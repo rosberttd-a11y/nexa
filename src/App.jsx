@@ -36,16 +36,28 @@ const GlobalStyles = () => {
       .font-display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
 
       @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(32px); }
+        from { opacity: 0; transform: translateY(28px); }
         to { opacity: 1; transform: translateY(0); }
       }
       @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
       }
+      @keyframes fadeScale {
+        from { opacity: 0; transform: scale(0.94) translateY(16px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
       @keyframes slideInLeft {
         from { opacity: 0; transform: translateX(-40px); }
         to { opacity: 1; transform: translateX(0); }
+      }
+      @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(40px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+      @keyframes growLine {
+        from { width: 0; opacity: 0; }
+        to { width: 48px; opacity: 1; }
       }
       @keyframes pulse-soft {
         0%, 100% { opacity: 0.6; }
@@ -82,10 +94,13 @@ const GlobalStyles = () => {
       }
 
       .section-divider {
-        width: 48px;
+        width: 0;
         height: 3px;
         background: linear-gradient(90deg, var(--blue), var(--blue-mid));
         border-radius: 2px;
+      }
+      .section-divider.visible {
+        animation: growLine 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
 
       .nav-blur {
@@ -158,6 +173,9 @@ const GlobalStyles = () => {
         .grid-3 { grid-template-columns: 1fr !important; }
         .hero-ctas { flex-direction: column !important; }
         .px-resp { padding-left: 20px !important; padding-right: 20px !important; }
+        .problem-connector { display: none !important; }
+        .problem-node { display: none !important; }
+        .problem-hline { display: none !important; }
       }
     `;
     document.head.appendChild(style);
@@ -335,36 +353,6 @@ const Hero = () => {
         opacity: inView ? 1 : 0, animation: inView ? "fadeIn 1s ease-out 0.6s forwards" : "none",
       }} />
 
-      {/* Floating photo - left */}
-      <div style={{
-        position: "absolute", top: "22%", left: "6%",
-        width: 110, height: 140, borderRadius: "60px 60px 60px 60px",
-        background: "linear-gradient(135deg, rgba(53,96,231,0.3), rgba(145,175,239,0.15))",
-        border: "2px solid rgba(145,175,239,0.15)",
-        display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
-        opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.8s ease-out 0.4s forwards" : "none",
-      }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-          <Icon name="activity" size={28} color="#91afef" />
-          <span style={{ fontSize: 10, color: "rgba(145,175,239,0.7)", fontWeight: 600, letterSpacing: 1 }}>RENDIMIENTO</span>
-        </div>
-      </div>
-
-      {/* Floating photo - right */}
-      <div style={{
-        position: "absolute", bottom: "18%", right: "6%",
-        width: 110, height: 140, borderRadius: "60px 60px 60px 60px",
-        background: "linear-gradient(135deg, rgba(145,175,239,0.15), rgba(53,96,231,0.3))",
-        border: "2px solid rgba(145,175,239,0.15)",
-        display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
-        opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.8s ease-out 0.5s forwards" : "none",
-      }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-          <Icon name="shield" size={28} color="#91afef" />
-          <span style={{ fontSize: 10, color: "rgba(145,175,239,0.7)", fontWeight: 600, letterSpacing: 1 }}>PREVENCIÓN</span>
-        </div>
-      </div>
-
       {/* Decorative ring */}
       <div style={{
         position: "absolute", top: "10%", right: "15%",
@@ -463,7 +451,6 @@ const Hero = () => {
         <div className="grid-3" style={{
           display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16,
           marginTop: 72,
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s ease-out 0.45s forwards" : "none",
         }}>
           {[
             { icon: "clipboard", title: "Entrenamiento", desc: "Estructurado y con criterio profesional" },
@@ -476,7 +463,9 @@ const Hero = () => {
               border: "1px solid rgba(145,175,239,0.12)",
               borderRadius: 16, padding: "28px 24px",
               display: "flex", alignItems: "flex-start", gap: 16,
-              transition: "all 0.3s ease",
+              transition: "background 0.3s ease, border-color 0.3s ease, transform 0.3s ease",
+              opacity: inView ? 1 : 0,
+              animation: inView ? `fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${0.5 + i * 0.12}s forwards` : "none",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "rgba(255,255,255,0.09)";
@@ -607,7 +596,7 @@ const NexaOrigen = () => {
               <div key={i} className="glass-card" style={{
                 padding: 32, borderRadius: 18, position: "relative", overflow: "hidden",
                 opacity: inView ? 1 : 0,
-                animation: inView ? `fadeUp 0.6s ease-out ${0.3 + i * 0.1}s forwards` : "none",
+                animation: inView ? `fadeScale 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.12}s forwards` : "none",
               }}>
                 <div style={{
                   position: "absolute", top: 0, left: 0, right: 0, height: 3,
@@ -633,7 +622,7 @@ const NexaOrigen = () => {
               <div key={i} className="glass-card" style={{
                 padding: 32, borderRadius: 18, position: "relative", overflow: "hidden",
                 opacity: inView ? 1 : 0,
-                animation: inView ? `fadeUp 0.6s ease-out ${0.6 + i * 0.1}s forwards` : "none",
+                animation: inView ? `fadeScale 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${0.66 + i * 0.12}s forwards` : "none",
               }}>
                 <div style={{
                   position: "absolute", top: 0, left: 0, right: 0, height: 3,
@@ -660,7 +649,7 @@ const NexaOrigen = () => {
           border: "1px solid rgba(145,175,239,0.2)",
           borderRadius: 20, padding: "40px 40px 32px", 
           opacity: inView ? 1 : 0,
-          animation: inView ? "fadeUp 0.7s ease-out 0.7s forwards" : "none",
+          animation: inView ? "fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards" : "none",
         }}>
           <h3 style={{
             fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2,
@@ -716,41 +705,154 @@ const Problem = () => {
   ];
 
   return (
-    <section id="problema" ref={ref} style={{ padding: "100px 32px", background: "var(--gray-50)" }} className="px-resp">
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ maxWidth: 540, marginBottom: 64 }}>
-          <div className="section-divider" style={{ marginBottom: 20 }} />
-          <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
+    <section id="problema" ref={ref} style={{
+      padding: "100px 32px",
+      background: "linear-gradient(160deg, #060e2e 0%, #0b1c60 50%, #0f2050 100%)",
+      position: "relative", overflow: "hidden",
+    }} className="px-resp">
+      {/* Subtle background glow */}
+      <div style={{
+        position: "absolute", top: "30%", right: "-10%",
+        width: 500, height: 500, borderRadius: "50%",
+        background: "radial-gradient(ellipse, rgba(53,96,231,0.08) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+      {/* Decorative ring */}
+      <div style={{
+        position: "absolute", bottom: "5%", left: "5%",
+        width: 200, height: 200, borderRadius: "50%",
+        border: "1px solid rgba(145,175,239,0.06)",
+        pointerEvents: "none",
+      }} />
+
+      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
+        {/* Header - centered */}
+        <div style={{
+          textAlign: "center", maxWidth: 600, margin: "0 auto 72px",
+        }}>
+          <p style={{
+            fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2,
+            color: "var(--blue-mid)", marginBottom: 16,
+            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards" : "none",
+          }}>
             El problema
           </p>
-          <h2 className="font-display section-title" style={{ fontSize: 44, color: "var(--navy)", lineHeight: 1.05, marginBottom: 16 }}>
+          <h2 className="font-display section-title" style={{
+            fontSize: 48, color: "white", lineHeight: 1.05, marginBottom: 18,
+            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards" : "none",
+          }}>
             ¿RECONOCES ESTO?
           </h2>
-          <p style={{ fontSize: 16, color: "var(--gray-600)", lineHeight: 1.7 }}>
+          <p style={{
+            fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: 1.7,
+            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards" : "none",
+          }}>
             Muchas personas entrenan con intensidad pero sin la estructura ni el acompañamiento que su cuerpo necesita.
           </p>
         </div>
 
-        <div className="grid-2" style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24,
+        {/* Problems - alternating layout with connecting line */}
+        <div style={{ position: "relative", maxWidth: 900, margin: "0 auto" }}>
+          {/* Vertical connecting line - centered */}
+          <div className="problem-connector" style={{
+            position: "absolute", left: "50%", top: 30, bottom: 30,
+            width: 1,
+            background: "linear-gradient(180deg, transparent 0%, rgba(145,175,239,0.2) 10%, rgba(145,175,239,0.2) 90%, transparent 100%)",
+            transform: "translateX(-50%)",
+            opacity: inView ? 1 : 0,
+            animation: inView ? "fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards" : "none",
+          }} />
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            {problems.map((p, i) => {
+              const isRight = i % 2 !== 0;
+              return (
+                <div key={i} style={{
+                  display: "flex", alignItems: "center",
+                  justifyContent: isRight ? "flex-end" : "flex-start",
+                  position: "relative",
+                }}>
+                  {/* Node dot on the center line */}
+                  <div className="problem-node" style={{
+                    position: "absolute", left: "50%", top: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: 10, height: 10, borderRadius: "50%",
+                    background: "var(--blue)", border: "2px solid rgba(145,175,239,0.3)",
+                    boxShadow: "0 0 12px rgba(53,96,231,0.3)",
+                    zIndex: 2,
+                    opacity: inView ? 1 : 0,
+                    animation: inView ? `fadeScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.13}s forwards` : "none",
+                  }} />
+
+                  {/* Horizontal connector from dot to card edge */}
+                  <div className="problem-hline" style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: isRight ? "calc(50% + 5px)" : "auto",
+                    right: isRight ? "auto" : "calc(50% + 5px)",
+                    width: "calc(50% - 420px - 5px)",
+                    minWidth: 0,
+                    height: 1,
+                    background: "rgba(145,175,239,0.15)",
+                    transform: "translateY(-50%)",
+                    opacity: inView ? 1 : 0,
+                    animation: inView ? `fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.35 + i * 0.13}s forwards` : "none",
+                  }} />
+
+                  <div style={{
+                    opacity: inView ? 1 : 0,
+                    animation: inView
+                      ? `${isRight ? "slideInRight" : "slideInLeft"} 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${0.25 + i * 0.13}s forwards`
+                      : "none",
+                  }}>
+                    <div style={{
+                    maxWidth: 420, padding: "28px 32px", borderRadius: 18,
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(145,175,239,0.1)",
+                    backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+                    display: "flex", gap: 20, alignItems: "flex-start",
+                    transition: "all 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.07)";
+                    e.currentTarget.style.borderColor = "rgba(145,175,239,0.2)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+                    e.currentTarget.style.borderColor = "rgba(145,175,239,0.1)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                  >
+                    <div style={{
+                      width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                      background: "linear-gradient(135deg, rgba(53,96,231,0.3), rgba(145,175,239,0.12))",
+                      border: "1px solid rgba(145,175,239,0.12)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                      <Icon name={p.icon} size={20} color="#91afef" />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: 16, fontWeight: 700, color: "white", marginBottom: 6 }}>{p.title}</h3>
+                      <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>{p.desc}</p>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Bottom transition text */}
+        <div style={{
+          textAlign: "center", marginTop: 56,
+          opacity: inView ? 1 : 0,
+          animation: inView ? "fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards" : "none",
         }}>
-          {problems.map((p, i) => (
-            <div key={i} className="glass-card" style={{
-              padding: 32, borderRadius: 16,
-              opacity: inView ? 1 : 0,
-              animation: inView ? `fadeUp 0.6s ease-out ${i * 0.1}s forwards` : "none",
-            }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 12,
-                background: "var(--blue-light)", display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: 20,
-              }}>
-                <Icon name={p.icon} size={22} color="var(--blue)" />
-              </div>
-              <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--navy)", marginBottom: 10 }}>{p.title}</h3>
-              <p style={{ fontSize: 15, color: "var(--gray-600)", lineHeight: 1.65 }}>{p.desc}</p>
-            </div>
-          ))}
+          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.35)", fontWeight: 500, fontStyle: "italic" }}>
+            Si algo de esto te suena, Nexa fue pensado para ti.
+          </p>
         </div>
       </div>
     </section>
@@ -773,7 +875,7 @@ const Solution = () => {
       }} />
       <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
         <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 64px" }}>
-          <div className="section-divider" style={{ margin: "0 auto 20px" }} />
+          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             La solución
           </p>
@@ -790,7 +892,7 @@ const Solution = () => {
             <div key={i} style={{
               padding: 40, borderRadius: 20, background: i === 1 ? "var(--navy)" : "var(--gray-50)",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeUp 0.7s ease-out ${i * 0.15}s forwards` : "none",
+              animation: inView ? `fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + i * 0.15}s forwards` : "none",
             }}>
               <div style={{
                 width: 52, height: 52, borderRadius: 14,
@@ -837,7 +939,7 @@ const ForWho = () => {
     <section id="paraquien" ref={ref} style={{ padding: "100px 32px", background: "var(--gray-50)" }} className="px-resp">
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 64px" }}>
-          <div className="section-divider" style={{ margin: "0 auto 20px" }} />
+          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Para quién
           </p>
@@ -851,7 +953,7 @@ const ForWho = () => {
             <div key={i} className="glass-card" style={{
               padding: 40, borderRadius: 20, position: "relative", overflow: "hidden",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeUp 0.7s ease-out ${i * 0.15}s forwards` : "none",
+              animation: inView ? `fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + i * 0.18}s forwards` : "none",
             }}>
               {/* Decorative line */}
               <div style={{
@@ -955,7 +1057,7 @@ const Plans = () => {
     <section id="planes" ref={ref} style={{ padding: "100px 32px", background: "var(--white)" }} className="px-resp">
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 64px" }}>
-          <div className="section-divider" style={{ margin: "0 auto 20px" }} />
+          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Planes
           </p>
@@ -974,7 +1076,7 @@ const Plans = () => {
               background: plan.accent ? "var(--navy)" : "var(--white)",
               border: plan.accent ? "none" : "1px solid var(--gray-100)",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeUp 0.7s ease-out ${i * 0.12}s forwards` : "none",
+              animation: inView ? `fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + i * 0.14}s forwards` : "none",
               display: "flex", flexDirection: "column",
             }}>
               {/* Top accent bar */}
@@ -1119,7 +1221,7 @@ const Launch = () => {
     }} className="px-resp">
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ maxWidth: 540, marginBottom: 64 }}>
-          <div className="section-divider" style={{ marginBottom: 20 }} />
+          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ marginBottom: 20 }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Cómo funciona
           </p>
@@ -1135,7 +1237,7 @@ const Launch = () => {
               padding: "32px 0",
               borderBottom: i < steps.length - 1 ? "1px solid var(--gray-100)" : "none",
               opacity: inView ? 1 : 0,
-              animation: inView ? `slideInLeft 0.6s ease-out ${i * 0.12}s forwards` : "none",
+              animation: inView ? `slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + i * 0.12}s forwards` : "none",
             }}>
               <span className="font-display" style={{
                 fontSize: 48, color: "var(--blue-light)", lineHeight: 1, minWidth: 72,
@@ -1171,7 +1273,7 @@ const FAQ = () => {
     <section id="faq" ref={ref} style={{ padding: "100px 32px", background: "var(--white)" }} className="px-resp">
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 64 }}>
-          <div className="section-divider" style={{ margin: "0 auto 20px" }} />
+          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Preguntas frecuentes
           </p>
@@ -1185,7 +1287,7 @@ const FAQ = () => {
             <div key={i} style={{
               borderBottom: "1px solid var(--gray-100)",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeUp 0.5s ease-out ${i * 0.08}s forwards` : "none",
+              animation: inView ? `fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.05 + i * 0.07}s forwards` : "none",
             }}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
@@ -1223,7 +1325,7 @@ const FinalCTA = () => {
         maxWidth: 1200, margin: "0 auto", borderRadius: 24, overflow: "hidden",
         background: "linear-gradient(135deg, #0b1c60 0%, #1a2d7a 50%, #3560e7 100%)",
         padding: "80px 60px", textAlign: "center", position: "relative",
-        opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s ease-out forwards" : "none",
+        opacity: inView ? 1 : 0, animation: inView ? "fadeScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards" : "none",
       }}>
         {/* Decorative circles */}
         <div style={{
