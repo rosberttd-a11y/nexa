@@ -35,37 +35,55 @@ const GlobalStyles = () => {
       
       .font-display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
 
+      /* ── Spring easing tokens ── */
+      /* spring-smooth: gentle overshoot */
+      /* spring-pop: noticeable bounce */
+      /* spring-snappy: quick settle */
+
       @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(28px); }
-        to { opacity: 1; transform: translateY(0); }
+        0% { opacity: 0; transform: translateY(20px); }
+        60% { opacity: 1; transform: translateY(-3px); }
+        100% { opacity: 1; transform: translateY(0); }
       }
       @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
       }
       @keyframes fadeScale {
-        from { opacity: 0; transform: scale(0.94) translateY(16px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
+        0% { opacity: 0; transform: scale(0.92) translateY(14px); }
+        60% { opacity: 1; transform: scale(1.015) translateY(-2px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
       }
       @keyframes slideInLeft {
-        from { opacity: 0; transform: translateX(-40px); }
-        to { opacity: 1; transform: translateX(0); }
+        0% { opacity: 0; transform: translateX(-36px); }
+        60% { opacity: 1; transform: translateX(4px); }
+        100% { opacity: 1; transform: translateX(0); }
       }
       @keyframes slideInRight {
-        from { opacity: 0; transform: translateX(40px); }
-        to { opacity: 1; transform: translateX(0); }
+        0% { opacity: 0; transform: translateX(36px); }
+        60% { opacity: 1; transform: translateX(-4px); }
+        100% { opacity: 1; transform: translateX(0); }
+      }
+      @keyframes clipRevealUp {
+        0% { clip-path: inset(100% 0 0 0); opacity: 0; transform: translateY(12px); }
+        100% { clip-path: inset(0 0 0 0); opacity: 1; transform: translateY(0); }
+      }
+      @keyframes clipRevealDown {
+        0% { clip-path: inset(0 0 100% 0); opacity: 0; }
+        100% { clip-path: inset(0 0 0 0); opacity: 1; }
       }
       @keyframes growLine {
-        from { width: 0; opacity: 0; }
-        to { width: 48px; opacity: 1; }
+        0% { width: 0; opacity: 0; }
+        70% { width: 52px; opacity: 1; }
+        100% { width: 48px; opacity: 1; }
       }
       @keyframes pulse-soft {
         0%, 100% { opacity: 0.6; }
         50% { opacity: 1; }
       }
-      .animate-fade-up { animation: fadeUp 0.7s ease-out forwards; }
-      .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
-      .animate-slide-left { animation: slideInLeft 0.7s ease-out forwards; }
+      .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.22, 1.2, 0.36, 1) forwards; }
+      .animate-fade-in { animation: fadeIn 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) forwards; }
+      .animate-slide-left { animation: slideInLeft 0.8s cubic-bezier(0.22, 1.2, 0.36, 1) forwards; }
       .delay-100 { animation-delay: 0.1s; }
       .delay-200 { animation-delay: 0.2s; }
       .delay-300 { animation-delay: 0.3s; }
@@ -344,13 +362,13 @@ const Hero = () => {
       {/* Dot grid top-right */}
       <DotGrid rows={5} cols={7} style={{
         position: "absolute", top: 140, right: 80,
-        opacity: inView ? 1 : 0, animation: inView ? "fadeIn 1s ease-out 0.5s forwards" : "none",
+        opacity: inView ? 1 : 0, animation: inView ? "fadeIn 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.5s forwards" : "none",
       }} />
 
       {/* Dot grid bottom-left */}
       <DotGrid rows={6} cols={3} style={{
         position: "absolute", bottom: 160, left: 60,
-        opacity: inView ? 1 : 0, animation: inView ? "fadeIn 1s ease-out 0.6s forwards" : "none",
+        opacity: inView ? 1 : 0, animation: inView ? "fadeIn 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.6s forwards" : "none",
       }} />
 
       {/* Decorative ring */}
@@ -379,25 +397,38 @@ const Hero = () => {
           border: "1px solid rgba(145,175,239,0.25)", borderRadius: 100, padding: "8px 20px",
           fontSize: 13, fontWeight: 600, color: "var(--blue-mid)", marginBottom: 40,
           background: "rgba(53,96,231,0.08)",
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s ease-out forwards" : "none",
+          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.22, 1.2, 0.36, 1) forwards" : "none",
         }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--blue-mid)", animation: "pulse-soft 2s infinite" }} />
           Pre-inscripción abierta — Nexa Origen
         </div>
 
-        {/* Title */}
+        {/* Title - line by line reveal */}
         <h1 className="font-display hero-title" style={{
           fontSize: 76, lineHeight: 1.0, color: "white", marginBottom: 28,
           maxWidth: 900, margin: "0 auto 28px",
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s ease-out 0.15s forwards" : "none",
         }}>
-          SÉ PARTE DEL INICIO{" "}
           <span style={{
-            display: "block",
-            background: "linear-gradient(135deg, #3560e7, #91afef, #d9e3fa)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            display: "block", overflow: "hidden",
           }}>
-            DE UNA NUEVA FORMA DE ENTRENAR
+            <span style={{
+              display: "block",
+              opacity: inView ? 1 : 0,
+              animation: inView ? "clipRevealUp 0.9s cubic-bezier(0.22, 1.2, 0.36, 1) 0.15s forwards" : "none",
+            }}>
+              SÉ PARTE DEL INICIO
+            </span>
+          </span>
+          <span style={{ display: "block", overflow: "hidden" }}>
+            <span style={{
+              display: "block",
+              background: "linear-gradient(135deg, #3560e7, #91afef, #d9e3fa)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+              opacity: inView ? 1 : 0,
+              animation: inView ? "clipRevealUp 0.9s cubic-bezier(0.22, 1.2, 0.36, 1) 0.35s forwards" : "none",
+            }}>
+              DE UNA NUEVA FORMA DE ENTRENAR
+            </span>
           </span>
         </h1>
 
@@ -405,7 +436,7 @@ const Hero = () => {
         <p style={{
           fontSize: 17, lineHeight: 1.75, color: "rgba(255,255,255,0.5)", maxWidth: 560, margin: "0 auto 32px",
           fontWeight: 400,
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s ease-out 0.25s forwards" : "none",
+          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.25s forwards" : "none",
         }}>
           Nexa integra entrenamiento estructurado, prevención de lesiones y recuperación profesional en un solo lugar. Inscríbete antes del {DEADLINE} y sé parte de Nexa Origen con beneficios exclusivos.
         </p>
@@ -415,7 +446,7 @@ const Hero = () => {
           display: "inline-flex", alignItems: "center", gap: 8,
           background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
           borderRadius: 8, padding: "10px 20px", marginBottom: 32,
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s ease-out 0.3s forwards" : "none",
+          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.3s forwards" : "none",
         }}>
           <Icon name="zap" size={16} color="#91afef" />
           <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)" }}>
@@ -426,7 +457,7 @@ const Hero = () => {
         {/* CTAs */}
         <div className="hero-ctas" style={{
           display: "flex", gap: 16, alignItems: "center", justifyContent: "center",
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s ease-out 0.35s forwards" : "none",
+          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.35s forwards" : "none",
         }}>
           <a href={FORM_URL} target="_blank" rel="noopener noreferrer" style={{
             background: "white", color: "var(--navy)", border: "none",
@@ -465,7 +496,7 @@ const Hero = () => {
               display: "flex", alignItems: "flex-start", gap: 16,
               transition: "background 0.3s ease, border-color 0.3s ease, transform 0.3s ease",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${0.5 + i * 0.12}s forwards` : "none",
+              animation: inView ? `fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.5 + i * 0.12}s forwards` : "none",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "rgba(255,255,255,0.09)";
@@ -559,21 +590,21 @@ const NexaOrigen = () => {
             background: "var(--navy)", borderRadius: 100, padding: "8px 20px",
             fontSize: 12, fontWeight: 700, color: "white", marginBottom: 24,
             textTransform: "uppercase", letterSpacing: 1.5,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s ease-out forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.22, 1.2, 0.36, 1) forwards" : "none",
           }}>
             <Icon name="zap" size={14} color="var(--blue-mid)" />
             Beneficios exclusivos — Pre-inscripción
           </div>
           <h2 className="font-display section-title" style={{
             fontSize: 52, color: "var(--navy)", lineHeight: 1.02, marginBottom: 16,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s ease-out 0.1s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
           }}>
             NEXA{" "}
             <span className="gradient-text">ORIGEN</span>
           </h2>
           <p style={{
             fontSize: 17, color: "var(--gray-600)", lineHeight: 1.7,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s ease-out 0.2s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.2s forwards" : "none",
           }}>
             Reserva tu cupo antes de inaugurar y entra en marzo con ventajas exclusivas.
           </p>
@@ -582,7 +613,7 @@ const NexaOrigen = () => {
         {/* Section label */}
         <p style={{
           fontSize: 14, fontWeight: 700, color: "var(--navy)", marginBottom: 24, textAlign: "center",
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s ease-out 0.25s forwards" : "none",
+          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.22, 1.2, 0.36, 1) 0.25s forwards" : "none",
         }}>
           ¿Qué obtienes al inscribirte antes del {DEADLINE}?
         </p>
@@ -596,7 +627,7 @@ const NexaOrigen = () => {
               <div key={i} className="glass-card" style={{
                 padding: 32, borderRadius: 18, position: "relative", overflow: "hidden",
                 opacity: inView ? 1 : 0,
-                animation: inView ? `fadeScale 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.12}s forwards` : "none",
+                animation: inView ? `fadeScale 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.3 + i * 0.12}s forwards` : "none",
               }}>
                 <div style={{
                   position: "absolute", top: 0, left: 0, right: 0, height: 3,
@@ -622,7 +653,7 @@ const NexaOrigen = () => {
               <div key={i} className="glass-card" style={{
                 padding: 32, borderRadius: 18, position: "relative", overflow: "hidden",
                 opacity: inView ? 1 : 0,
-                animation: inView ? `fadeScale 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${0.66 + i * 0.12}s forwards` : "none",
+                animation: inView ? `fadeScale 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.66 + i * 0.12}s forwards` : "none",
               }}>
                 <div style={{
                   position: "absolute", top: 0, left: 0, right: 0, height: 3,
@@ -649,7 +680,7 @@ const NexaOrigen = () => {
           border: "1px solid rgba(145,175,239,0.2)",
           borderRadius: 20, padding: "40px 40px 32px", 
           opacity: inView ? 1 : 0,
-          animation: inView ? "fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards" : "none",
+          animation: inView ? "fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.7s forwards" : "none",
         }}>
           <h3 style={{
             fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2,
@@ -677,7 +708,7 @@ const NexaOrigen = () => {
         <div style={{
           textAlign: "center",
           opacity: inView ? 1 : 0,
-          animation: inView ? "fadeUp 0.7s ease-out 0.8s forwards" : "none",
+          animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.8s forwards" : "none",
         }}>
           <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{
             display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
@@ -733,19 +764,19 @@ const Problem = () => {
           <p style={{
             fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2,
             color: "var(--blue-mid)", marginBottom: 16,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) forwards" : "none",
           }}>
             El problema
           </p>
           <h2 className="font-display section-title" style={{
             fontSize: 48, color: "white", lineHeight: 1.05, marginBottom: 18,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
           }}>
             ¿RECONOCES ESTO?
           </h2>
           <p style={{
             fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: 1.7,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s forwards" : "none",
           }}>
             Muchas personas entrenan con intensidad pero sin la estructura ni el acompañamiento que su cuerpo necesita.
           </p>
@@ -760,7 +791,7 @@ const Problem = () => {
             background: "linear-gradient(180deg, transparent 0%, rgba(145,175,239,0.2) 10%, rgba(145,175,239,0.2) 90%, transparent 100%)",
             transform: "translateX(-50%)",
             opacity: inView ? 1 : 0,
-            animation: inView ? "fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards" : "none",
+            animation: inView ? "fadeIn 1s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s forwards" : "none",
           }} />
 
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -781,7 +812,7 @@ const Problem = () => {
                     boxShadow: "0 0 12px rgba(53,96,231,0.3)",
                     zIndex: 2,
                     opacity: inView ? 1 : 0,
-                    animation: inView ? `fadeScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.13}s forwards` : "none",
+                    animation: inView ? `fadeScale 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.3 + i * 0.13}s forwards` : "none",
                   }} />
 
                   {/* Horizontal connector from dot to card edge */}
@@ -796,13 +827,13 @@ const Problem = () => {
                     background: "rgba(145,175,239,0.15)",
                     transform: "translateY(-50%)",
                     opacity: inView ? 1 : 0,
-                    animation: inView ? `fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.35 + i * 0.13}s forwards` : "none",
+                    animation: inView ? `fadeIn 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.35 + i * 0.13}s forwards` : "none",
                   }} />
 
                   <div style={{
                     opacity: inView ? 1 : 0,
                     animation: inView
-                      ? `${isRight ? "slideInRight" : "slideInLeft"} 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${0.25 + i * 0.13}s forwards`
+                      ? `${isRight ? "slideInRight" : "slideInLeft"} 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.25 + i * 0.13}s forwards`
                       : "none",
                   }}>
                     <div style={{
@@ -848,7 +879,7 @@ const Problem = () => {
         <div style={{
           textAlign: "center", marginTop: 56,
           opacity: inView ? 1 : 0,
-          animation: inView ? "fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards" : "none",
+          animation: inView ? "fadeUp 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.8s forwards" : "none",
         }}>
           <p style={{ fontSize: 15, color: "rgba(255,255,255,0.35)", fontWeight: 500, fontStyle: "italic" }}>
             Si algo de esto te suena, Nexa fue pensado para ti.
@@ -879,7 +910,10 @@ const Solution = () => {
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             La solución
           </p>
-          <h2 className="font-display section-title" style={{ fontSize: 44, color: "var(--navy)", lineHeight: 1.05, marginBottom: 16 }}>
+          <h2 className="font-display section-title" style={{
+            fontSize: 44, color: "var(--navy)", lineHeight: 1.05, marginBottom: 16,
+            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+          }}>
             ENTRENAMIENTO, RENDIMIENTO Y CUIDADO DEL CUERPO. ALINEADOS.
           </h2>
           <p style={{ fontSize: 16, color: "var(--gray-600)", lineHeight: 1.7 }}>
@@ -892,7 +926,7 @@ const Solution = () => {
             <div key={i} style={{
               padding: 40, borderRadius: 20, background: i === 1 ? "var(--navy)" : "var(--gray-50)",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + i * 0.15}s forwards` : "none",
+              animation: inView ? `fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.1 + i * 0.15}s forwards` : "none",
             }}>
               <div style={{
                 width: 52, height: 52, borderRadius: 14,
@@ -943,7 +977,10 @@ const ForWho = () => {
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Para quién
           </p>
-          <h2 className="font-display section-title" style={{ fontSize: 44, color: "var(--navy)", lineHeight: 1.05 }}>
+          <h2 className="font-display section-title" style={{
+            fontSize: 44, color: "var(--navy)", lineHeight: 1.05,
+            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+          }}>
             ¿ES NEXA PARA TI?
           </h2>
         </div>
@@ -953,7 +990,7 @@ const ForWho = () => {
             <div key={i} className="glass-card" style={{
               padding: 40, borderRadius: 20, position: "relative", overflow: "hidden",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + i * 0.18}s forwards` : "none",
+              animation: inView ? `fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.1 + i * 0.18}s forwards` : "none",
             }}>
               {/* Decorative line */}
               <div style={{
@@ -1061,7 +1098,10 @@ const Plans = () => {
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Planes
           </p>
-          <h2 className="font-display section-title" style={{ fontSize: 44, color: "var(--navy)", lineHeight: 1.05, marginBottom: 16 }}>
+          <h2 className="font-display section-title" style={{
+            fontSize: 44, color: "var(--navy)", lineHeight: 1.05, marginBottom: 16,
+            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+          }}>
             EL PLAN QUE SE ADAPTA A TI
           </h2>
           <p style={{ fontSize: 16, color: "var(--gray-600)", lineHeight: 1.7 }}>
@@ -1076,7 +1116,7 @@ const Plans = () => {
               background: plan.accent ? "var(--navy)" : "var(--white)",
               border: plan.accent ? "none" : "1px solid var(--gray-100)",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + i * 0.14}s forwards` : "none",
+              animation: inView ? `fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.1 + i * 0.14}s forwards` : "none",
               display: "flex", flexDirection: "column",
             }}>
               {/* Top accent bar */}
@@ -1111,7 +1151,7 @@ const Plans = () => {
                 }}>{plan.desc}</p>
 
                 {/* Price */}
-                <div style={{ marginBottom: 8, display: "flex", alignItems: "baseline", gap: 4 }}>
+                <div style={{ marginBottom: 4, display: "flex", alignItems: "baseline", gap: 4 }}>
                   <span style={{
                     fontSize: 14, fontWeight: 600,
                     color: plan.accent ? "rgba(255,255,255,0.5)" : "var(--gray-400)",
@@ -1126,6 +1166,11 @@ const Plans = () => {
                     marginLeft: 4,
                   }}>/mes</span>
                 </div>
+                <p style={{
+                  fontSize: 11.5, fontWeight: 600,
+                  color: plan.accent ? "rgba(145,175,239,0.6)" : "var(--blue-mid)",
+                  marginBottom: 8, letterSpacing: 0.3,
+                }}>Tasa BCV</p>
 
                 {/* Frequency */}
                 {plan.frequency && (
@@ -1225,7 +1270,10 @@ const Launch = () => {
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Cómo funciona
           </p>
-          <h2 className="font-display section-title" style={{ fontSize: 44, color: "var(--navy)", lineHeight: 1.05 }}>
+          <h2 className="font-display section-title" style={{
+            fontSize: 44, color: "var(--navy)", lineHeight: 1.05,
+            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+          }}>
             TU PROCESO EN NEXA
           </h2>
         </div>
@@ -1237,7 +1285,7 @@ const Launch = () => {
               padding: "32px 0",
               borderBottom: i < steps.length - 1 ? "1px solid var(--gray-100)" : "none",
               opacity: inView ? 1 : 0,
-              animation: inView ? `slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + i * 0.12}s forwards` : "none",
+              animation: inView ? `slideInLeft 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.1 + i * 0.12}s forwards` : "none",
             }}>
               <span className="font-display" style={{
                 fontSize: 48, color: "var(--blue-light)", lineHeight: 1, minWidth: 72,
@@ -1277,7 +1325,10 @@ const FAQ = () => {
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Preguntas frecuentes
           </p>
-          <h2 className="font-display section-title" style={{ fontSize: 44, color: "var(--navy)", lineHeight: 1.05 }}>
+          <h2 className="font-display section-title" style={{
+            fontSize: 44, color: "var(--navy)", lineHeight: 1.05,
+            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+          }}>
             RESOLVEMOS TUS DUDAS
           </h2>
         </div>
@@ -1287,7 +1338,7 @@ const FAQ = () => {
             <div key={i} style={{
               borderBottom: "1px solid var(--gray-100)",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.05 + i * 0.07}s forwards` : "none",
+              animation: inView ? `fadeUp 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.05 + i * 0.07}s forwards` : "none",
             }}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
@@ -1325,7 +1376,7 @@ const FinalCTA = () => {
         maxWidth: 1200, margin: "0 auto", borderRadius: 24, overflow: "hidden",
         background: "linear-gradient(135deg, #0b1c60 0%, #1a2d7a 50%, #3560e7 100%)",
         padding: "80px 60px", textAlign: "center", position: "relative",
-        opacity: inView ? 1 : 0, animation: inView ? "fadeScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards" : "none",
+        opacity: inView ? 1 : 0, animation: inView ? "fadeScale 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) forwards" : "none",
       }}>
         {/* Decorative circles */}
         <div style={{
@@ -1339,6 +1390,7 @@ const FinalCTA = () => {
 
         <h2 className="font-display" style={{
           fontSize: 52, color: "white", lineHeight: 1.05, marginBottom: 20, position: "relative",
+          opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.15s forwards" : "none",
         }}>
           SÉ PARTE DE{" "}
           <span style={{ color: "var(--blue-mid)" }}>NEXA ORIGEN</span>
