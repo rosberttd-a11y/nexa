@@ -1314,7 +1314,7 @@ const FAQ = () => {
     { q: "¿Puedo entrenar si vengo de un proceso de fisioterapia?", a: "Sí, de hecho es uno de los escenarios más comunes. Te ayudamos a retomar el entrenamiento con seguridad y continuidad profesional." },
     { q: "¿Cómo elijo el plan adecuado?", a: "En tu evaluación inicial analizamos tu perfil, objetivos y necesidades. Con base en eso, te recomendamos el plan que mejor se adapta a ti." },
     { q: "¿Qué beneficios obtengo si me inscribo antes de la inauguración?", a: "Al inscribirte antes del 7 de marzo formas parte de Nexa Origen: recibes invitación a la inauguración, medias edición limitada, una sesión de Nexa Recovery, onboarding prioritario y acceso preferente a los cupos de marzo." },
-    { q: "¿Dónde están ubicados?", a: <>Estamos en Barquisimeto. Puedes ver nuestra <a href="https://maps.app.goo.gl/Sv1kWtonHkFWcBnr7?g_st=iw" target="_blank" rel="noopener noreferrer" style={{ color: "var(--blue)", fontWeight: 600, textDecoration: "underline" }}>ubicación exacta en Google Maps</a>.</> },
+    { q: "¿Dónde están ubicados?", a: <>Estamos en la Av. Constitución. Puedes ver nuestra <a href="https://maps.app.goo.gl/Sv1kWtonHkFWcBnr7?g_st=iw" target="_blank" rel="noopener noreferrer" style={{ color: "var(--blue)", fontWeight: 600, textDecoration: "underline" }}>ubicación exacta en Google Maps</a>.</> },
   ];
 
   return (
