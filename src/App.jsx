@@ -5,12 +5,19 @@ const NEXA_LOGO_BLUE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATwAAADICA
 
 
 const FORM_URL = "https://tally.so/r/WONe2J";
-const DEADLINE = "7 de marzo"; // Fecha de inauguración
+const WA_URL = "https://wa.me/584220430323";
+const WA_URL_PLANS = `${WA_URL}?text=${encodeURIComponent("Hola! Me interesa conocer más sobre los planes de Nexa.")}`;
+const WA_URL_FISIO = `${WA_URL}?text=${encodeURIComponent("Hola! Me interesa una sesión de fisioterapia / recovery en Nexa.")}`;
+const MAPS_URL = "https://maps.app.goo.gl/Sv1kWtonHkFWcBnr7?g_st=iw";
+
+const SPRING = "cubic-bezier(0.22, 1.2, 0.36, 1)";
+const SPRING_POP = "cubic-bezier(0.34, 1.4, 0.64, 1)";
+
+// ─── GLOBAL STYLES ──────────────────────────────────────────────────
 const GlobalStyles = () => {
   useEffect(() => {
     const link = document.createElement("link");
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap";
+    link.href = "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap";
     link.rel = "stylesheet";
     document.head.appendChild(link);
 
@@ -32,23 +39,14 @@ const GlobalStyles = () => {
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       html { scroll-behavior: smooth; }
       body { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--navy); background: var(--white); overflow-x: hidden; }
-      
       .font-display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
-
-      /* ── Spring easing tokens ── */
-      /* spring-smooth: gentle overshoot */
-      /* spring-pop: noticeable bounce */
-      /* spring-snappy: quick settle */
 
       @keyframes fadeUp {
         0% { opacity: 0; transform: translateY(20px); }
         60% { opacity: 1; transform: translateY(-3px); }
         100% { opacity: 1; transform: translateY(0); }
       }
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       @keyframes fadeScale {
         0% { opacity: 0; transform: scale(0.92) translateY(14px); }
         60% { opacity: 1; transform: scale(1.015) translateY(-2px); }
@@ -68,120 +66,58 @@ const GlobalStyles = () => {
         0% { clip-path: inset(100% 0 0 0); opacity: 0; transform: translateY(12px); }
         100% { clip-path: inset(0 0 0 0); opacity: 1; transform: translateY(0); }
       }
-      @keyframes clipRevealDown {
-        0% { clip-path: inset(0 0 100% 0); opacity: 0; }
-        100% { clip-path: inset(0 0 0 0); opacity: 1; }
-      }
       @keyframes growLine {
         0% { width: 0; opacity: 0; }
         70% { width: 52px; opacity: 1; }
         100% { width: 48px; opacity: 1; }
       }
-      @keyframes pulse-soft {
-        0%, 100% { opacity: 0.6; }
-        50% { opacity: 1; }
+      @keyframes pulseGlow {
+        0%, 100% { box-shadow: 0 0 16px rgba(37,211,102,0.2); }
+        50% { box-shadow: 0 0 28px rgba(37,211,102,0.45); }
       }
-      .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.22, 1.2, 0.36, 1) forwards; }
-      .animate-fade-in { animation: fadeIn 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) forwards; }
-      .animate-slide-left { animation: slideInLeft 0.8s cubic-bezier(0.22, 1.2, 0.36, 1) forwards; }
-      .delay-100 { animation-delay: 0.1s; }
-      .delay-200 { animation-delay: 0.2s; }
-      .delay-300 { animation-delay: 0.3s; }
-      .delay-400 { animation-delay: 0.4s; }
-      .delay-500 { animation-delay: 0.5s; }
-      .delay-600 { animation-delay: 0.6s; }
 
       .gradient-text {
         background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       }
-
-      .glass-card {
-        background: rgba(255,255,255,0.7);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(145,175,239,0.2);
-      }
-
-      .hero-gradient {
-        background: 
-          radial-gradient(ellipse 80% 60% at 70% 20%, rgba(53,96,231,0.08) 0%, transparent 60%),
-          radial-gradient(ellipse 60% 50% at 20% 80%, rgba(145,175,239,0.06) 0%, transparent 50%),
-          var(--white);
-      }
-
-      .section-divider {
-        width: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--blue), var(--blue-mid));
-        border-radius: 2px;
-      }
-      .section-divider.visible {
-        animation: growLine 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      }
-
-      .nav-blur {
-        background: rgba(255,255,255,0.85);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-      }
-
-      .plan-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 60px rgba(11,28,96,0.1);
-      }
-      .plan-card { transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-
-      .faq-answer {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-      }
-      .faq-answer.open {
-        max-height: 300px;
-        padding-bottom: 20px;
-      }
-
+      .section-divider { width: 0; height: 3px; background: linear-gradient(90deg, var(--blue), var(--blue-mid)); border-radius: 2px; }
+      .section-divider.visible { animation: growLine 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
+      .nav-blur { background: rgba(255,255,255,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+      .glass-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(20px); border: 1px solid rgba(145,175,239,0.2); }
       .btn-primary {
         background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
-        color: white;
-        border: none;
-        padding: 14px 36px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 15px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        letter-spacing: 0.01em;
+        color: white; border: none; padding: 14px 36px; border-radius: 8px;
+        font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.3s ease;
+        font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.01em; text-decoration: none; display: inline-block;
       }
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(53,96,231,0.3);
-      }
-
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(53,96,231,0.3); }
       .btn-outline {
-        background: transparent;
-        color: var(--navy);
-        border: 1.5px solid var(--blue-mid);
-        padding: 13px 34px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 15px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: 'Plus Jakarta Sans', sans-serif;
+        background: transparent; color: var(--navy); border: 1.5px solid var(--blue-mid);
+        padding: 13px 34px; border-radius: 8px; font-weight: 600; font-size: 15px;
+        cursor: pointer; transition: all 0.3s ease; font-family: 'Plus Jakarta Sans', sans-serif; text-decoration: none; display: inline-block;
       }
-      .btn-outline:hover {
-        border-color: var(--blue);
-        background: var(--blue-light);
+      .btn-outline:hover { border-color: var(--blue); background: var(--blue-light); }
+      .plan-card { transition: all 0.35s cubic-bezier(0.4,0,0.2,1); }
+      .plan-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(11,28,96,0.1); }
+      .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease; }
+      .faq-answer.open { max-height: 300px; padding-bottom: 20px; }
+      .wa-float {
+        position: fixed; bottom: 24px; right: 24px; z-index: 1000;
+        width: 56px; height: 56px; border-radius: 50%; background: #25D366;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 4px 20px rgba(37,211,102,0.3); cursor: pointer;
+        transition: all 0.3s ease; animation: pulseGlow 2.5s ease-in-out infinite;
+        text-decoration: none;
       }
-
-      .dot-pattern {
-        background-image: radial-gradient(circle, rgba(53,96,231,0.07) 1px, transparent 1px);
-        background-size: 24px 24px;
+      .wa-float:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+      .quiz-option {
+        padding: 14px 20px; border-radius: 10px; cursor: pointer;
+        border: 1.5px solid var(--gray-100); background: white;
+        transition: all 0.25s ease; font-size: 14px; font-weight: 500; text-align: left; width: 100%;
+        font-family: 'Plus Jakarta Sans', sans-serif; color: var(--navy);
       }
+      .quiz-option:hover { border-color: var(--blue-mid); background: var(--blue-light); }
+      .quiz-option.selected { border-color: var(--blue); background: var(--blue-light); font-weight: 600; }
 
       @media (max-width: 768px) {
         .hero-title { font-size: 48px !important; line-height: 1.05 !important; }
@@ -189,23 +125,20 @@ const GlobalStyles = () => {
         .nav-links { display: none !important; }
         .grid-2 { grid-template-columns: 1fr !important; }
         .grid-3 { grid-template-columns: 1fr !important; }
+        .grid-4 { grid-template-columns: 1fr 1fr !important; }
         .hero-ctas { flex-direction: column !important; }
         .px-resp { padding-left: 20px !important; padding-right: 20px !important; }
-        .problem-connector { display: none !important; }
-        .problem-node { display: none !important; }
-        .problem-hline { display: none !important; }
+        .plans-grid { grid-template-columns: 1fr !important; }
+        .wa-float { bottom: 16px; right: 16px; }
       }
     `;
     document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(link);
-      document.head.removeChild(style);
-    };
+    return () => { document.head.removeChild(link); document.head.removeChild(style); };
   }, []);
   return null;
 };
 
-// ─── INTERSECTION OBSERVER HOOK ─────────────────────────────────────
+// ─── INTERSECTION OBSERVER ──────────────────────────────────────────
 function useInView(threshold = 0.15) {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
@@ -222,11 +155,11 @@ function useInView(threshold = 0.15) {
   return [ref, inView];
 }
 
-// ─── ICONS (inline SVG) ─────────────────────────────────────────────
+// ─── ICONS ──────────────────────────────────────────────────────────
 const Icon = ({ name, size = 24, color = "currentColor" }) => {
   const icons = {
-    shield: <path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm0 2.18l7 3.82v4c0 4.62-3.2 8.93-7 10.01C8.2 20.93 5 16.62 5 12V8l7-3.82z" fill={color}/>,
-    target: <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-14a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" fill={color}/>,
+    shield: <path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" fill="none" stroke={color} strokeWidth="2"/>,
+    target: <><circle cx="12" cy="12" r="10" fill="none" stroke={color} strokeWidth="2"/><circle cx="12" cy="12" r="6" fill="none" stroke={color} strokeWidth="2"/><circle cx="12" cy="12" r="2" fill={color}/></>,
     zap: <path d="M13 2L3 14h9l-1 10 10-12h-9l1-10z" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
     heart: <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="none" stroke={color} strokeWidth="2"/>,
     users: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="none" stroke={color} strokeWidth="2"/><circle cx="9" cy="7" r="4" fill="none" stroke={color} strokeWidth="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" fill="none" stroke={color} strokeWidth="2"/></>,
@@ -238,7 +171,10 @@ const Icon = ({ name, size = 24, color = "currentColor" }) => {
     x: <><line x1="18" y1="6" x2="6" y2="18" stroke={color} strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke={color} strokeWidth="2" strokeLinecap="round"/></>,
     trending: <><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><polyline points="17 6 23 6 23 12" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></>,
     clipboard: <><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" fill="none" stroke={color} strokeWidth="2"/><rect x="8" y="2" width="8" height="4" rx="1" fill="none" stroke={color} strokeWidth="2"/></>,
-    star: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill={color}/>,
+    star: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round"/>,
+    tool: <><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" fill="none" stroke={color} strokeWidth="2"/></>,
+    calendar: <><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke={color} strokeWidth="2"/><line x1="16" y1="2" x2="16" y2="6" stroke={color} strokeWidth="2"/><line x1="8" y1="2" x2="8" y2="6" stroke={color} strokeWidth="2"/><line x1="3" y1="10" x2="21" y2="10" stroke={color} strokeWidth="2"/></>,
+    send: <><line x1="22" y1="2" x2="11" y2="13" stroke={color} strokeWidth="2"/><polygon points="22 2 15 22 11 13 2 9 22 2" fill="none" stroke={color} strokeWidth="2"/></>,
   };
   return <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">{icons[name]}</svg>;
 };
@@ -247,775 +183,372 @@ const Icon = ({ name, size = 24, color = "currentColor" }) => {
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const h = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", h); return () => window.removeEventListener("scroll", h);
   }, []);
 
   const links = [
-    { label: "Nexa Origen", href: "#origen" },
-    { label: "Solución", href: "#solucion" },
-    { label: "Para quién", href: "#paraquien" },
+    { label: "Cómo trabajamos", href: "#metodo" },
     { label: "Planes", href: "#planes" },
+    { label: "Servicios", href: "#servicios" },
     { label: "FAQ", href: "#faq" },
   ];
 
   return (
-    <nav
-      style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        background: scrolled ? "rgba(255,255,255,0.92)" : "transparent",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(145,175,239,0.15)" : "1px solid transparent",
-        transition: "all 0.4s ease",
-      }}
-    >
-      <div style={{
-        maxWidth: 1200, margin: "0 auto", padding: "16px 32px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }} className="px-resp">
-        {/* Logo */}
-        <a href="#" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
-          <img src={scrolled ? NEXA_LOGO_BLUE : NEXA_LOGO_WHITE} alt="Nexa" style={{ height: 40, width: "auto", objectFit: "contain" }} />
+    <nav className="nav-blur" style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+      padding: scrolled ? "12px 32px" : "18px 32px",
+      borderBottom: scrolled ? "1px solid var(--gray-100)" : "1px solid transparent",
+      transition: "all 0.3s ease",
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <a href="#" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+          <img src={scrolled ? NEXA_LOGO_BLUE : NEXA_LOGO_BLUE} alt="Nexa" style={{ height: 36, width: "auto", objectFit: "contain", transition: "all 0.3s" }} />
         </a>
 
-        {/* Desktop Links */}
-        <div className="nav-links" style={{ display: "flex", gap: 32, alignItems: "center" }}>
-          {links.map((l) => (
+        <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 32 }}>
+          {links.map(l => (
             <a key={l.label} href={l.href} style={{
-              textDecoration: "none", color: scrolled ? "var(--gray-600)" : "rgba(255,255,255,0.7)", fontSize: 14, fontWeight: 500,
-              transition: "color 0.3s",
-            }}
-            onMouseEnter={(e) => e.target.style.color = scrolled ? "var(--blue)" : "white"}
-            onMouseLeave={(e) => e.target.style.color = scrolled ? "var(--gray-600)" : "rgba(255,255,255,0.7)"}
-            >{l.label}</a>
+              fontSize: 14, fontWeight: 500, color: "var(--gray-600)", textDecoration: "none", transition: "color 0.2s",
+            }}>{l.label}</a>
           ))}
-          <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "10px 24px", fontSize: 14, textDecoration: "none" }}>
-            Pre-inscríbete
+          <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "10px 24px", fontSize: 14, textDecoration: "none" }}>
+            Contáctanos
           </a>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{ display: "none", background: "none", border: "none", cursor: "pointer" }}
-          className="nav-menu-btn"
-        >
-          <Icon name={menuOpen ? "x" : "menu"} color="var(--navy)" />
+        {/* Mobile menu button */}
+        <button onClick={() => setMenuOpen(!menuOpen)} style={{ display: "none", background: "none", border: "none", cursor: "pointer" }}
+          className="mobile-menu-btn">
+          <Icon name={menuOpen ? "x" : "menu"} size={24} color="var(--navy)" />
         </button>
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
         <div style={{
-          padding: "16px 32px 24px", display: "flex", flexDirection: "column", gap: 16,
-          background: "white", borderTop: "1px solid var(--gray-100)",
+          position: "absolute", top: "100%", left: 0, right: 0,
+          background: "white", borderBottom: "1px solid var(--gray-100)",
+          padding: "16px 32px", display: "flex", flexDirection: "column", gap: 16,
         }}>
-          {links.map((l) => (
+          {links.map(l => (
             <a key={l.label} href={l.href} onClick={() => setMenuOpen(false)} style={{
-              textDecoration: "none", color: "var(--gray-600)", fontSize: 15, fontWeight: 500,
+              fontSize: 15, fontWeight: 500, color: "var(--navy)", textDecoration: "none", padding: "8px 0",
             }}>{l.label}</a>
           ))}
-          <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ marginTop: 8, textDecoration: "none", textAlign: "center" }}>Pre-inscríbete</a>
+          <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ marginTop: 8, textDecoration: "none", textAlign: "center" }}>Contáctanos</a>
         </div>
       )}
+
+      <style>{`@media (max-width: 768px) { .mobile-menu-btn { display: block !important; } }`}</style>
     </nav>
   );
 };
 
+
 // ─── HERO ───────────────────────────────────────────────────────────
 const Hero = () => {
   const [ref, inView] = useInView(0.1);
-
-  // Dot grid component
-  const DotGrid = ({ rows, cols, style }) => (
-    <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 8px)`, gap: 8, ...style }}>
-      {Array.from({ length: rows * cols }).map((_, i) => (
-        <div key={i} style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(145,175,239,0.25)" }} />
-      ))}
-    </div>
-  );
-
   return (
     <section ref={ref} style={{
-      position: "relative", overflow: "hidden", minHeight: "100vh", display: "flex", alignItems: "center",
-      background: "linear-gradient(160deg, #060e2e 0%, #0b1c60 40%, #122470 100%)",
-    }}>
-      {/* Subtle radial glow */}
-      <div style={{
-        position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)",
-        width: 800, height: 600, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(53,96,231,0.1) 0%, transparent 70%)",
-        pointerEvents: "none",
-      }} />
-
-      {/* Large faded background text */}
-      <div className="font-display" style={{
-        position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
-        fontSize: 280, color: "rgba(53,96,231,0.04)", letterSpacing: 20, whiteSpace: "nowrap",
-        pointerEvents: "none", userSelect: "none",
-      }}>NEXA</div>
-
-      {/* Dot grid top-right */}
-      <DotGrid rows={5} cols={7} style={{
-        position: "absolute", top: 140, right: 80,
-        opacity: inView ? 1 : 0, animation: inView ? "fadeIn 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.5s forwards" : "none",
-      }} />
-
-      {/* Dot grid bottom-left */}
-      <DotGrid rows={6} cols={3} style={{
-        position: "absolute", bottom: 160, left: 60,
-        opacity: inView ? 1 : 0, animation: inView ? "fadeIn 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.6s forwards" : "none",
-      }} />
-
-      {/* Decorative ring */}
-      <div style={{
-        position: "absolute", top: "10%", right: "15%",
-        width: 180, height: 180, borderRadius: "50%",
-        border: "1px solid rgba(145,175,239,0.07)",
-        pointerEvents: "none",
-      }} />
-      <div style={{
-        position: "absolute", bottom: "10%", left: "12%",
-        width: 120, height: 120, borderRadius: "50%",
-        border: "1px solid rgba(145,175,239,0.06)",
-        pointerEvents: "none",
-      }} />
-
-      {/* Main content - centered */}
-      <div style={{
-        maxWidth: 1200, margin: "0 auto", padding: "160px 32px 120px",
-        position: "relative", textAlign: "center", width: "100%",
-      }} className="px-resp">
-
+      minHeight: "100vh", display: "flex", alignItems: "center",
+      padding: "120px 32px 80px", position: "relative",
+      background: "radial-gradient(ellipse 80% 60% at 70% 20%, rgba(53,96,231,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 20% 80%, rgba(145,175,239,0.06) 0%, transparent 50%), var(--white)",
+    }} className="px-resp">
+      <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
         {/* Badge */}
         <div style={{
           display: "inline-flex", alignItems: "center", gap: 8,
-          border: "1px solid rgba(145,175,239,0.25)", borderRadius: 100, padding: "8px 20px",
-          fontSize: 13, fontWeight: 600, color: "var(--blue-mid)", marginBottom: 40,
-          background: "rgba(53,96,231,0.08)",
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.22, 1.2, 0.36, 1) forwards" : "none",
+          background: "var(--blue-light)", borderRadius: 100, padding: "8px 20px",
+          fontSize: 12, fontWeight: 700, color: "var(--navy)", marginBottom: 28,
+          textTransform: "uppercase", letterSpacing: 1.5,
+          opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.6s ${SPRING} forwards` : "none",
         }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--blue-mid)", animation: "pulse-soft 2s infinite" }} />
-          Pre-inscripción abierta — Nexa Origen
+          <Icon name="shield" size={14} color="var(--blue)" />
+          Centro de entrenamiento & rehabilitación
         </div>
 
-        {/* Title - line by line reveal */}
+        {/* Title */}
         <h1 className="font-display hero-title" style={{
-          fontSize: 76, lineHeight: 1.0, color: "white", marginBottom: 28,
-          maxWidth: 900, margin: "0 auto 28px",
+          fontSize: 72, lineHeight: 1.02, color: "var(--navy)", marginBottom: 24, maxWidth: 750, margin: "0 auto 24px",
         }}>
-          <span style={{
-            display: "block", overflow: "hidden",
-          }}>
-            <span style={{
-              display: "block",
-              opacity: inView ? 1 : 0,
-              animation: inView ? "clipRevealUp 0.9s cubic-bezier(0.22, 1.2, 0.36, 1) 0.15s forwards" : "none",
-            }}>
-              SÉ PARTE DEL INICIO
-            </span>
-          </span>
           <span style={{ display: "block", overflow: "hidden" }}>
             <span style={{
-              display: "block",
-              background: "linear-gradient(135deg, #3560e7, #91afef, #d9e3fa)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              opacity: inView ? 1 : 0,
-              animation: inView ? "clipRevealUp 0.9s cubic-bezier(0.22, 1.2, 0.36, 1) 0.35s forwards" : "none",
-            }}>
-              DE UNA NUEVA FORMA DE ENTRENAR
-            </span>
+              display: "block", opacity: inView ? 1 : 0,
+              animation: inView ? `clipRevealUp 0.9s ${SPRING} 0.15s forwards` : "none",
+            }}>ENTRENA CON CRITERIO.</span>
+          </span>
+          <span style={{ display: "block", overflow: "hidden" }}>
+            <span className="gradient-text" style={{
+              display: "block", opacity: inView ? 1 : 0,
+              animation: inView ? `clipRevealUp 0.9s ${SPRING} 0.35s forwards` : "none",
+            }}>PROGRESA CON ESTRUCTURA.</span>
           </span>
         </h1>
 
         {/* Subtitle */}
         <p style={{
-          fontSize: 17, lineHeight: 1.75, color: "rgba(255,255,255,0.5)", maxWidth: 560, margin: "0 auto 32px",
-          fontWeight: 400,
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.25s forwards" : "none",
+          fontSize: 18, color: "var(--gray-600)", lineHeight: 1.7, maxWidth: 560, margin: "0 auto 36px",
+          opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.8s ${SPRING} 0.5s forwards` : "none",
         }}>
-          Nexa integra entrenamiento estructurado, prevención de lesiones y recuperación profesional en un solo lugar. Inscríbete antes del {DEADLINE} y sé parte de Nexa Origen con beneficios exclusivos.
+          Entrenamiento guiado por fisioterapeutas. Evaluación, seguimiento y prevención integrados en tu proceso — sin improvisar.
         </p>
-
-        {/* Deadline badge */}
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: 8,
-          background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
-          borderRadius: 8, padding: "10px 20px", marginBottom: 32,
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.3s forwards" : "none",
-        }}>
-          <Icon name="zap" size={16} color="#91afef" />
-          <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)" }}>
-            Inscripciones abiertas hasta el <span style={{ color: "white" }}>{DEADLINE}</span> — Inauguración
-          </span>
-        </div>
 
         {/* CTAs */}
         <div className="hero-ctas" style={{
-          display: "flex", gap: 16, alignItems: "center", justifyContent: "center",
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.35s forwards" : "none",
+          display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap",
+          opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.8s ${SPRING} 0.65s forwards` : "none",
         }}>
-          <a href={FORM_URL} target="_blank" rel="noopener noreferrer" style={{
-            background: "white", color: "var(--navy)", border: "none",
-            padding: "15px 36px", borderRadius: 8, fontSize: 15, fontWeight: 700,
-            cursor: "pointer", transition: "all 0.3s", fontFamily: "'Plus Jakarta Sans', sans-serif",
-            display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
-          }}>
-            Quiero ser parte de Nexa Origen <Icon name="arrow" size={18} color="var(--navy)" />
+          <a href="#quiz" className="btn-primary" style={{ textDecoration: "none" }}>
+            Encuentra tu plan ideal
           </a>
-          <a href="#origen" style={{
-            background: "transparent", color: "white",
-            border: "1.5px solid rgba(145,175,239,0.3)",
-            padding: "14px 34px", borderRadius: 8, fontSize: 15, fontWeight: 600,
-            cursor: "pointer", transition: "all 0.3s", fontFamily: "'Plus Jakarta Sans', sans-serif",
-            textDecoration: "none",
-          }}>
-            Ver beneficios
+          <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ textDecoration: "none" }}>
+            Escríbenos por WhatsApp
           </a>
         </div>
 
-        {/* Pillars - glassmorphism cards */}
-        <div className="grid-3" style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16,
-          marginTop: 72,
+        {/* 3 quick pillars */}
+        <div style={{
+          display: "flex", justifyContent: "center", gap: 40, marginTop: 56, flexWrap: "wrap",
+          opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.7s ${SPRING} 0.85s forwards` : "none",
         }}>
           {[
-            { icon: "clipboard", title: "Entrenamiento", desc: "Estructurado y con criterio profesional" },
-            { icon: "shield", title: "Prevención", desc: "Cuidamos tu cuerpo mientras progresas" },
-            { icon: "heart", title: "Recuperación", desc: "Integrada al proceso, no separada" },
+            { icon: "activity", text: "Entrenamiento estructurado" },
+            { icon: "shield", text: "Evaluación profesional" },
+            { icon: "heart", text: "Prevención integrada" },
           ].map((p, i) => (
-            <div key={i} style={{
-              background: "rgba(255,255,255,0.05)",
-              backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
-              border: "1px solid rgba(145,175,239,0.12)",
-              borderRadius: 16, padding: "28px 24px",
-              display: "flex", alignItems: "flex-start", gap: 16,
-              transition: "background 0.3s ease, border-color 0.3s ease, transform 0.3s ease",
-              opacity: inView ? 1 : 0,
-              animation: inView ? `fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.5 + i * 0.12}s forwards` : "none",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.09)";
-              e.currentTarget.style.borderColor = "rgba(145,175,239,0.25)";
-              e.currentTarget.style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-              e.currentTarget.style.borderColor = "rgba(145,175,239,0.12)";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-            >
-              <div style={{
-                width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-                background: "linear-gradient(135deg, rgba(53,96,231,0.3), rgba(145,175,239,0.15))",
-                border: "1px solid rgba(145,175,239,0.15)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <Icon name={p.icon} size={20} color="#91afef" />
-              </div>
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: "white", marginBottom: 4 }}>{p.title}</div>
-                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.5, fontWeight: 400 }}>{p.desc}</div>
-              </div>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <Icon name={p.icon} size={18} color="var(--blue)" />
+              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--gray-600)" }}>{p.text}</span>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Bottom curved divider */}
-      <div style={{
-        position: "absolute", bottom: -2, left: 0, right: 0,
-      }}>
-        <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block", width: "100%" }}>
-          <path d="M0 60V30C240 5 480 0 720 10C960 20 1200 40 1440 30V60H0Z" fill="var(--gray-50)" />
-        </svg>
       </div>
     </section>
   );
 };
 
-// ─── NEXA ORIGEN (PRE-INSCRIPTION BENEFITS) ────────────────────────
-const NexaOrigen = () => {
+// ─── HOW WE WORK ────────────────────────────────────────────────────
+const HowWeWork = () => {
   const [ref, inView] = useInView();
+  const [active, setActive] = useState(0);
 
-  const benefits = [
-    {
-      icon: "star",
-      title: "Invitación a la inauguración",
-      desc: "Acceso al evento de apertura el 7 de marzo + experiencia de bienvenida exclusiva.",
-    },
-    {
-      icon: "heart",
-      title: 'Medias edición limitada "Nexa Origen"',
-      desc: "Medias con el logo + detalle que identifica que perteneces al grupo inicial. Solo para quienes se inscriban antes de inaugurar.",
-    },
-    {
-      icon: "activity",
-      title: "1 sesión de Nexa Recovery",
-      desc: "Descarga + movilidad asistida según evaluación. Ideal para soltar tensión y entrar a entrenar mejor.",
-    },
+  const tabs = [
     {
       icon: "trending",
-      title: "Onboarding prioritario",
-      desc: "Prioridad para agendar tu evaluación inicial y organizar tus primeras semanas en Nexa.",
+      label: "Entrenamiento",
+      title: "Entrenamiento con criterio",
+      desc: "Tu programa no es una rutina genérica. Está diseñado por fisioterapeutas con base en cómo se mueve tu cuerpo, qué necesita y hacia dónde vas.",
+      points: [
+        "Programas diseñados con criterio profesional",
+        "Se ajusta y evoluciona según tus avances",
+        "Cada ejercicio tiene un porqué claro",
+      ],
     },
     {
       icon: "clipboard",
-      title: "Acceso preferente a cupos de marzo",
-      desc: "Priorización para elegir horarios disponibles según tu plan.",
+      label: "Evaluación",
+      title: "Tu cuerpo da las respuestas",
+      desc: "No adivinamos: medimos, interpretamos y tomamos decisiones con datos reales. Seguimiento periódico para que tu plan siempre esté actualizado.",
+      points: [
+        "Evaluación de fuerza y medidas corporales",
+        "Análisis funcional del movimiento",
+        "Seguimiento periódico con ajustes basados en datos",
+      ],
+    },
+    {
+      icon: "heart",
+      label: "Prevención",
+      title: "Prevención antes que reparación",
+      desc: "Fisioterapia y recovery integrados en tu proceso. No esperamos a que algo duela — trabajamos para que no pase. Y si ya pasó, te acompañamos de vuelta.",
+      points: [
+        "Recovery preventiva integrada al entrenamiento",
+        "Fisioterapia disponible cuando se necesita",
+        "Transición segura entre rehabilitación y entrenamiento",
+      ],
     },
   ];
 
-  const steps = [
-    { num: "01", text: "Te registras y apartas tu cupo en el plan." },
-    { num: "02", text: "Coordinamos tu evaluación inicial, tu agenda de marzo y tu Nexa Recovery." },
-    { num: "03", text: "Asistes a la inauguración y recibes tus medias Nexa Origen." },
-  ];
+  const current = tabs[active];
 
   return (
-    <section id="origen" ref={ref} style={{
-      padding: "100px 32px",
-      background: "linear-gradient(180deg, var(--white) 0%, var(--blue-light) 40%, var(--blue-light) 60%, var(--white) 100%)",
-      position: "relative",
-    }} className="px-resp">
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+    <section id="metodo" ref={ref} style={{ padding: "100px 32px", background: "var(--off-white)" }} className="px-resp">
+      <div style={{ maxWidth: 800, margin: "0 auto" }}>
         {/* Header */}
-        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 56px" }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "var(--navy)", borderRadius: 100, padding: "8px 20px",
-            fontSize: 12, fontWeight: 700, color: "white", marginBottom: 24,
-            textTransform: "uppercase", letterSpacing: 1.5,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.22, 1.2, 0.36, 1) forwards" : "none",
-          }}>
-            <Icon name="zap" size={14} color="var(--blue-mid)" />
-            Beneficios exclusivos — Pre-inscripción
-          </div>
-          <h2 className="font-display section-title" style={{
-            fontSize: 52, color: "var(--navy)", lineHeight: 1.02, marginBottom: 16,
-            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
-          }}>
-            NEXA{" "}
-            <span className="gradient-text">ORIGEN</span>
-          </h2>
-          <p style={{
-            fontSize: 17, color: "var(--gray-600)", lineHeight: 1.7,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.2s forwards" : "none",
-          }}>
-            Reserva tu cupo antes de inaugurar y entra en marzo con ventajas exclusivas.
-          </p>
-        </div>
-
-        {/* Section label */}
-        <p style={{
-          fontSize: 14, fontWeight: 700, color: "var(--navy)", marginBottom: 24, textAlign: "center",
-          opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.22, 1.2, 0.36, 1) 0.25s forwards" : "none",
-        }}>
-          ¿Qué obtienes al inscribirte antes del {DEADLINE}?
-        </p>
-
-        {/* Benefits - top row 3, bottom row 2 centered */}
-        <div style={{ marginBottom: 64 }}>
-          <div className="grid-3" style={{
-            display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, marginBottom: 20,
-          }}>
-            {benefits.slice(0, 3).map((b, i) => (
-              <div key={i} className="glass-card" style={{
-                padding: 32, borderRadius: 18, position: "relative", overflow: "hidden",
-                opacity: inView ? 1 : 0,
-                animation: inView ? `fadeScale 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.3 + i * 0.12}s forwards` : "none",
-              }}>
-                <div style={{
-                  position: "absolute", top: 0, left: 0, right: 0, height: 3,
-                  background: "linear-gradient(90deg, var(--blue), var(--blue-mid))",
-                }} />
-                <div style={{
-                  width: 48, height: 48, borderRadius: 14, marginBottom: 18,
-                  background: "linear-gradient(135deg, var(--navy), var(--blue))",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  <Icon name={b.icon} size={22} color="white" />
-                </div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--navy)", marginBottom: 8 }}>{b.title}</h3>
-                <p style={{ fontSize: 13.5, color: "var(--gray-600)", lineHeight: 1.6 }}>{b.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="grid-2" style={{
-            display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20,
-            maxWidth: 800, margin: "0 auto",
-          }}>
-            {benefits.slice(3).map((b, i) => (
-              <div key={i} className="glass-card" style={{
-                padding: 32, borderRadius: 18, position: "relative", overflow: "hidden",
-                opacity: inView ? 1 : 0,
-                animation: inView ? `fadeScale 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.66 + i * 0.12}s forwards` : "none",
-              }}>
-                <div style={{
-                  position: "absolute", top: 0, left: 0, right: 0, height: 3,
-                  background: "linear-gradient(90deg, var(--blue), var(--blue-mid))",
-                }} />
-                <div style={{
-                  width: 48, height: 48, borderRadius: 14, marginBottom: 18,
-                  background: "linear-gradient(135deg, var(--navy), var(--blue))",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  <Icon name={b.icon} size={22} color="white" />
-                </div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--navy)", marginBottom: 8 }}>{b.title}</h3>
-                <p style={{ fontSize: 13.5, color: "var(--gray-600)", lineHeight: 1.6 }}>{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* How it works */}
-        <div style={{
-          maxWidth: 700, margin: "0 auto 56px",
-          background: "rgba(255,255,255,0.85)", backdropFilter: "blur(20px)",
-          border: "1px solid rgba(145,175,239,0.2)",
-          borderRadius: 20, padding: "40px 40px 32px", 
-          opacity: inView ? 1 : 0,
-          animation: inView ? "fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.7s forwards" : "none",
-        }}>
-          <h3 style={{
-            fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2,
-            color: "var(--blue)", marginBottom: 28, textAlign: "center",
-          }}>
-            Cómo funciona
-          </h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            {steps.map((s, i) => (
-              <div key={i} style={{
-                display: "flex", gap: 20, alignItems: "flex-start",
-                padding: "16px 0",
-                borderBottom: i < steps.length - 1 ? "1px solid var(--gray-100)" : "none",
-              }}>
-                <span className="font-display" style={{
-                  fontSize: 32, color: "var(--blue-mid)", lineHeight: 1, minWidth: 44,
-                }}>{s.num}</span>
-                <p style={{ fontSize: 15, color: "var(--gray-800)", lineHeight: 1.6, fontWeight: 500, paddingTop: 4 }}>{s.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div style={{
-          textAlign: "center",
-          opacity: inView ? 1 : 0,
-          animation: inView ? "fadeUp 0.7s cubic-bezier(0.22, 1.2, 0.36, 1) 0.8s forwards" : "none",
-        }}>
-          <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{
-            display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
-            padding: "16px 40px", fontSize: 16,
-          }}>
-            Quiero ser parte de Nexa Origen <Icon name="arrow" size={18} color="white" />
-          </a>
-          <p style={{ fontSize: 13, color: "var(--gray-400)", marginTop: 14 }}>
-            Beneficios exclusivos para inscripciones antes del {DEADLINE}.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// ─── PROBLEM ────────────────────────────────────────────────────────
-const Problem = () => {
-  const [ref, inView] = useInView();
-  const problems = [
-    { icon: "zap", title: "Sin estructura", desc: "Entrenas fuerte pero sin un plan profesional. El progreso se estanca y las molestias aparecen." },
-    { icon: "activity", title: "Molestias recurrentes", desc: "Arrastras dolores por entrenar sin criterio. Tu cuerpo te pasa factura." },
-    { icon: "shield", title: "Sin conexión", desc: "Sales de fisioterapia y no sabes cómo volver a entrenar con seguridad." },
-    { icon: "target", title: "Rendimiento limitado", desc: "Quieres mejorar tu desempeño deportivo pero no tienes acompañamiento real." },
-  ];
-
-  return (
-    <section id="problema" ref={ref} style={{
-      padding: "100px 32px",
-      background: "linear-gradient(160deg, #060e2e 0%, #0b1c60 50%, #0f2050 100%)",
-      position: "relative", overflow: "hidden",
-    }} className="px-resp">
-      {/* Subtle background glow */}
-      <div style={{
-        position: "absolute", top: "30%", right: "-10%",
-        width: 500, height: 500, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(53,96,231,0.08) 0%, transparent 70%)",
-        pointerEvents: "none",
-      }} />
-      {/* Decorative ring */}
-      <div style={{
-        position: "absolute", bottom: "5%", left: "5%",
-        width: 200, height: 200, borderRadius: "50%",
-        border: "1px solid rgba(145,175,239,0.06)",
-        pointerEvents: "none",
-      }} />
-
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
-        {/* Header - centered */}
-        <div style={{
-          textAlign: "center", maxWidth: 600, margin: "0 auto 72px",
-        }}>
-          <p style={{
-            fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2,
-            color: "var(--blue-mid)", marginBottom: 16,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) forwards" : "none",
-          }}>
-            El problema
-          </p>
-          <h2 className="font-display section-title" style={{
-            fontSize: 48, color: "white", lineHeight: 1.05, marginBottom: 18,
-            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
-          }}>
-            ¿RECONOCES ESTO?
-          </h2>
-          <p style={{
-            fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: 1.7,
-            opacity: inView ? 1 : 0, animation: inView ? "fadeUp 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s forwards" : "none",
-          }}>
-            Muchas personas entrenan con intensidad pero sin la estructura ni el acompañamiento que su cuerpo necesita.
-          </p>
-        </div>
-
-        {/* Problems - alternating layout with connecting line */}
-        <div style={{ position: "relative", maxWidth: 900, margin: "0 auto" }}>
-          {/* Vertical connecting line - centered */}
-          <div className="problem-connector" style={{
-            position: "absolute", left: "50%", top: 30, bottom: 30,
-            width: 1,
-            background: "linear-gradient(180deg, transparent 0%, rgba(145,175,239,0.2) 10%, rgba(145,175,239,0.2) 90%, transparent 100%)",
-            transform: "translateX(-50%)",
-            opacity: inView ? 1 : 0,
-            animation: inView ? "fadeIn 1s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s forwards" : "none",
-          }} />
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            {problems.map((p, i) => {
-              const isRight = i % 2 !== 0;
-              return (
-                <div key={i} style={{
-                  display: "flex", alignItems: "center",
-                  justifyContent: isRight ? "flex-end" : "flex-start",
-                  position: "relative",
-                }}>
-                  {/* Node dot on the center line */}
-                  <div className="problem-node" style={{
-                    position: "absolute", left: "50%", top: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: 10, height: 10, borderRadius: "50%",
-                    background: "var(--blue)", border: "2px solid rgba(145,175,239,0.3)",
-                    boxShadow: "0 0 12px rgba(53,96,231,0.3)",
-                    zIndex: 2,
-                    opacity: inView ? 1 : 0,
-                    animation: inView ? `fadeScale 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.3 + i * 0.13}s forwards` : "none",
-                  }} />
-
-                  {/* Horizontal connector from dot to card edge */}
-                  <div className="problem-hline" style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: isRight ? "calc(50% + 5px)" : "auto",
-                    right: isRight ? "auto" : "calc(50% + 5px)",
-                    width: "calc(50% - 420px - 5px)",
-                    minWidth: 0,
-                    height: 1,
-                    background: "rgba(145,175,239,0.15)",
-                    transform: "translateY(-50%)",
-                    opacity: inView ? 1 : 0,
-                    animation: inView ? `fadeIn 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.35 + i * 0.13}s forwards` : "none",
-                  }} />
-
-                  <div style={{
-                    opacity: inView ? 1 : 0,
-                    animation: inView
-                      ? `${isRight ? "slideInRight" : "slideInLeft"} 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.25 + i * 0.13}s forwards`
-                      : "none",
-                  }}>
-                    <div style={{
-                    maxWidth: 420, padding: "28px 32px", borderRadius: 18,
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(145,175,239,0.1)",
-                    backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-                    display: "flex", gap: 20, alignItems: "flex-start",
-                    transition: "all 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.07)";
-                    e.currentTarget.style.borderColor = "rgba(145,175,239,0.2)";
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-                    e.currentTarget.style.borderColor = "rgba(145,175,239,0.1)";
-                    e.currentTarget.style.transform = "translateY(0)";
-                  }}
-                  >
-                    <div style={{
-                      width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-                      background: "linear-gradient(135deg, rgba(53,96,231,0.3), rgba(145,175,239,0.12))",
-                      border: "1px solid rgba(145,175,239,0.12)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <Icon name={p.icon} size={20} color="#91afef" />
-                    </div>
-                    <div>
-                      <h3 style={{ fontSize: 16, fontWeight: 700, color: "white", marginBottom: 6 }}>{p.title}</h3>
-                      <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>{p.desc}</p>
-                    </div>
-                  </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Bottom transition text */}
-        <div style={{
-          textAlign: "center", marginTop: 56,
-          opacity: inView ? 1 : 0,
-          animation: inView ? "fadeUp 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.8s forwards" : "none",
-        }}>
-          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.35)", fontWeight: 500, fontStyle: "italic" }}>
-            Si algo de esto te suena, Nexa fue pensado para ti.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// ─── SOLUTION ───────────────────────────────────────────────────────
-const Solution = () => {
-  const [ref, inView] = useInView();
-  const pillars = [
-    { icon: "clipboard", title: "Entrenamiento estructurado", desc: "Cada sesión tiene un propósito. Programación con criterio profesional adaptada a tus objetivos y capacidades." },
-    { icon: "shield", title: "Prevención activa", desc: "Cuidamos la carga, la técnica y la recuperación. Entrenamos para rendir más y lesionarnos menos." },
-    { icon: "heart", title: "Recuperación integrada", desc: "Fisioterapia disponible cuando se necesita, no separada del proceso. Todo conectado." },
-  ];
-
-  return (
-    <section id="solucion" ref={ref} style={{ padding: "100px 32px", background: "var(--white)", position: "relative" }} className="px-resp">
-      <div className="dot-pattern" style={{
-        position: "absolute", top: 0, right: 0, width: "40%", height: "100%", opacity: 0.5,
-      }} />
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
-        <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 64px" }}>
+        <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 48px" }}>
           <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
-            La solución
+            Cómo trabajamos
           </p>
           <h2 className="font-display section-title" style={{
             fontSize: 44, color: "var(--navy)", lineHeight: 1.05, marginBottom: 16,
-            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.1s forwards` : "none",
           }}>
-            ENTRENAMIENTO, RENDIMIENTO Y CUIDADO DEL CUERPO. ALINEADOS.
+            NO ES UN GYM. ES UN SISTEMA.
           </h2>
-          <p style={{ fontSize: 16, color: "var(--gray-600)", lineHeight: 1.7 }}>
-            Nexa es donde se entrena con criterio. Donde el rendimiento y la salud no compiten — conviven.
+          <p style={{
+            fontSize: 16, color: "var(--gray-600)", lineHeight: 1.7,
+            opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.7s ${SPRING} 0.2s forwards` : "none",
+          }}>
+            Todo está conectado. Entrenamiento, evaluación y prevención se alimentan entre sí para que tu progreso sea real y sostenible.
           </p>
         </div>
 
-        <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32 }}>
-          {pillars.map((p, i) => (
-            <div key={i} style={{
-              padding: 40, borderRadius: 20, background: i === 1 ? "var(--navy)" : "var(--gray-50)",
-              opacity: inView ? 1 : 0,
-              animation: inView ? `fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.1 + i * 0.15}s forwards` : "none",
+        {/* Tab bar */}
+        <div style={{
+          display: "flex", gap: 6, marginBottom: 0, borderRadius: "16px 16px 0 0", overflow: "hidden",
+          background: "rgba(145,175,239,0.1)", padding: 6,
+          opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.7s ${SPRING} 0.3s forwards` : "none",
+        }}>
+          {tabs.map((tab, i) => (
+            <button key={i} onClick={() => setActive(i)} style={{
+              flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              padding: "14px 16px", border: "none", borderRadius: 12,
+              background: active === i ? "white" : "transparent",
+              boxShadow: active === i ? "0 2px 12px rgba(11,28,96,0.08)" : "none",
+              cursor: "pointer", transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontSize: 14, fontWeight: active === i ? 700 : 500,
+              color: active === i ? "var(--navy)" : "var(--gray-400)",
             }}>
-              <div style={{
-                width: 52, height: 52, borderRadius: 14,
-                background: i === 1 ? "rgba(53,96,231,0.25)" : "var(--blue-light)",
-                display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24,
-              }}>
-                <Icon name={p.icon} size={24} color={i === 1 ? "#91afef" : "var(--blue)"} />
-              </div>
-              <h3 style={{
-                fontSize: 20, fontWeight: 700, marginBottom: 12,
-                color: i === 1 ? "white" : "var(--navy)",
-              }}>{p.title}</h3>
-              <p style={{
-                fontSize: 15, lineHeight: 1.7,
-                color: i === 1 ? "rgba(255,255,255,0.7)" : "var(--gray-600)",
-              }}>{p.desc}</p>
-            </div>
+              <Icon name={tab.icon} size={18} color={active === i ? "var(--blue)" : "var(--gray-400)"} />
+              <span className="tab-label">{tab.label}</span>
+            </button>
           ))}
         </div>
+
+        {/* Tab content */}
+        <div style={{
+          background: "white", borderRadius: "0 0 20px 20px",
+          border: "1px solid var(--gray-100)", borderTop: "none",
+          padding: "40px 36px",
+          boxShadow: "0 8px 32px rgba(11,28,96,0.04)",
+          opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.7s ${SPRING} 0.35s forwards` : "none",
+        }}>
+          {/* Animated number */}
+          <div key={active} style={{ animation: `fadeUp 0.5s ${SPRING} forwards` }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 20, marginBottom: 24 }}>
+              <span className="font-display" style={{
+                fontSize: 64, lineHeight: 0.85, color: "var(--blue-light)",
+                flexShrink: 0, userSelect: "none",
+              }}>
+                0{active + 1}
+              </span>
+              <div>
+                <h3 style={{ fontSize: 22, fontWeight: 700, color: "var(--navy)", marginBottom: 10, lineHeight: 1.3 }}>
+                  {current.title}
+                </h3>
+                <p style={{ fontSize: 15, color: "var(--gray-600)", lineHeight: 1.7 }}>
+                  {current.desc}
+                </p>
+              </div>
+            </div>
+
+            {/* Points */}
+            <div style={{
+              display: "flex", flexDirection: "column", gap: 12,
+              paddingLeft: 84,
+            }}>
+              {current.points.map((point, pi) => (
+                <div key={pi} style={{
+                  display: "flex", alignItems: "center", gap: 12,
+                  animation: `fadeUp 0.4s ${SPRING} ${0.1 + pi * 0.08}s both`,
+                }}>
+                  <div style={{
+                    width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
+                    background: "linear-gradient(135deg, var(--blue), var(--blue-mid))",
+                  }} />
+                  <span style={{ fontSize: 14, color: "var(--gray-600)", lineHeight: 1.5 }}>{point}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <style>{`@media (max-width: 768px) {
+          .tab-label { display: none; }
+        }`}</style>
       </div>
     </section>
   );
 };
+
 
 // ─── FOR WHO ────────────────────────────────────────────────────────
 const ForWho = () => {
   const [ref, inView] = useInView();
-  const audiences = [
+  const profiles = [
     {
-      tag: "Prioritario",
-      title: "Personas activas y deportistas",
-      desc: "Disfrutas entrenar y quieres hacerlo mejor. Buscas estructura, rendimiento y un espacio serio donde progresar.",
-      features: ["Entrenar con criterio profesional", "Mejorar rendimiento deportivo", "Prevenir lesiones", "Seguimiento y estructura real"],
+      icon: "users",
+      title: "Quiero entrenar bien pero no sé por dónde empezar",
+      plan: "Base",
+      desc: "Recibe un programa con criterio profesional desde el día uno, sin necesitar experiencia previa.",
     },
     {
-      tag: "Bienestar",
-      title: "Adultos activos con molestias",
-      desc: "Quieres mantenerte activo sin que las molestias te detengan. Valoras la seguridad y el cuidado de tu cuerpo.",
-      features: ["Entrenamiento guiado y seguro", "Control y corrección técnica", "Continuidad post-terapia", "Confianza para moverse mejor"],
+      icon: "activity",
+      title: "Entreno pero tengo molestias recurrentes",
+      plan: "Control",
+      desc: "Evaluamos tu movimiento, identificamos el origen y ajustamos tu entrenamiento para que dejes de compensar.",
+    },
+    {
+      icon: "heart",
+      title: "Vengo de fisioterapia y quiero retomar",
+      plan: "Control",
+      desc: "Transición segura entre rehabilitación y entrenamiento con fisioterapeutas que entienden tu proceso.",
+    },
+    {
+      icon: "trending",
+      title: "Quiero llevar mi rendimiento al siguiente nivel",
+      plan: "Proceso",
+      desc: "Programa totalmente personalizado, seguimiento continuo, plan nutricional y recuperación integral.",
     },
   ];
 
   return (
-    <section id="paraquien" ref={ref} style={{ padding: "100px 32px", background: "var(--gray-50)" }} className="px-resp">
+    <section ref={ref} style={{ padding: "100px 32px", background: "var(--white)" }} className="px-resp">
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 64px" }}>
+        <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 64px" }}>
           <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
-            Para quién
+            ¿Es Nexa para ti?
           </p>
           <h2 className="font-display section-title" style={{
             fontSize: 44, color: "var(--navy)", lineHeight: 1.05,
-            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.1s forwards` : "none",
           }}>
-            ¿ES NEXA PARA TI?
+            ENCUENTRA TU CAMINO
           </h2>
         </div>
 
-        <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
-          {audiences.map((a, i) => (
-            <div key={i} className="glass-card" style={{
-              padding: 40, borderRadius: 20, position: "relative", overflow: "hidden",
+        <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
+          {profiles.map((p, i) => (
+            <div key={i} style={{
+              borderRadius: 16, padding: "28px 24px", border: "1px solid var(--gray-100)",
+              background: "white", transition: "all 0.3s ease",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.1 + i * 0.18}s forwards` : "none",
+              animation: inView ? `fadeScale 0.65s ${SPRING_POP} ${0.2 + i * 0.1}s forwards` : "none",
             }}>
-              {/* Decorative line */}
-              <div style={{
-                position: "absolute", top: 0, left: 0, right: 0, height: 3,
-                background: "linear-gradient(90deg, var(--blue), var(--blue-mid))",
-              }} />
-              <span style={{
-                display: "inline-block", padding: "5px 14px", borderRadius: 100,
-                fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1,
-                background: "var(--blue-light)", color: "var(--blue)", marginBottom: 20,
-              }}>{a.tag}</span>
-              <h3 style={{ fontSize: 24, fontWeight: 700, color: "var(--navy)", marginBottom: 12 }}>{a.title}</h3>
-              <p style={{ fontSize: 15, color: "var(--gray-600)", lineHeight: 1.7, marginBottom: 28 }}>{a.desc}</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {a.features.map((f, j) => (
-                  <div key={j} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{
-                      width: 22, height: 22, borderRadius: 6, flexShrink: 0,
-                      background: "var(--blue-light)", display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <Icon name="check" size={14} color="var(--blue)" />
-                    </div>
-                    <span style={{ fontSize: 14, color: "var(--gray-800)", fontWeight: 500 }}>{f}</span>
-                  </div>
-                ))}
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+                  background: "linear-gradient(135deg, rgba(53,96,231,0.08), rgba(145,175,239,0.12))",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <Icon name={p.icon} size={20} color="var(--blue)" />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: 15, fontWeight: 700, color: "var(--navy)", marginBottom: 8, lineHeight: 1.4 }}>
+                    "{p.title}"
+                  </h3>
+                  <p style={{ fontSize: 13, color: "var(--gray-600)", lineHeight: 1.6, marginBottom: 10 }}>{p.desc}</p>
+                  <span style={{
+                    fontSize: 12, fontWeight: 700, color: "var(--blue)",
+                    background: "var(--blue-light)", padding: "4px 12px", borderRadius: 100,
+                  }}>
+                    Recomendado: Nexa {p.plan}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
@@ -1025,220 +558,349 @@ const ForWho = () => {
   );
 };
 
+// ─── PLAN QUIZ ──────────────────────────────────────────────────────
+const quizQuestions = [
+  {
+    q: "¿Has entrenado antes de forma regular?",
+    options: [
+      { text: "No, sería mi primera vez", score: { base: 3, control: 1, proceso: 0 } },
+      { text: "Sí, pero hace tiempo que no", score: { base: 2, control: 3, proceso: 1 } },
+      { text: "Sí, actualmente entreno", score: { base: 0, control: 2, proceso: 3 } },
+    ],
+  },
+  {
+    q: "¿Cuántos días a la semana puedes dedicar al entrenamiento?",
+    options: [
+      { text: "1 a 2 días", score: { base: 3, control: 1, proceso: 0 } },
+      { text: "3 días", score: { base: 1, control: 3, proceso: 1 } },
+      { text: "4 a 5 días", score: { base: 0, control: 1, proceso: 3 } },
+    ],
+  },
+  {
+    q: "¿Tienes alguna molestia, lesión o condición actual?",
+    options: [
+      { text: "No, estoy bien", score: { base: 2, control: 1, proceso: 1 } },
+      { text: "Sí, algo menor o recurrente", score: { base: 0, control: 3, proceso: 2 } },
+      { text: "Sí, vengo de un proceso de rehabilitación", score: { base: 0, control: 3, proceso: 3 } },
+    ],
+  },
+  {
+    q: "¿Qué nivel de acompañamiento buscas?",
+    options: [
+      { text: "Estructura básica — quiero un buen programa", score: { base: 3, control: 0, proceso: 0 } },
+      { text: "Seguimiento profesional — que me guíen de cerca", score: { base: 0, control: 3, proceso: 1 } },
+      { text: "Optimización total — programa, nutrición y recovery", score: { base: 0, control: 0, proceso: 3 } },
+    ],
+  },
+];
+
+const planResults = {
+  base: { name: "Nexa Base", price: "50", tagline: "Estructura y criterio profesional", color: "var(--navy)" },
+  control: { name: "Nexa Control", price: "75", tagline: "Seguimiento que marca la diferencia", color: "var(--blue)" },
+  proceso: { name: "Nexa Proceso", price: "95", tagline: "Tu rendimiento, optimizado al máximo", color: "#3560e7" },
+};
+
+const PlanQuiz = () => {
+  const [ref, inView] = useInView();
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [result, setResult] = useState(null);
+
+  const handleAnswer = (option) => {
+    const newAnswers = [...answers, option.score];
+    setAnswers(newAnswers);
+
+    if (step < quizQuestions.length - 1) {
+      setStep(step + 1);
+    } else {
+      // Calculate result
+      const totals = newAnswers.reduce((acc, s) => ({
+        base: acc.base + s.base,
+        control: acc.control + s.control,
+        proceso: acc.proceso + s.proceso,
+      }), { base: 0, control: 0, proceso: 0 });
+
+      const winner = Object.entries(totals).sort((a, b) => b[1] - a[1])[0][0];
+      setResult(winner);
+    }
+  };
+
+  const reset = () => { setStep(0); setAnswers([]); setResult(null); };
+
+  return (
+    <section id="quiz" ref={ref} style={{
+      padding: "100px 32px",
+      background: "linear-gradient(180deg, var(--white) 0%, var(--blue-light) 50%, var(--white) 100%)",
+    }} className="px-resp">
+      <div style={{ maxWidth: 600, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
+          <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
+            Test rápido
+          </p>
+          <h2 className="font-display section-title" style={{
+            fontSize: 44, color: "var(--navy)", lineHeight: 1.05,
+            opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.1s forwards` : "none",
+          }}>
+            ¿CUÁL PLAN ES PARA TI?
+          </h2>
+          <p style={{
+            fontSize: 15, color: "var(--gray-600)", lineHeight: 1.6, marginTop: 12,
+            opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.7s ${SPRING} 0.2s forwards` : "none",
+          }}>
+            Responde 4 preguntas y te recomendamos el plan ideal.
+          </p>
+        </div>
+
+        {!result ? (
+          <div style={{
+            background: "white", borderRadius: 20, padding: "36px 32px",
+            boxShadow: "0 8px 40px rgba(11,28,96,0.06)", border: "1px solid var(--gray-100)",
+          }}>
+            {/* Progress */}
+            <div style={{ display: "flex", gap: 6, marginBottom: 28 }}>
+              {quizQuestions.map((_, i) => (
+                <div key={i} style={{
+                  flex: 1, height: 4, borderRadius: 2,
+                  background: i <= step ? "var(--blue)" : "var(--gray-100)",
+                  transition: "background 0.3s ease",
+                }} />
+              ))}
+            </div>
+
+            <p style={{ fontSize: 12, color: "var(--gray-400)", marginBottom: 8, fontWeight: 600 }}>
+              Pregunta {step + 1} de {quizQuestions.length}
+            </p>
+            <h3 style={{ fontSize: 17, fontWeight: 700, color: "var(--navy)", marginBottom: 24, lineHeight: 1.4 }}>
+              {quizQuestions[step].q}
+            </h3>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {quizQuestions[step].options.map((opt, i) => (
+                <button key={i} className="quiz-option" onClick={() => handleAnswer(opt)}>
+                  {opt.text}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div style={{
+            background: "white", borderRadius: 20, padding: "40px 32px",
+            boxShadow: "0 8px 40px rgba(11,28,96,0.06)", border: "1px solid var(--gray-100)",
+            textAlign: "center",
+            animation: `fadeScale 0.6s ${SPRING_POP} forwards`,
+          }}>
+            <div style={{
+              width: 56, height: 56, borderRadius: "50%", margin: "0 auto 20px",
+              background: "linear-gradient(135deg, rgba(53,96,231,0.15), rgba(145,175,239,0.1))",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <Icon name="check" size={28} color="var(--blue)" />
+            </div>
+            <p style={{ fontSize: 13, color: "var(--gray-400)", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>
+              Tu plan recomendado
+            </p>
+            <h3 className="font-display" style={{ fontSize: 40, color: planResults[result].color, marginBottom: 8 }}>
+              {planResults[result].name}
+            </h3>
+            <p style={{ fontSize: 15, color: "var(--gray-600)", marginBottom: 4 }}>{planResults[result].tagline}</p>
+            <p className="font-display" style={{ fontSize: 36, color: "var(--navy)", margin: "12px 0 24px" }}>
+              ${planResults[result].price}<span style={{ fontSize: 16, color: "var(--gray-400)" }}>/mes</span>
+            </p>
+
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ textDecoration: "none" }}>
+                Inscribirme por WhatsApp
+              </a>
+              <button onClick={reset} className="btn-outline" style={{ cursor: "pointer" }}>
+                Repetir test
+              </button>
+            </div>
+
+            <a href="#planes" style={{
+              display: "inline-block", marginTop: 20,
+              fontSize: 13, color: "var(--blue)", textDecoration: "none", fontWeight: 600,
+            }}>
+              Ver todos los planes en detalle →
+            </a>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+
 // ─── PLANS ──────────────────────────────────────────────────────────
 const Plans = () => {
   const [ref, inView] = useInView();
+
   const plans = [
     {
       name: "Nexa Base",
-      tagline: "Estructura y criterio profesional",
       price: "50",
-      frequency: null,
-      desc: "Entrena con estructura y criterio profesional.",
-      features: [
-        "Programa estructurado seleccionado por fisioterapeuta",
-        "Adaptación general de cargas según tu nivel",
-        "Evaluación inicial de fuerza",
-        "Medidas corporales básicas",
-        "Revisión mensual de progreso",
-        "Orientación profesional en sala",
-      ],
-      ideal: "Personas que quieren entrenar con seguridad, buena base técnica.",
-      accent: false,
+      tagline: "Tu entrada al entrenamiento con criterio",
+      isAccent: false,
       badge: null,
-      color: "#91afef",
+      features: [
+        "Frecuencia libre",
+        "Programa seleccionado por fisioterapeuta",
+        "Evaluación de fuerza inicial",
+        "Medidas corporales",
+        "Corrección técnica puntual",
+        "Ajuste mensual del programa",
+        "Acceso completo al espacio",
+      ],
+      ideal: "Para quien quiere estructura profesional sin necesitar seguimiento cercano.",
     },
     {
       name: "Nexa Control",
-      tagline: "Seguimiento técnico y progreso",
       price: "75",
-      frequency: "3 días por semana",
-      desc: "Seguimiento técnico y progreso estructurado.",
-      includesBase: true,
+      tagline: "Seguimiento que marca la diferencia",
+      isAccent: true,
+      badge: "El más elegido",
       features: [
-        "Evaluación funcional (FMS)",
-        "Valoración de fuerza específica",
+        "3 días por semana",
         "Programa ajustado a tus objetivos",
-        "Corrección técnica activa",
+        "Evaluación de fuerza específica",
+        "Evaluación funcional",
+        "Medidas corporales",
+        "Corrección técnica activa en cada sesión",
         "Seguimiento mensual estructurado",
-        "Proceso de recuperación integrado",
+        "Recovery según necesidad",
+        "Acceso completo al espacio",
       ],
-      ideal: "Personas activas y deportistas que buscan mejorar rendimiento con supervisión profesional constante.",
-      accent: true,
-      badge: "Más elegido",
-      color: "#3560e7",
+      ideal: "Para quien entrena serio, tiene molestias recurrentes o quiere resultados sostenibles.",
+      includesBase: true,
     },
     {
       name: "Nexa Proceso",
-      tagline: "Optimización integral",
       price: "95",
-      frequency: "5 días por semana",
-      desc: "Optimización integral para alto rendimiento.",
-      includesBase: true,
-      includesControl: true,
-      features: [
-        "Programa totalmente personalizado",
-        "Seguimiento continuo y ajustes estratégicos",
-        "Plan nutricional estructurado",
-        "Proceso de recuperación completo",
-        "Enfoque orientado a objetivos exigentes",
-      ],
-      ideal: "Deportistas y personas con metas claras que buscan máximo progreso con control profesional.",
-      accent: false,
+      tagline: "Tu rendimiento, optimizado al máximo",
+      isAccent: false,
       badge: null,
-      color: "#0b1c60",
+      features: [
+        "5 días por semana",
+        "Programa totalmente personalizado",
+        "Evaluación de fuerza específica",
+        "Evaluación funcional",
+        "Medidas corporales",
+        "Corrección técnica activa continua",
+        "Seguimiento continuo con ajustes frecuentes",
+        "Nexa Recovery completa integrada",
+        "Plan nutricional",
+        "Acceso completo al espacio",
+      ],
+      ideal: "Para quien busca alto rendimiento, metas exigentes u optimización integral.",
+      includesControl: true,
     },
   ];
 
   return (
     <section id="planes" ref={ref} style={{ padding: "100px 32px", background: "var(--white)" }} className="px-resp">
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 64px" }}>
+        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 20px" }}>
           <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
             Planes
           </p>
           <h2 className="font-display section-title" style={{
             fontSize: 44, color: "var(--navy)", lineHeight: 1.05, marginBottom: 16,
-            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.1s forwards` : "none",
           }}>
             EL PLAN QUE SE ADAPTA A TI
           </h2>
-          <p style={{ fontSize: 16, color: "var(--gray-600)", lineHeight: 1.7 }}>
-            Distintos niveles de acompañamiento profesional. Tú eliges según tus objetivos y necesidades.
+          <p style={{
+            fontSize: 16, color: "var(--gray-600)", lineHeight: 1.7,
+            opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.7s ${SPRING} 0.2s forwards` : "none",
+          }}>
+            Los planes se diferencian por el nivel de acompañamiento, no por acceso. Todos entrenan en el mismo espacio con la misma calidad.
           </p>
         </div>
 
-        <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, alignItems: "start" }}>
+        {/* Key differentiator message */}
+        <div style={{
+          textAlign: "center", marginBottom: 48,
+          opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.7s ${SPRING} 0.3s forwards` : "none",
+        }}>
+          <p style={{
+            display: "inline-block", fontSize: 13, fontWeight: 700, color: "var(--navy)",
+            background: "var(--blue-light)", padding: "10px 24px", borderRadius: 100,
+          }}>
+            Base te da estructura · Control te da seguimiento · Proceso te da optimización integral
+          </p>
+        </div>
+
+        <div className="plans-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, alignItems: "start" }}>
           {plans.map((plan, i) => (
             <div key={i} className="plan-card" style={{
-              padding: 0, borderRadius: 20, position: "relative", overflow: "hidden",
-              background: plan.accent ? "var(--navy)" : "var(--white)",
-              border: plan.accent ? "none" : "1px solid var(--gray-100)",
+              borderRadius: 20, padding: plan.isAccent ? "3px" : 0,
+              background: plan.isAccent ? "linear-gradient(135deg, var(--navy), var(--blue))" : "transparent",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeScale 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.1 + i * 0.14}s forwards` : "none",
-              display: "flex", flexDirection: "column",
+              animation: inView ? `fadeScale 0.7s ${SPRING_POP} ${0.3 + i * 0.12}s forwards` : "none",
             }}>
-              {/* Top accent bar */}
               <div style={{
-                height: 4,
-                background: plan.accent
-                  ? "linear-gradient(90deg, #3560e7, #91afef)"
-                  : i === 0
-                    ? "linear-gradient(90deg, #91afef, #d9e3fa)"
-                    : "linear-gradient(90deg, #0b1c60, #3560e7)",
-              }} />
-
-              <div style={{ padding: "36px 32px 32px" }}>
-                {/* Badge */}
+                borderRadius: plan.isAccent ? 18 : 20,
+                padding: "32px 24px",
+                background: plan.isAccent ? "var(--navy)" : "white",
+                border: plan.isAccent ? "none" : "1px solid var(--gray-100)",
+                color: plan.isAccent ? "white" : "var(--navy)",
+                position: "relative", minHeight: 520,
+                display: "flex", flexDirection: "column",
+              }}>
                 {plan.badge && (
                   <div style={{
-                    position: "absolute", top: 20, right: 20,
-                    padding: "5px 12px", borderRadius: 100, fontSize: 11, fontWeight: 700,
-                    background: "rgba(53,96,231,0.3)", color: "#91afef", textTransform: "uppercase", letterSpacing: 1,
+                    position: "absolute", top: -1, left: "50%", transform: "translateX(-50%)",
+                    background: "var(--blue)", color: "white", fontSize: 11, fontWeight: 700,
+                    padding: "5px 16px", borderRadius: "0 0 8px 8px", textTransform: "uppercase", letterSpacing: 1,
                   }}>{plan.badge}</div>
                 )}
 
-                {/* Name */}
-                <h3 className="font-display" style={{
-                  fontSize: 30, color: plan.accent ? "white" : "var(--navy)", marginBottom: 8, letterSpacing: 1,
-                }}>{plan.name}</h3>
-
-                {/* Description */}
                 <p style={{
-                  fontSize: 14, lineHeight: 1.6, marginBottom: 20,
-                  color: plan.accent ? "rgba(255,255,255,0.55)" : "var(--gray-600)",
-                }}>{plan.desc}</p>
+                  fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5,
+                  color: plan.isAccent ? "var(--blue-mid)" : "var(--blue)", marginBottom: 8, marginTop: plan.badge ? 16 : 0,
+                }}>{plan.name}</p>
 
-                {/* Price */}
-                <div style={{ marginBottom: 4, display: "flex", alignItems: "baseline", gap: 4 }}>
-                  <span style={{
-                    fontSize: 14, fontWeight: 600,
-                    color: plan.accent ? "rgba(255,255,255,0.5)" : "var(--gray-400)",
-                  }}>$</span>
-                  <span className="font-display" style={{
-                    fontSize: 52, lineHeight: 1,
-                    color: plan.accent ? "white" : "var(--navy)",
-                  }}>{plan.price}</span>
-                  <span style={{
-                    fontSize: 14, fontWeight: 500,
-                    color: plan.accent ? "rgba(255,255,255,0.5)" : "var(--gray-400)",
-                    marginLeft: 4,
-                  }}>/mes</span>
+                <div className="font-display" style={{ fontSize: 52, lineHeight: 1, marginBottom: 4 }}>
+                  ${plan.price}
                 </div>
+                <p style={{ fontSize: 11.5, color: plan.isAccent ? "rgba(145,175,239,0.6)" : "var(--blue-mid)", marginBottom: 16 }}>
+                  /mes · Tasa BCV
+                </p>
+
                 <p style={{
-                  fontSize: 11.5, fontWeight: 600,
-                  color: plan.accent ? "rgba(145,175,239,0.6)" : "var(--blue-mid)",
-                  marginBottom: 8, letterSpacing: 0.3,
-                }}>Tasa BCV</p>
+                  fontSize: 14, fontWeight: 600, marginBottom: 20, lineHeight: 1.4,
+                  color: plan.isAccent ? "rgba(255,255,255,0.8)" : "var(--gray-600)",
+                }}>{plan.tagline}</p>
 
-                {/* Frequency */}
-                {plan.frequency && (
-                  <p style={{
-                    fontSize: 13, fontWeight: 600, marginBottom: 4,
-                    color: plan.accent ? "var(--blue-mid)" : "var(--blue)",
-                  }}>{plan.frequency}</p>
-                )}
-
-                {/* Includes previous plan note */}
-                {(plan.includesBase || plan.includesControl) && (
-                  <p style={{
-                    fontSize: 12, fontStyle: "italic", marginTop: 12,
-                    color: plan.accent ? "rgba(255,255,255,0.4)" : "var(--gray-400)",
-                    paddingBottom: 4,
-                  }}>
-                    Incluye todo lo de {plan.includesControl ? "Nexa Control" : "Nexa Base"}, más:
-                  </p>
-                )}
-
-                {/* Features */}
-                <div style={{
-                  display: "flex", flexDirection: "column", gap: 14, marginTop: 20, marginBottom: 28,
-                  paddingTop: 20, borderTop: `1px solid ${plan.accent ? "rgba(255,255,255,0.08)" : "var(--gray-100)"}`,
-                }}>
-                  {plan.features.map((f, j) => (
-                    <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                      <div style={{
-                        width: 20, height: 20, borderRadius: 5, flexShrink: 0, marginTop: 1,
-                        background: plan.accent ? "rgba(53,96,231,0.25)" : "var(--blue-light)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                      }}>
-                        <Icon name="check" size={12} color={plan.accent ? "#91afef" : "var(--blue)"} />
-                      </div>
+                <div style={{ flex: 1, marginBottom: 20 }}>
+                  {plan.features.map((f, fi) => (
+                    <div key={fi} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
+                      <Icon name="check" size={16} color={plan.isAccent ? "var(--blue-mid)" : "var(--blue)"} />
                       <span style={{
-                        fontSize: 13.5, fontWeight: 500, lineHeight: 1.45,
-                        color: plan.accent ? "rgba(255,255,255,0.82)" : "var(--gray-800)",
+                        fontSize: 13, lineHeight: 1.4,
+                        color: plan.isAccent ? "rgba(255,255,255,0.75)" : "var(--gray-600)",
                       }}>{f}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Ideal for */}
-                <div style={{
-                  padding: "16px 18px", borderRadius: 12, marginBottom: 28,
-                  background: plan.accent ? "rgba(255,255,255,0.06)" : "var(--gray-50)",
-                  border: `1px solid ${plan.accent ? "rgba(255,255,255,0.06)" : "var(--gray-100)"}`,
+                <p style={{
+                  fontSize: 12, fontStyle: "italic", marginBottom: 20,
+                  color: plan.isAccent ? "rgba(255,255,255,0.5)" : "var(--gray-400)", lineHeight: 1.5,
                 }}>
-                  <p style={{
-                    fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2,
-                    color: plan.accent ? "var(--blue-mid)" : "var(--blue)", marginBottom: 6,
-                  }}>Ideal para</p>
-                  <p style={{
-                    fontSize: 13, lineHeight: 1.55,
-                    color: plan.accent ? "rgba(255,255,255,0.6)" : "var(--gray-600)",
-                  }}>{plan.ideal}</p>
-                </div>
+                  {plan.ideal}
+                </p>
 
-                {/* CTA */}
-                <a href={FORM_URL} target="_blank" rel="noopener noreferrer" style={{
-                  display: "block", width: "100%", padding: "14px 0", borderRadius: 10,
-                  fontSize: 14, fontWeight: 600, cursor: "pointer", transition: "all 0.3s",
-                  background: plan.accent ? "linear-gradient(135deg, #3560e7, #91afef)" : "transparent",
-                  color: plan.accent ? "white" : "var(--navy)",
-                  border: plan.accent ? "none" : "1.5px solid var(--blue-mid)",
-                  fontFamily: "'Plus Jakarta Sans', sans-serif", textDecoration: "none", textAlign: "center",
-                }}>
-                  Reservar con Nexa Origen
+                <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display: "block", textAlign: "center", padding: "14px", borderRadius: 10,
+                    fontSize: 14, fontWeight: 700, textDecoration: "none", transition: "all 0.3s",
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    background: plan.isAccent ? "white" : "linear-gradient(135deg, var(--navy), var(--blue))",
+                    color: plan.isAccent ? "var(--navy)" : "white",
+                  }}>
+                  Inscribirme en {plan.name}
                 </a>
               </div>
             </div>
@@ -1249,51 +911,71 @@ const Plans = () => {
   );
 };
 
-// ─── LAUNCH / PROCESS ───────────────────────────────────────────────
-const Launch = () => {
+// ─── SERVICES ───────────────────────────────────────────────────────
+const Services = () => {
   const [ref, inView] = useInView();
-  const steps = [
-    { num: "01", title: "Evaluación inicial", desc: "Conocemos tu cuerpo, tu historial y tus objetivos. Todo empieza con criterio." },
-    { num: "02", title: "Plan personalizado", desc: "Diseñamos tu programa de entrenamiento adaptado a tu realidad y metas." },
-    { num: "03", title: "Entrenamiento guiado", desc: "Cada sesión tiene estructura, supervisión y propósito. Sin improvisación." },
-    { num: "04", title: "Seguimiento continuo", desc: "Ajustamos, prevenimos y acompañamos. Tu progreso es nuestro proceso." },
+  const services = [
+    {
+      icon: "tool",
+      title: "Fisioterapia",
+      price: "$20 / sesión",
+      desc: "Sesión individual de 60 min mínimo. Para lesión, patología o dolor agudo/recurrente. Evaluación y tratamiento personalizado.",
+    },
+    {
+      icon: "heart",
+      title: "Nexa Recovery",
+      price: "$20 / sesión",
+      desc: "Recuperación preventiva: descarga muscular y movilidad asistida. No es terapia clínica — es mantenimiento del cuerpo para seguir entrenando bien.",
+    },
+    {
+      icon: "activity",
+      title: "Pilates Mat",
+      price: "Desde $8 / clase",
+      desc: "Sábados, máximo 7 personas. Control, movilidad y fuerza del core. Complemento ideal para tu entrenamiento. Pack 4: $28 · Pack 8: $52.",
+    },
   ];
 
   return (
-    <section ref={ref} style={{
+    <section id="servicios" ref={ref} style={{
       padding: "100px 32px",
-      background: "linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%)",
+      background: "linear-gradient(180deg, var(--off-white) 0%, var(--white) 100%)",
     }} className="px-resp">
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ maxWidth: 540, marginBottom: 64 }}>
-          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ marginBottom: 20 }} />
+        <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 64px" }}>
+          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
           <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
-            Cómo funciona
+            Servicios complementarios
           </p>
           <h2 className="font-display section-title" style={{
             fontSize: 44, color: "var(--navy)", lineHeight: 1.05,
-            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.1s forwards` : "none",
           }}>
-            TU PROCESO EN NEXA
+            ATENCIÓN ESPECÍFICA, CUANDO LA NECESITAS
           </h2>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {steps.map((s, i) => (
+        <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          {services.map((s, i) => (
             <div key={i} style={{
-              display: "flex", gap: 32, alignItems: "flex-start",
-              padding: "32px 0",
-              borderBottom: i < steps.length - 1 ? "1px solid var(--gray-100)" : "none",
+              borderRadius: 16, padding: "32px 24px", border: "1px solid var(--gray-100)", background: "white",
               opacity: inView ? 1 : 0,
-              animation: inView ? `slideInLeft 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.1 + i * 0.12}s forwards` : "none",
+              animation: inView ? `fadeScale 0.65s ${SPRING_POP} ${0.2 + i * 0.12}s forwards` : "none",
             }}>
-              <span className="font-display" style={{
-                fontSize: 48, color: "var(--blue-light)", lineHeight: 1, minWidth: 72,
-              }}>{s.num}</span>
-              <div>
-                <h3 style={{ fontSize: 20, fontWeight: 700, color: "var(--navy)", marginBottom: 8 }}>{s.title}</h3>
-                <p style={{ fontSize: 15, color: "var(--gray-600)", lineHeight: 1.65, maxWidth: 480 }}>{s.desc}</p>
+              <div style={{
+                width: 44, height: 44, borderRadius: 12,
+                background: "linear-gradient(135deg, rgba(53,96,231,0.08), rgba(145,175,239,0.12))",
+                display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16,
+              }}>
+                <Icon name={s.icon} size={20} color="var(--blue)" />
               </div>
+              <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--navy)", marginBottom: 6 }}>{s.title}</h3>
+              <p className="font-display" style={{ fontSize: 22, color: "var(--blue)", marginBottom: 14 }}>{s.price}</p>
+              <p style={{ fontSize: 13, color: "var(--gray-600)", lineHeight: 1.7, marginBottom: 16 }}>{s.desc}</p>
+              <a href={WA_URL_FISIO} target="_blank" rel="noopener noreferrer" style={{
+                fontSize: 13, fontWeight: 600, color: "var(--blue)", textDecoration: "none",
+              }}>
+                Consultar disponibilidad →
+              </a>
             </div>
           ))}
         </div>
@@ -1302,23 +984,86 @@ const Launch = () => {
   );
 };
 
-// ─── FAQ ────────────────────────────────────────────────────────────
-const FAQ = () => {
+
+// ─── HOW TO START ───────────────────────────────────────────────────
+const HowToStart = () => {
   const [ref, inView] = useInView();
-  const [open, setOpen] = useState(null);
-  const faqs = [
-    { q: "¿Nexa es un gimnasio?", a: "No. Nexa es un espacio de entrenamiento profesional con acompañamiento de fisioterapeutas. Aquí no se entrena al azar — todo tiene estructura, criterio y seguimiento." },
-    { q: "¿Necesito tener experiencia entrenando?", a: "No necesitas experiencia previa. Nos adaptamos a tu nivel, desde personas que inician hasta deportistas de alto rendimiento." },
-    { q: "¿Qué pasa si tengo una lesión o molestia?", a: "El entrenamiento se ajusta a tu realidad. Si necesitas intervención terapéutica, contamos con fisioterapeutas que trabajan de forma integrada con tu proceso de entrenamiento." },
-    { q: "¿En qué se diferencia de un centro de rehabilitación?", a: "En Nexa, el entrenamiento es el protagonista. La fisioterapia está disponible cuando se necesita, pero el objetivo principal es que entrenes mejor, rindas más y cuides tu cuerpo." },
-    { q: "¿Puedo entrenar si vengo de un proceso de fisioterapia?", a: "Sí, de hecho es uno de los escenarios más comunes. Te ayudamos a retomar el entrenamiento con seguridad y continuidad profesional." },
-    { q: "¿Cómo elijo el plan adecuado?", a: "En tu evaluación inicial analizamos tu perfil, objetivos y necesidades. Con base en eso, te recomendamos el plan que mejor se adapta a ti." },
-    { q: "¿Qué beneficios obtengo si me inscribo antes de la inauguración?", a: "Al inscribirte antes del 7 de marzo formas parte de Nexa Origen: recibes invitación a la inauguración, medias edición limitada, una sesión de Nexa Recovery, onboarding prioritario y acceso preferente a los cupos de marzo." },
-    { q: "¿Dónde están ubicados?", a: <>Estamos en la Av. Constitución. Puedes ver nuestra <a href="https://maps.app.goo.gl/Sv1kWtonHkFWcBnr7?g_st=iw" target="_blank" rel="noopener noreferrer" style={{ color: "var(--blue)", fontWeight: 600, textDecoration: "underline" }}>ubicación exacta en Google Maps</a>.</> },
+  const steps = [
+    { num: "01", icon: "send", title: "Escríbenos", desc: "Contáctanos por WhatsApp. Te preguntamos sobre tus objetivos, experiencia y disponibilidad." },
+    { num: "02", icon: "clipboard", title: "Evaluación inicial", desc: "Conocemos tu cuerpo, tu historial y tus objetivos. Evaluación de fuerza, medidas y análisis funcional según tu plan." },
+    { num: "03", icon: "trending", title: "Empieza a entrenar", desc: "Recibe tu programa y comienza con estructura desde el primer día. Tu fisioterapeuta te acompaña en cada paso." },
   ];
 
   return (
-    <section id="faq" ref={ref} style={{ padding: "100px 32px", background: "var(--white)" }} className="px-resp">
+    <section ref={ref} style={{ padding: "100px 32px", background: "var(--white)" }} className="px-resp">
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
+          <p style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "var(--blue)", marginBottom: 12 }}>
+            Cómo empezar
+          </p>
+          <h2 className="font-display section-title" style={{
+            fontSize: 44, color: "var(--navy)", lineHeight: 1.05,
+            opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.1s forwards` : "none",
+          }}>
+            TU PROCESO EN NEXA
+          </h2>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          {steps.map((s, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "flex-start", gap: 24,
+              opacity: inView ? 1 : 0,
+              animation: inView ? `slideInLeft 0.6s ${SPRING_POP} ${0.2 + i * 0.12}s forwards` : "none",
+            }}>
+              <div style={{
+                width: 52, height: 52, borderRadius: 14, flexShrink: 0,
+                background: "linear-gradient(135deg, var(--navy), var(--blue))",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <Icon name={s.icon} size={22} color="white" />
+              </div>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                  <span className="font-display" style={{ fontSize: 28, color: "var(--blue-mid)" }}>{s.num}</span>
+                  <h3 style={{ fontSize: 17, fontWeight: 700, color: "var(--navy)" }}>{s.title}</h3>
+                </div>
+                <p style={{ fontSize: 14, color: "var(--gray-600)", lineHeight: 1.7 }}>{s.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div style={{ textAlign: "center", marginTop: 48 }}>
+          <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ textDecoration: "none" }}>
+            Empezar ahora por WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─── FAQ ─────────────────────────────────────────────────────────────
+const FAQ = () => {
+  const [ref, inView] = useInView();
+  const [open, setOpen] = useState(null);
+
+  const faqs = [
+    { q: "¿Nexa es un gimnasio?", a: "No. Nexa es un espacio de entrenamiento profesional con acompañamiento de fisioterapeutas. Aquí no se entrena al azar — todo tiene estructura, criterio y seguimiento." },
+    { q: "¿Necesito tener experiencia entrenando?", a: "No necesitas experiencia previa. Nos adaptamos a tu nivel, desde personas que inician hasta deportistas de alto rendimiento." },
+    { q: "¿En qué se diferencian los planes?", a: "Los planes se diferencian por el nivel de acompañamiento, no por acceso al espacio. Base te da estructura; Control te da seguimiento profesional 3 días/semana; Proceso te da optimización integral 5 días/semana con nutrición y recovery." },
+    { q: "¿Qué pasa si tengo una lesión o molestia?", a: "El entrenamiento se ajusta a tu realidad. Si necesitas intervención terapéutica, contamos con fisioterapeutas que trabajan de forma integrada con tu proceso de entrenamiento." },
+    { q: "¿Puedo entrenar si vengo de un proceso de fisioterapia?", a: "Sí, de hecho es uno de los escenarios más comunes. Te ayudamos a retomar el entrenamiento con seguridad y continuidad profesional." },
+    { q: "¿Cómo elijo el plan adecuado?", a: "Puedes hacer nuestro test rápido arriba en la página o escribirnos por WhatsApp. En tu evaluación inicial analizamos tu perfil y te recomendamos el plan que mejor se adapta." },
+    { q: "¿La fisioterapia y el recovery están incluidos?", a: "En Nexa Control, el recovery se incluye según necesidad. En Nexa Proceso, la recovery completa está integrada. Las sesiones de fisioterapia individual ($20) y Nexa Recovery ($20) también están disponibles como servicios aparte." },
+    { q: "¿Dónde están ubicados?", a: <>Estamos en la Av. Constitución. Puedes ver nuestra <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" style={{ color: "var(--blue)", fontWeight: 600, textDecoration: "underline" }}>ubicación exacta en Google Maps</a>.</> },
+  ];
+
+  return (
+    <section id="faq" ref={ref} style={{ padding: "100px 32px", background: "var(--off-white)" }} className="px-resp">
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 64 }}>
           <div className={`section-divider ${inView ? "visible" : ""}`} style={{ margin: "0 auto 20px" }} />
@@ -1327,7 +1072,7 @@ const FAQ = () => {
           </p>
           <h2 className="font-display section-title" style={{
             fontSize: 44, color: "var(--navy)", lineHeight: 1.05,
-            opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.1s forwards" : "none",
+            opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.1s forwards` : "none",
           }}>
             RESOLVEMOS TUS DUDAS
           </h2>
@@ -1338,7 +1083,7 @@ const FAQ = () => {
             <div key={i} style={{
               borderBottom: "1px solid var(--gray-100)",
               opacity: inView ? 1 : 0,
-              animation: inView ? `fadeUp 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) ${0.05 + i * 0.07}s forwards` : "none",
+              animation: inView ? `fadeUp 0.5s ${SPRING_POP} ${0.05 + i * 0.07}s forwards` : "none",
             }}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
@@ -1346,13 +1091,9 @@ const FAQ = () => {
                   width: "100%", padding: "24px 0", display: "flex", justifyContent: "space-between",
                   alignItems: "center", background: "none", border: "none", cursor: "pointer",
                   textAlign: "left", fontFamily: "'Plus Jakarta Sans', sans-serif",
-                }}
-              >
-                <span style={{ fontSize: 16, fontWeight: 600, color: "var(--navy)", paddingRight: 16 }}>{faq.q}</span>
-                <div style={{
-                  transition: "transform 0.3s ease", flexShrink: 0,
-                  transform: open === i ? "rotate(180deg)" : "rotate(0deg)",
                 }}>
+                <span style={{ fontSize: 16, fontWeight: 600, color: "var(--navy)", paddingRight: 16 }}>{faq.q}</span>
+                <div style={{ transition: "transform 0.3s ease", flexShrink: 0, transform: open === i ? "rotate(180deg)" : "rotate(0deg)" }}>
                   <Icon name="chevron" size={20} color="var(--blue)" />
                 </div>
               </button>
@@ -1376,9 +1117,8 @@ const FinalCTA = () => {
         maxWidth: 1200, margin: "0 auto", borderRadius: 24, overflow: "hidden",
         background: "linear-gradient(135deg, #0b1c60 0%, #1a2d7a 50%, #3560e7 100%)",
         padding: "80px 60px", textAlign: "center", position: "relative",
-        opacity: inView ? 1 : 0, animation: inView ? "fadeScale 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) forwards" : "none",
+        opacity: inView ? 1 : 0, animation: inView ? `fadeScale 0.8s ${SPRING_POP} forwards` : "none",
       }}>
-        {/* Decorative circles */}
         <div style={{
           position: "absolute", top: -60, right: -60, width: 240, height: 240,
           borderRadius: "50%", border: "1px solid rgba(145,175,239,0.12)",
@@ -1390,25 +1130,19 @@ const FinalCTA = () => {
 
         <h2 className="font-display" style={{
           fontSize: 52, color: "white", lineHeight: 1.05, marginBottom: 20, position: "relative",
-          opacity: inView ? 1 : 0, animation: inView ? "clipRevealUp 1s cubic-bezier(0.22, 1.2, 0.36, 1) 0.15s forwards" : "none",
+          opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.15s forwards` : "none",
         }}>
-          SÉ PARTE DE{" "}
-          <span style={{ color: "var(--blue-mid)" }}>NEXA ORIGEN</span>
+          ENTRENA CON{" "}
+          <span style={{ color: "var(--blue-mid)" }}>CRITERIO</span>
         </h2>
         <p style={{
           fontSize: 17, color: "rgba(255,255,255,0.65)", lineHeight: 1.7,
-          maxWidth: 520, margin: "0 auto 12px", position: "relative",
+          maxWidth: 520, margin: "0 auto 32px", position: "relative",
         }}>
-          Inscríbete antes de la inauguración y accede a beneficios que no se repetirán. Sé parte del grupo fundador de Nexa.
+          Escríbenos para conocer tu caso, resolver tus dudas y encontrar el plan ideal para ti. Sin compromiso.
         </p>
-        <p style={{
-          fontSize: 13, fontWeight: 600, color: "var(--blue-mid)", marginBottom: 32,
-          position: "relative",
-        }}>
-          Inscripciones abiertas hasta el {DEADLINE}
-        </p>
-        <div style={{ position: "relative" }}>
-          <a href={FORM_URL} target="_blank" rel="noopener noreferrer" style={{
+        <div style={{ position: "relative", display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
+          <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" style={{
             display: "inline-block",
             background: "white", color: "var(--navy)", border: "none",
             padding: "16px 40px", borderRadius: 10, fontSize: 15, fontWeight: 700,
@@ -1416,7 +1150,16 @@ const FinalCTA = () => {
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             boxShadow: "0 4px 20px rgba(0,0,0,0.15)", textDecoration: "none",
           }}>
-            Quiero ser parte de Nexa Origen
+            Escríbenos por WhatsApp
+          </a>
+          <a href="#quiz" style={{
+            display: "inline-block",
+            background: "transparent", color: "white", border: "1.5px solid rgba(255,255,255,0.3)",
+            padding: "15px 36px", borderRadius: 10, fontSize: 15, fontWeight: 700,
+            cursor: "pointer", transition: "all 0.3s",
+            fontFamily: "'Plus Jakarta Sans', sans-serif", textDecoration: "none",
+          }}>
+            Hacer el test de plan
           </a>
         </div>
       </div>
@@ -1424,11 +1167,18 @@ const FinalCTA = () => {
   );
 };
 
+// ─── FLOATING WHATSAPP ──────────────────────────────────────────────
+const FloatingWhatsApp = () => (
+  <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="wa-float" aria-label="WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+);
+
 // ─── FOOTER ─────────────────────────────────────────────────────────
 const Footer = () => (
-  <footer style={{
-    padding: "48px 32px", borderTop: "1px solid var(--gray-100)", background: "var(--white)",
-  }} className="px-resp">
+  <footer style={{ padding: "48px 32px", borderTop: "1px solid var(--gray-100)", background: "var(--white)" }} className="px-resp">
     <div style={{
       maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between",
       alignItems: "center", flexWrap: "wrap", gap: 16,
@@ -1443,22 +1193,23 @@ const Footer = () => (
   </footer>
 );
 
-// ─── MAIN APP ───────────────────────────────────────────────────────
+// ─── APP ────────────────────────────────────────────────────────────
 export default function NexaLanding() {
   return (
-    <div style={{ minHeight: "100vh" }}>
+    <>
       <GlobalStyles />
       <Navbar />
       <Hero />
-      <NexaOrigen />
-      <Problem />
-      <Solution />
+      <HowWeWork />
       <ForWho />
+      <PlanQuiz />
       <Plans />
-      <Launch />
+      <Services />
+      <HowToStart />
       <FAQ />
       <FinalCTA />
       <Footer />
-    </div>
+      <FloatingWhatsApp />
+    </>
   );
 }
