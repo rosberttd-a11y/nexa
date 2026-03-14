@@ -8,6 +8,7 @@ const FORM_URL = "https://tally.so/r/WONe2J";
 const WA_URL = "https://wa.me/584220430323";
 const WA_URL_PLANS = `${WA_URL}?text=${encodeURIComponent("Hola! Me interesa conocer más sobre los planes de Nexa.")}`;
 const WA_URL_FISIO = `${WA_URL}?text=${encodeURIComponent("Hola! Me interesa una sesión de fisioterapia / recovery en Nexa.")}`;
+const WA_URL_EVAL = `${WA_URL}?text=${encodeURIComponent("Hola! Quiero agendar mi evaluación en Nexa.")}`;
 const MAPS_URL = "https://maps.app.goo.gl/Sv1kWtonHkFWcBnr7?g_st=iw";
 
 const SPRING = "cubic-bezier(0.22, 1.2, 0.36, 1)";
@@ -300,11 +301,11 @@ const Hero = () => {
           display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap",
           opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.8s ${SPRING} 0.65s forwards` : "none",
         }}>
-          <a href="#quiz" className="btn-primary" style={{ textDecoration: "none" }}>
-            Encuentra tu plan ideal
+          <a href="#evaluacion" className="btn-primary" style={{ textDecoration: "none" }}>
+            Agenda tu evaluación — $10
           </a>
-          <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ textDecoration: "none" }}>
-            Escríbenos por WhatsApp
+          <a href="#quiz" className="btn-outline" style={{ textDecoration: "none" }}>
+            ¿Qué plan es para ti?
           </a>
         </div>
 
@@ -572,8 +573,8 @@ const quizQuestions = [
     q: "¿Cuántos días a la semana puedes dedicar al entrenamiento?",
     options: [
       { text: "1 a 2 días", score: { base: 3, control: 1, proceso: 0 } },
-      { text: "3 días", score: { base: 1, control: 3, proceso: 1 } },
-      { text: "4 a 5 días", score: { base: 0, control: 1, proceso: 3 } },
+      { text: "3 a 4 días", score: { base: 1, control: 3, proceso: 2 } },
+      { text: "5 días o más", score: { base: 0, control: 2, proceso: 3 } },
     ],
   },
   {
@@ -709,20 +710,26 @@ const PlanQuiz = () => {
             </p>
 
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ textDecoration: "none" }}>
-                Inscribirme por WhatsApp
+              <a href={WA_URL_EVAL} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ textDecoration: "none" }}>
+                Agenda tu evaluación primero
               </a>
-              <button onClick={reset} className="btn-outline" style={{ cursor: "pointer" }}>
-                Repetir test
-              </button>
+              <a href="#planes" className="btn-outline" style={{ textDecoration: "none" }}>
+                Ver planes
+              </a>
             </div>
 
-            <a href="#planes" style={{
-              display: "inline-block", marginTop: 20,
-              fontSize: 13, color: "var(--blue)", textDecoration: "none", fontWeight: 600,
+            <p style={{
+              marginTop: 16, fontSize: 12, color: "var(--gray-400)", lineHeight: 1.5,
             }}>
-              Ver todos los planes en detalle →
-            </a>
+              La evaluación cuesta $10 y se descuenta de tu primer mes si eliges un plan.
+            </p>
+
+            <button onClick={reset} style={{
+              display: "inline-block", marginTop: 16, background: "none", border: "none", cursor: "pointer",
+              fontSize: 13, color: "var(--blue)", fontWeight: 600, fontFamily: "'Plus Jakarta Sans', sans-serif",
+            }}>
+              Repetir test
+            </button>
           </div>
         )}
       </div>
@@ -743,13 +750,11 @@ const Plans = () => {
       isAccent: false,
       badge: null,
       features: [
-        "Frecuencia libre",
         "Programa seleccionado por fisioterapeuta",
         "Evaluación de fuerza inicial",
         "Medidas corporales",
         "Corrección técnica puntual",
         "Ajuste mensual del programa",
-        "Acceso completo al espacio",
       ],
       ideal: "Para quien quiere estructura profesional sin necesitar seguimiento cercano.",
     },
@@ -760,15 +765,13 @@ const Plans = () => {
       isAccent: true,
       badge: "El más elegido",
       features: [
-        "3 días por semana",
-        "Programa ajustado a tus objetivos",
+        "Programa personalizado a tus objetivos",
         "Evaluación de fuerza específica",
         "Evaluación funcional",
         "Medidas corporales",
         "Corrección técnica activa en cada sesión",
         "Seguimiento mensual estructurado",
         "Recovery según necesidad",
-        "Acceso completo al espacio",
       ],
       ideal: "Para quien entrena serio, tiene molestias recurrentes o quiere resultados sostenibles.",
       includesBase: true,
@@ -780,7 +783,6 @@ const Plans = () => {
       isAccent: false,
       badge: null,
       features: [
-        "5 días por semana",
         "Programa totalmente personalizado",
         "Evaluación de fuerza específica",
         "Evaluación funcional",
@@ -789,7 +791,6 @@ const Plans = () => {
         "Seguimiento continuo con ajustes frecuentes",
         "Nexa Recovery completa integrada",
         "Plan nutricional",
-        "Acceso completo al espacio",
       ],
       ideal: "Para quien busca alto rendimiento, metas exigentes u optimización integral.",
       includesControl: true,
@@ -820,7 +821,7 @@ const Plans = () => {
 
         {/* Key differentiator message */}
         <div style={{
-          textAlign: "center", marginBottom: 48,
+          textAlign: "center", marginBottom: 20,
           opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.7s ${SPRING} 0.3s forwards` : "none",
         }}>
           <p style={{
@@ -830,6 +831,14 @@ const Plans = () => {
             Base te da estructura · Control te da seguimiento · Proceso te da optimización integral
           </p>
         </div>
+
+        {/* Shared access line */}
+        <p style={{
+          textAlign: "center", fontSize: 13, color: "var(--gray-400)", marginBottom: 48,
+          opacity: inView ? 1 : 0, animation: inView ? `fadeUp 0.6s ${SPRING} 0.35s forwards` : "none",
+        }}>
+          Todos los planes incluyen acceso de lunes a sábado al espacio de entrenamiento.
+        </p>
 
         <div className="plans-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, alignItems: "start" }}>
           {plans.map((plan, i) => (
@@ -905,6 +914,70 @@ const Plans = () => {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─── EVALUATION ─────────────────────────────────────────────────────
+const Evaluation = () => {
+  const [ref, inView] = useInView();
+  return (
+    <section id="evaluacion" ref={ref} style={{ padding: "80px 32px", background: "var(--white)" }} className="px-resp">
+      <div style={{
+        maxWidth: 900, margin: "0 auto", borderRadius: 24, overflow: "hidden",
+        background: "linear-gradient(135deg, var(--blue-light) 0%, rgba(145,175,239,0.12) 100%)",
+        border: "1px solid rgba(145,175,239,0.2)",
+        padding: "56px 48px",
+        opacity: inView ? 1 : 0, animation: inView ? `fadeScale 0.7s ${SPRING_POP} forwards` : "none",
+      }}>
+        <div style={{ maxWidth: 600, margin: "0 auto" }}>
+          <p style={{
+            fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2,
+            color: "var(--blue)", marginBottom: 16, textAlign: "center",
+          }}>
+            Tu primer paso
+          </p>
+          <h3 className="font-display" style={{
+            fontSize: 36, color: "var(--navy)", lineHeight: 1.1, marginBottom: 20, textAlign: "center",
+            opacity: inView ? 1 : 0, animation: inView ? `clipRevealUp 1s ${SPRING} 0.1s forwards` : "none",
+          }}>
+            CONOCE NEXA ANTES DE DECIDIR
+          </h3>
+          <p style={{ fontSize: 16, color: "var(--gray-600)", lineHeight: 1.8, marginBottom: 24, textAlign: "center" }}>
+            En tu evaluación medimos tu fuerza, analizamos cómo te mueves y tomamos medidas corporales. Al final recibes un diagnóstico claro de lo que necesita tu cuerpo y cómo podemos acompañarte.
+          </p>
+
+          <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginBottom: 24 }}>
+            {["Evaluación de fuerza", "Análisis de movimiento", "Medidas corporales", "Diagnóstico personalizado"].map((item, i) => (
+              <div key={i} style={{
+                display: "flex", alignItems: "center", gap: 8,
+                background: "rgba(255,255,255,0.7)", padding: "8px 16px", borderRadius: 100,
+                fontSize: 13, fontWeight: 600, color: "var(--navy)",
+              }}>
+                <Icon name="check" size={14} color="var(--blue)" />
+                {item}
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center", marginBottom: 16 }}>
+            <p className="font-display" style={{ fontSize: 44, color: "var(--navy)", marginBottom: 4 }}>
+              $10
+            </p>
+            <p style={{ fontSize: 14, color: "var(--gray-600)" }}>
+              Si decides entrar a un plan, se descuentan de tu primer mes.
+            </p>
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <a href={WA_URL_EVAL} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{
+              textDecoration: "none", padding: "16px 40px", fontSize: 16,
+            }}>
+              Agendar mi evaluación
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -1054,7 +1127,7 @@ const FAQ = () => {
   const faqs = [
     { q: "¿Nexa es un gimnasio?", a: "No. Nexa es un espacio de entrenamiento profesional con acompañamiento de fisioterapeutas. Aquí no se entrena al azar — todo tiene estructura, criterio y seguimiento." },
     { q: "¿Necesito tener experiencia entrenando?", a: "No necesitas experiencia previa. Nos adaptamos a tu nivel, desde personas que inician hasta deportistas de alto rendimiento." },
-    { q: "¿En qué se diferencian los planes?", a: "Los planes se diferencian por el nivel de acompañamiento, no por acceso al espacio. Base te da estructura; Control te da seguimiento profesional 3 días/semana; Proceso te da optimización integral 5 días/semana con nutrición y recovery." },
+    { q: "¿En qué se diferencian los planes?", a: "Los planes se diferencian por el nivel de acompañamiento, no por acceso al espacio. Base te da estructura con frecuencia libre; Control te da seguimiento profesional con programa personalizado 5 días/semana; Proceso te da optimización integral con seguimiento continuo, nutrición y recovery completa." },
     { q: "¿Qué pasa si tengo una lesión o molestia?", a: "El entrenamiento se ajusta a tu realidad. Si necesitas intervención terapéutica, contamos con fisioterapeutas que trabajan de forma integrada con tu proceso de entrenamiento." },
     { q: "¿Puedo entrenar si vengo de un proceso de fisioterapia?", a: "Sí, de hecho es uno de los escenarios más comunes. Te ayudamos a retomar el entrenamiento con seguridad y continuidad profesional." },
     { q: "¿Cómo elijo el plan adecuado?", a: "Puedes hacer nuestro test rápido arriba en la página o escribirnos por WhatsApp. En tu evaluación inicial analizamos tu perfil y te recomendamos el plan que mejor se adapta." },
@@ -1139,10 +1212,10 @@ const FinalCTA = () => {
           fontSize: 17, color: "rgba(255,255,255,0.65)", lineHeight: 1.7,
           maxWidth: 520, margin: "0 auto 32px", position: "relative",
         }}>
-          Escríbenos para conocer tu caso, resolver tus dudas y encontrar el plan ideal para ti. Sin compromiso.
+          Conoce cómo entrenas, cómo te mueves y qué necesita tu cuerpo. Tu evaluación es el primer paso.
         </p>
         <div style={{ position: "relative", display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
-          <a href={WA_URL_PLANS} target="_blank" rel="noopener noreferrer" style={{
+          <a href={WA_URL_EVAL} target="_blank" rel="noopener noreferrer" style={{
             display: "inline-block",
             background: "white", color: "var(--navy)", border: "none",
             padding: "16px 40px", borderRadius: 10, fontSize: 15, fontWeight: 700,
@@ -1150,7 +1223,7 @@ const FinalCTA = () => {
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             boxShadow: "0 4px 20px rgba(0,0,0,0.15)", textDecoration: "none",
           }}>
-            Escríbenos por WhatsApp
+            Agendar mi evaluación — $10
           </a>
           <a href="#quiz" style={{
             display: "inline-block",
@@ -1159,7 +1232,7 @@ const FinalCTA = () => {
             cursor: "pointer", transition: "all 0.3s",
             fontFamily: "'Plus Jakarta Sans', sans-serif", textDecoration: "none",
           }}>
-            Hacer el test de plan
+            ¿Qué plan es para ti?
           </a>
         </div>
       </div>
@@ -1201,6 +1274,7 @@ export default function NexaLanding() {
       <Navbar />
       <Hero />
       <HowWeWork />
+      <Evaluation />
       <ForWho />
       <PlanQuiz />
       <Plans />
