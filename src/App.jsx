@@ -483,26 +483,26 @@ const ForWho = () => {
     {
       icon: "users",
       title: "Quiero entrenar bien pero no sé por dónde empezar",
-      plan: "Base",
-      desc: "Recibe un programa con criterio profesional desde el día uno, sin necesitar experiencia previa.",
+      plan: "Entrada",
+      desc: "Evaluación profesional tu primer día, plan de entrenamiento inicial y acceso completo. Un punto de partida con criterio.",
     },
     {
       icon: "activity",
-      title: "Entreno pero tengo molestias recurrentes",
-      plan: "Control",
-      desc: "Evaluamos tu movimiento, identificamos el origen y ajustamos tu entrenamiento para que dejes de compensar.",
+      title: "Entreno pero quiero estructura y seguimiento",
+      plan: "Base",
+      desc: "Seguimiento activo y continuo con corrección técnica en cada sesión. Tu fisioterapeuta ajusta tu programa cada mes.",
     },
     {
       icon: "heart",
-      title: "Vengo de fisioterapia y quiero retomar",
+      title: "Tengo molestias recurrentes o vengo de fisioterapia",
       plan: "Control",
-      desc: "Transición segura entre rehabilitación y entrenamiento con fisioterapeutas que entienden tu proceso.",
+      desc: "Evaluación funcional completa, programa con criterio clínico, ejercicios fisioterapéuticos integrados y Recovery incluida.",
     },
     {
       icon: "trending",
       title: "Quiero llevar mi rendimiento al siguiente nivel",
-      plan: "Proceso",
-      desc: "Programa totalmente personalizado, seguimiento continuo, plan nutricional y recuperación integral.",
+      plan: "Control",
+      desc: "El mayor nivel de personalización. Programa diseñado con criterio clínico, seguimiento estructurado y recuperación integrada.",
     },
   ];
 
@@ -564,41 +564,41 @@ const quizQuestions = [
   {
     q: "¿Has entrenado antes de forma regular?",
     options: [
-      { text: "No, sería mi primera vez", score: { base: 3, control: 1, proceso: 0 } },
-      { text: "Sí, pero hace tiempo que no", score: { base: 2, control: 3, proceso: 1 } },
-      { text: "Sí, actualmente entreno", score: { base: 0, control: 2, proceso: 3 } },
+      { text: "No, sería mi primera vez", score: { entrada: 3, base: 1, control: 0 } },
+      { text: "Sí, pero hace tiempo que no", score: { entrada: 1, base: 3, control: 1 } },
+      { text: "Sí, actualmente entreno", score: { entrada: 0, base: 2, control: 3 } },
     ],
   },
   {
     q: "¿Cuántos días a la semana puedes dedicar al entrenamiento?",
     options: [
-      { text: "1 a 2 días", score: { base: 3, control: 1, proceso: 0 } },
-      { text: "3 a 4 días", score: { base: 1, control: 3, proceso: 2 } },
-      { text: "5 días o más", score: { base: 0, control: 2, proceso: 3 } },
+      { text: "1 a 2 días", score: { entrada: 3, base: 1, control: 0 } },
+      { text: "3 a 4 días", score: { entrada: 1, base: 3, control: 2 } },
+      { text: "5 días o más", score: { entrada: 0, base: 2, control: 3 } },
     ],
   },
   {
     q: "¿Tienes alguna molestia, lesión o condición actual?",
     options: [
-      { text: "No, estoy bien", score: { base: 2, control: 1, proceso: 1 } },
-      { text: "Sí, algo menor o recurrente", score: { base: 0, control: 3, proceso: 2 } },
-      { text: "Sí, vengo de un proceso de rehabilitación", score: { base: 0, control: 3, proceso: 3 } },
+      { text: "No, estoy bien", score: { entrada: 2, base: 2, control: 0 } },
+      { text: "Sí, algo menor o recurrente", score: { entrada: 0, base: 1, control: 3 } },
+      { text: "Sí, vengo de un proceso de rehabilitación", score: { entrada: 0, base: 0, control: 3 } },
     ],
   },
   {
     q: "¿Qué nivel de acompañamiento buscas?",
     options: [
-      { text: "Estructura básica — quiero un buen programa", score: { base: 3, control: 0, proceso: 0 } },
-      { text: "Seguimiento profesional — que me guíen de cerca", score: { base: 0, control: 3, proceso: 1 } },
-      { text: "Optimización total — programa, nutrición y recovery", score: { base: 0, control: 0, proceso: 3 } },
+      { text: "Un buen punto de partida — entreno por mi cuenta", score: { entrada: 3, base: 0, control: 0 } },
+      { text: "Seguimiento activo — que me guíen de cerca", score: { entrada: 0, base: 3, control: 1 } },
+      { text: "Criterio clínico — tengo molestias o quiero máxima personalización", score: { entrada: 0, base: 0, control: 3 } },
     ],
   },
 ];
 
 const planResults = {
-  base: { name: "Nexa Base", price: "50", tagline: "Estructura y criterio profesional", color: "var(--navy)" },
-  control: { name: "Nexa Control", price: "75", tagline: "Seguimiento que marca la diferencia", color: "var(--blue)" },
-  proceso: { name: "Nexa Proceso", price: "95", tagline: "Tu rendimiento, optimizado al máximo", color: "#3560e7" },
+  entrada: { name: "Nexa Entrada", price: "30", tagline: "Tu punto de partida con criterio profesional", color: "var(--navy)" },
+  base: { name: "Nexa Base", price: "50", tagline: "Seguimiento que marca la diferencia", color: "var(--blue)" },
+  control: { name: "Nexa Control", price: "75", tagline: "Entrenamiento con criterio clínico", color: "#3560e7" },
 };
 
 const PlanQuiz = () => {
@@ -616,10 +616,10 @@ const PlanQuiz = () => {
     } else {
       // Calculate result
       const totals = newAnswers.reduce((acc, s) => ({
+        entrada: acc.entrada + s.entrada,
         base: acc.base + s.base,
         control: acc.control + s.control,
-        proceso: acc.proceso + s.proceso,
-      }), { base: 0, control: 0, proceso: 0 });
+      }), { entrada: 0, base: 0, control: 0 });
 
       const winner = Object.entries(totals).sort((a, b) => b[1] - a[1])[0][0];
       setResult(winner);
@@ -721,7 +721,7 @@ const PlanQuiz = () => {
             <p style={{
               marginTop: 16, fontSize: 12, color: "var(--gray-400)", lineHeight: 1.5,
             }}>
-              La evaluación cuesta $10 y se descuenta de tu primer mes si eliges un plan.
+              La evaluación cuesta $10 y se descuenta de tu primer mes si eliges el plan Control.
             </p>
 
             <button onClick={reset} style={{
@@ -744,56 +744,50 @@ const Plans = () => {
 
   const plans = [
     {
+      name: "Nexa Entrada",
+      price: "30",
+      tagline: "Tu punto de partida con criterio profesional",
+      isAccent: false,
+      badge: null,
+      features: [
+        "Evaluación profesional tu primer día",
+        "Fuerza, movimiento y medidas corporales",
+        "Recomendaciones personalizadas del fisioterapeuta",
+        "Plan de entrenamiento inicial",
+      ],
+      ideal: "Para quien quiere estructura profesional, controla su presupuesto y entrena de forma autónoma.",
+    },
+    {
       name: "Nexa Base",
       price: "50",
-      tagline: "Tu entrada al entrenamiento con criterio",
+      tagline: "Seguimiento activo que marca la diferencia",
       isAccent: false,
       badge: null,
       features: [
         "Programa seleccionado por fisioterapeuta",
-        "Evaluación de fuerza inicial",
-        "Medidas corporales",
-        "Corrección técnica puntual",
+        "Evaluación de fuerza y medidas corporales",
+        "Seguimiento activo y continuo",
+        "Corrección técnica activa en sesiones",
         "Ajuste mensual del programa",
       ],
-      ideal: "Para quien quiere estructura profesional sin necesitar seguimiento cercano.",
+      ideal: "Para quien quiere entrenamiento con estructura y un fisio activo en su proceso.",
     },
     {
       name: "Nexa Control",
       price: "75",
-      tagline: "Seguimiento que marca la diferencia",
+      tagline: "Entrenamiento con criterio clínico",
       isAccent: true,
       badge: "El más elegido",
       features: [
-        "Programa personalizado a tus objetivos",
-        "Evaluación de fuerza específica",
-        "Evaluación funcional",
+        "Programa personalizado con criterio clínico",
+        "Evaluación de fuerza + evaluación funcional completa",
         "Medidas corporales",
+        "Ejercicios fisioterapéuticos integrados",
         "Corrección técnica activa en cada sesión",
         "Seguimiento mensual estructurado",
-        "Recovery según necesidad",
+        "Nexa Recovery incluida",
       ],
-      ideal: "Para quien entrena serio, tiene molestias recurrentes o quiere resultados sostenibles.",
-      includesBase: true,
-    },
-    {
-      name: "Nexa Proceso",
-      price: "95",
-      tagline: "Tu rendimiento, optimizado al máximo",
-      isAccent: false,
-      badge: null,
-      features: [
-        "Programa totalmente personalizado",
-        "Evaluación de fuerza específica",
-        "Evaluación funcional",
-        "Medidas corporales",
-        "Corrección técnica activa continua",
-        "Seguimiento continuo con ajustes frecuentes",
-        "Nexa Recovery completa integrada",
-        "Plan nutricional",
-      ],
-      ideal: "Para quien busca alto rendimiento, metas exigentes u optimización integral.",
-      includesControl: true,
+      ideal: "Para quien tiene lesión previa, dolor recurrente o quiere el mayor nivel de personalización.",
     },
   ];
 
@@ -828,7 +822,7 @@ const Plans = () => {
             display: "inline-block", fontSize: 13, fontWeight: 700, color: "var(--navy)",
             background: "var(--blue-light)", padding: "10px 24px", borderRadius: 100,
           }}>
-            Base te da estructura · Control te da seguimiento · Proceso te da optimización integral
+            Entrada te da el punto de partida · Base te da seguimiento · Control te da criterio clínico
           </p>
         </div>
 
@@ -967,7 +961,7 @@ const Evaluation = () => {
               $10
             </p>
             <p style={{ fontSize: 14, color: "var(--gray-600)" }}>
-              Si decides entrar a un plan, se descuentan de tu primer mes.
+              Si decides entrar al plan Control, se descuentan de tu primer mes.
             </p>
           </div>
 
@@ -991,8 +985,8 @@ const Services = () => {
     {
       icon: "tool",
       title: "Fisioterapia",
-      price: "$20 / sesión",
-      desc: "Sesión individual de 60 min mínimo. Para lesión, patología o dolor agudo/recurrente. Evaluación y tratamiento personalizado.",
+      price: "Desde $20 / sesión",
+      desc: "Sesión individual de 60 min mínimo. Primera sesión $30 (incluye evaluación), sesiones subsiguientes $20. Para lesión, patología o dolor agudo/recurrente.",
     },
     {
       icon: "heart",
@@ -1127,11 +1121,11 @@ const FAQ = () => {
   const faqs = [
     { q: "¿Nexa es un gimnasio?", a: "No. Nexa es un espacio de entrenamiento profesional con acompañamiento de fisioterapeutas. Aquí no se entrena al azar — todo tiene estructura, criterio y seguimiento." },
     { q: "¿Necesito tener experiencia entrenando?", a: "No necesitas experiencia previa. Nos adaptamos a tu nivel, desde personas que inician hasta deportistas de alto rendimiento." },
-    { q: "¿En qué se diferencian los planes?", a: "Los planes se diferencian por el nivel de acompañamiento, no por acceso al espacio. Base te da estructura con frecuencia libre; Control te da seguimiento profesional con programa personalizado 5 días/semana; Proceso te da optimización integral con seguimiento continuo, nutrición y recovery completa." },
+    { q: "¿En qué se diferencian los planes?", a: "Los planes se diferencian por el nivel de acompañamiento, no por acceso al espacio. Entrada te da un punto de partida profesional para entrenar de forma autónoma; Base te da seguimiento activo con corrección técnica y ajuste mensual; Control te da criterio clínico con evaluación funcional, ejercicios fisioterapéuticos y Recovery incluida." },
     { q: "¿Qué pasa si tengo una lesión o molestia?", a: "El entrenamiento se ajusta a tu realidad. Si necesitas intervención terapéutica, contamos con fisioterapeutas que trabajan de forma integrada con tu proceso de entrenamiento." },
     { q: "¿Puedo entrenar si vengo de un proceso de fisioterapia?", a: "Sí, de hecho es uno de los escenarios más comunes. Te ayudamos a retomar el entrenamiento con seguridad y continuidad profesional." },
     { q: "¿Cómo elijo el plan adecuado?", a: "Puedes hacer nuestro test rápido arriba en la página o escribirnos por WhatsApp. En tu evaluación inicial analizamos tu perfil y te recomendamos el plan que mejor se adapta." },
-    { q: "¿La fisioterapia y el recovery están incluidos?", a: "En Nexa Control, el recovery se incluye según necesidad. En Nexa Proceso, la recovery completa está integrada. Las sesiones de fisioterapia individual ($20) y Nexa Recovery ($20) también están disponibles como servicios aparte." },
+    { q: "¿La fisioterapia y el recovery están incluidos?", a: "En Nexa Control, la Recovery está incluida como parte del plan. Las sesiones de fisioterapia individual (primera sesión $30, subsiguientes $20) y Nexa Recovery ($20/sesión) también están disponibles como servicios aparte para cualquier persona." },
     { q: "¿Dónde están ubicados?", a: <>Estamos en la Av. Constitución. Puedes ver nuestra <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" style={{ color: "var(--blue)", fontWeight: 600, textDecoration: "underline" }}>ubicación exacta en Google Maps</a>.</> },
   ];
 
