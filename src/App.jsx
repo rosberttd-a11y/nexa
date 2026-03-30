@@ -750,12 +750,13 @@ const Plans = () => {
       isAccent: false,
       badge: null,
       features: [
+        "Acceso al espacio de lunes a sábado",
         "Evaluación profesional tu primer día",
-        "Fuerza, movimiento y medidas corporales",
-        "Recomendaciones personalizadas del fisioterapeuta",
+        "Primera semana de acompañamiento incluida",
         "Plan de entrenamiento inicial",
       ],
-      ideal: "Para quien quiere estructura profesional, controla su presupuesto y entrena de forma autónoma.",
+      note: "Después de la primera semana, entrenas por tu cuenta.",
+      ideal: "Para quien quiere un punto de partida profesional y prefiere entrenar de forma autónoma.",
     },
     {
       name: "Nexa Base",
@@ -886,6 +887,14 @@ const Plans = () => {
                       }}>{f}</span>
                     </div>
                   ))}
+                  {plan.note && (
+                    <p style={{
+                      fontSize: 12, color: "var(--gray-400)", lineHeight: 1.5,
+                      marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--gray-100)",
+                    }}>
+                      {plan.note}
+                    </p>
+                  )}
                 </div>
 
                 <p style={{
