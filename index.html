@@ -162,31 +162,31 @@
   }
   .hero-photo-layer.active { opacity: 1; }
   /* ── Hero photos: reemplaza las URLs de Unsplash con tus fotos locales ──
-     Ejemplo:  url('assets/hero-default.jpg')
+     Ejemplo:  url('hero-default.jpg')
      object-position se controla con background-position en cada capa.  */
   .hero-photo-layer.p-default {
     background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=2000&q=80');
-    /* LOCAL: url('assets/hero-default.jpg') */
+    /* LOCAL: url('hero-default.jpg') */
   }
   .hero-photo-layer.p-1 {
     background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=2000&q=80');
     background-position: 65% center;
-    /* LOCAL: url('assets/hero-1.jpg') */
+    /* LOCAL: url('hero-1.jpg') */
   }
   .hero-photo-layer.p-2 {
     background-image: url('https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=2000&q=80');
     background-position: 60% center;
-    /* LOCAL: url('assets/hero-2.jpg') */
+    /* LOCAL: url('hero-2.jpg') */
   }
   .hero-photo-layer.p-3 {
     background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=2000&q=80');
     background-position: 65% center;
-    /* LOCAL: url('assets/hero-3.jpg') */
+    /* LOCAL: url('hero-3.jpg') */
   }
   .hero-photo-layer.p-4 {
     background-image: url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=2000&q=80');
     background-position: 60% center;
-    /* LOCAL: url('assets/hero-4.jpg') */
+    /* LOCAL: url('hero-4.jpg') */
   }
   @keyframes photoSettle {
     from { transform: scale(1.04); }
@@ -2027,7 +2027,7 @@ function Navbar({ onCta }) {
   return (
     <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
       <a href="#top" className="nav-logo" aria-label="Nexa — inicio">
-        <img className="nav-logo-img" src="assets/nexa-mark.png" alt="Nexa" />
+        <img className="nav-logo-img" src="nexa-mark.png" alt="Nexa" />
       </a>
       <div className="nav-links">
         <a href="#planes">Planes</a>
@@ -2272,7 +2272,7 @@ const FIRST_SESSION = {
       <p>Un fisioterapeuta revisa tu historial — cómo entrenas, qué molestias tienes, desde cuándo, qué has intentado. Con eso claro, arrancas con movimientos sencillos mientras el fisio observa cómo responde tu cuerpo en tiempo real.</p>
       <p>De ahí sale un plan de entrenamiento con criterio real. No una rutina genérica — un proceso diseñado para que sigas entrenando fuerte sin que tu cuerpo te pase factura.</p>
     </>),
-    photo: { num: '01', src: 'assets/sesion-1.jpg', pos: 'center 30%', label: 'Foto · Evaluación inicial', desc: 'Fisio hablando con cliente, anotando y evaluando postura.', meta: 'Conversación + observación en movimiento · ~45 min' }
+    photo: { num: '01', src: 'sesion-1.jpg', pos: 'center 30%', label: 'Foto · Evaluación inicial', desc: 'Fisio hablando con cliente, anotando y evaluando postura.', meta: 'Conversación + observación en movimiento · ~45 min' }
   },
   2: {
     body: (<>
@@ -2280,7 +2280,7 @@ const FIRST_SESSION = {
       <p>El primer día el fisio revisa cómo quedó tu cuerpo — te hace preguntas, te observa moviéndote, evalúa cómo responde la zona afectada. Con eso define si estás listo para entrenar o si primero necesitas trabajo terapéutico.</p>
       <p>Nadie te mete a entrenar antes de tiempo. Y cuando estás listo, el proceso está diseñado para que no vuelvas a donde estabas.</p>
     </>),
-    photo: { num: '02', src: 'assets/sesion-2.jpg', pos: 'center 30%', label: 'Foto · Evaluación post-lesión', desc: 'Fisio evaluando movimiento o zona específica del cliente.', meta: 'Movilidad, dolor, control motor de la zona afectada' }
+    photo: { num: '02', src: 'sesion-2.jpg', pos: 'center 30%', label: 'Foto · Evaluación post-lesión', desc: 'Fisio evaluando movimiento o zona específica del cliente.', meta: 'Movilidad, dolor, control motor de la zona afectada' }
   },
   3: {
     body: (<>
@@ -2288,7 +2288,7 @@ const FIRST_SESSION = {
       <p>Revisamos patrones de movimiento, identificamos limitaciones que frenan tu rendimiento y evaluamos tu fuerza con criterio deportivo. Con eso se construye un plan enfocado en lo que necesitas para rendir más en tu deporte específico.</p>
       <p>Entrenas para mejorar en lo que practicas. Con la estructura para no lesionarte en el proceso.</p>
     </>),
-    photo: { num: '03', src: 'assets/sesion-3.jpg', pos: 'center 30%', label: 'Foto · Análisis deportivo', desc: 'Fisio observando movimiento del cliente en entrenamiento.', meta: 'Patrones, fuerza, criterio específico para tu deporte' }
+    photo: { num: '03', src: 'sesion-3.jpg', pos: 'center 30%', label: 'Foto · Análisis deportivo', desc: 'Fisio observando movimiento del cliente en entrenamiento.', meta: 'Patrones, fuerza, criterio específico para tu deporte' }
   },
   4: {
     body: (<>
@@ -2296,7 +2296,7 @@ const FIRST_SESSION = {
       <p>El fisioterapeuta revisa tu condición, entiende el origen del dolor o la lesión, y diseña el tratamiento desde ese mismo día. No hay suposiciones ni tratamientos genéricos — cada proceso se construye sobre lo que encontramos en esa primera evaluación.</p>
       <p>Cuando estés listo para retomar el entrenamiento, en Nexa tienes continuidad. No empiezas de cero.</p>
     </>),
-    photo: { num: '04', src: 'assets/sesion-4.jpg', pos: 'center 30%', label: 'Foto · Sesión de fisioterapia', desc: 'Fisio trabajando zona específica del cliente en tratamiento.', meta: 'Tratamiento dirigido + plan desde la primera sesión' }
+    photo: { num: '04', src: 'sesion-4.jpg', pos: 'center 30%', label: 'Foto · Sesión de fisioterapia', desc: 'Fisio trabajando zona específica del cliente en tratamiento.', meta: 'Tratamiento dirigido + plan desde la primera sesión' }
   }
 };
 
@@ -2706,9 +2706,9 @@ function ServiceCard({ name, price, desc, cta, msg }) {
 
 /* ── Datos de fotos del equipo ── */
 const TEAM_TILES = [
-  { num: '02', label: 'Espacio',     desc: 'Vista del área de entrenamiento', big: false, src: 'assets/equipo-espacio.jpeg', pos: 'center center' },
-  { num: '01', label: 'En sesión',   desc: 'Fisio trabajando con cliente',    big: true,  src: 'assets/equipo-sesion.jpg',   pos: 'center 30%' },
-  { num: '03', label: 'Evaluación',  desc: 'Fisio en proceso de evaluación',  big: false, src: 'assets/equipo-evaluacion.jpg', pos: 'center center' },
+  { num: '02', label: 'Espacio',     desc: 'Vista del área de entrenamiento', big: false, src: 'equipo-espacio.jpeg', pos: 'center center' },
+  { num: '01', label: 'En sesión',   desc: 'Fisio trabajando con cliente',    big: true,  src: 'equipo-sesion.jpg',   pos: 'center 30%' },
+  { num: '03', label: 'Evaluación',  desc: 'Fisio en proceso de evaluación',  big: false, src: 'equipo-evaluacion.jpg', pos: 'center center' },
 ];
 
 function Team() {
@@ -2862,7 +2862,7 @@ function Footer() {
     <footer className="footer">
       <div className="footer-inner">
         <a href="#top" className="footer-brand" aria-label="Nexa — inicio">
-          <img className="footer-logo-img" src="assets/nexa-mark.png" alt="Nexa" />
+          <img className="footer-logo-img" src="nexa-mark.png" alt="Nexa" />
         </a>
         <div className="footer-links">
           <a href="#planes">Planes</a>

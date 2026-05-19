@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 110" width="360" height="110">
+  <defs>
+    <linearGradient id="nexa-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0b1c60"></stop>
+      <stop offset="100%" stop-color="#3560e7"></stop>
+    </linearGradient>
+    
+  </defs>
+  <text x="0" y="92" class="wm" fill="url(#nexa-grad)">NEXA</text>
+</svg>
