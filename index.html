@@ -1,14 +1,2990 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexa — Entrenamiento, Prevención y Recuperación</title>
-    <meta name="description" content="Nexa integra entrenamiento estructurado, prevención de lesiones y recuperación profesional en un solo lugar. Inscríbete en Nexa Origen antes de la inauguración." />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nexa — Entrena fuerte. Sin romperte.</title>
+<meta name="description" content="Centro de Entrenamiento & Rehabilitación guiado por fisioterapeutas en Maracay, Venezuela. Entrena con criterio. Sin romperte." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --navy: #0b1c60;
+    --blue: #3560e7;
+    --blue-mid: #91afef;
+    --blue-light: #d9e3fa;
+    --white: #ffffff;
+    --off-white: #f4f7fd;
+    --gray-50: #f8faff;
+    --gray-100: #e8edf8;
+    --gray-400: #7b8bb5;
+    --gray-600: #4a5578;
+    --gray-800: #1e2a4a;
+    --whatsapp: #25D366;
+    --whatsapp-dark: #1ebe5a;
+
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-pop: cubic-bezier(0.22, 1.2, 0.36, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: var(--gray-800);
+    background: var(--white);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  button { font-family: inherit; cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50%      { opacity: 1; transform: scale(1.15); }
+  }
+  @keyframes float-circle {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50%      { transform: translate(20px, -30px) rotate(8deg); }
+  }
+  @keyframes wa-glow {
+    0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.40), 0 0 0 0 rgba(37,211,102,0.35); }
+    50%      { box-shadow: 0 4px 24px rgba(37,211,102,0.50), 0 0 0 8px rgba(37,211,102,0.10); }
+  }
+
+  .reveal { opacity: 0; }
+  .reveal.in { animation: fadeUp 0.8s var(--ease-pop) forwards; }
+
+  /* ---------- Navbar ---------- */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.3s ease, backdrop-filter 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .nav.scrolled {
+    background: rgba(11, 28, 96, 0.55);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-bottom-color: rgba(145, 175, 239, 0.15);
+    padding: 12px 32px;
+  }
+  .nav-logo {
+    display: flex; align-items: center;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo-img {
+    display: block;
+    height: 60px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+    transition: opacity 0.25s ease, height 0.3s ease;
+  }
+  .nav-logo:hover .nav-logo-img { opacity: 1; }
+  .nav.scrolled .nav-logo-img { height: 50px; }
+  .nav-links {
+    display: flex; align-items: center; gap: 32px;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.78);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: var(--white);
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(53, 96, 231, 0.30);
+  }
+  .nav-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(53, 96, 231, 0.45);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    padding: 140px 32px 80px;
+  }
+
+  .hero-photo-stack {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--navy);
+  }
+  .hero-photo-layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: 70% center;
+    background-color: var(--navy);
+    filter: saturate(0.85) contrast(1.08) brightness(0.95);
+    opacity: 0;
+    transition: opacity 1.1s var(--ease-smooth), filter 1.1s var(--ease-smooth);
+  }
+  .hero-photo-layer.active { opacity: 1; }
+  /* ── Hero photos: reemplaza las URLs de Unsplash con tus fotos locales ──
+     Ejemplo:  url('assets/hero-default.jpg')
+     object-position se controla con background-position en cada capa.  */
+  .hero-photo-layer.p-default {
+    background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=2000&q=80');
+    /* LOCAL: url('assets/hero-default.jpg') */
+  }
+  .hero-photo-layer.p-1 {
+    background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=2000&q=80');
+    background-position: 65% center;
+    /* LOCAL: url('assets/hero-1.jpg') */
+  }
+  .hero-photo-layer.p-2 {
+    background-image: url('https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=2000&q=80');
+    background-position: 60% center;
+    /* LOCAL: url('assets/hero-2.jpg') */
+  }
+  .hero-photo-layer.p-3 {
+    background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=2000&q=80');
+    background-position: 65% center;
+    /* LOCAL: url('assets/hero-3.jpg') */
+  }
+  .hero-photo-layer.p-4 {
+    background-image: url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=2000&q=80');
+    background-position: 60% center;
+    /* LOCAL: url('assets/hero-4.jpg') */
+  }
+  @keyframes photoSettle {
+    from { transform: scale(1.04); }
+    to { transform: scale(1); }
+  }
+  .hero-photo-layer.active {
+    animation: photoSettle 1.6s var(--ease-smooth);
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg,
+        rgba(8, 18, 60, 0.97) 0%,
+        rgba(11, 28, 96, 0.88) 30%,
+        rgba(11, 28, 96, 0.55) 60%,
+        rgba(11, 28, 96, 0.25) 100%),
+      linear-gradient(180deg,
+        rgba(11, 28, 96, 0.15) 0%,
+        rgba(11, 28, 96, 0.0) 30%,
+        rgba(5, 10, 30, 0.45) 100%);
+    z-index: 1;
+  }
+  .hero-overlay::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(217, 227, 250, 0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.7;
+  }
+
+  .hero-circles {
+    position: absolute; inset: 0; z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(145, 175, 239, 0.14);
+  }
+  .hero-circle.c1 {
+    width: 580px; height: 580px;
+    top: -120px; right: -160px;
+    animation: float-circle 18s ease-in-out infinite;
+  }
+  .hero-circle.c2 {
+    width: 380px; height: 380px;
+    top: 38%; right: 8%;
+    border-color: rgba(145, 175, 239, 0.10);
+    animation: float-circle 22s ease-in-out infinite reverse;
+  }
+  .hero-circle.c3 {
+    width: 240px; height: 240px;
+    bottom: -60px; left: 36%;
+    border-color: rgba(145, 175, 239, 0.08);
+    animation: float-circle 26s ease-in-out infinite;
+  }
+
+  .hero-grain {
+    position: absolute; inset: 0; z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 70%, rgba(5, 10, 30, 0.55) 100%);
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 3;
+    max-width: 1240px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-content {
+    max-width: 680px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--blue-mid);
+  }
+  .eyebrow-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blue-mid);
+    box-shadow: 0 0 12px var(--blue-mid);
+    animation: pulse-soft 2.4s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    font-size: clamp(56px, 8.4vw, 96px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin: 20px 0 0;
+    color: var(--white);
+  }
+  .hero h1 .line2 {
+    display: block;
+    background: linear-gradient(135deg, #ffffff 0%, var(--blue-mid) 35%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.78);
+    max-width: 480px;
+    margin: 24px 0 0;
+    min-height: 56px;
+  }
+  .hero-sub-text {
+    display: inline-block;
+    transition: opacity 0.35s ease;
+  }
+  .hero-sub-text.fading { opacity: 0; }
+
+  .selector-label {
+    margin: 44px 0 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .selector-label::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 680px;
+  }
+
+  .profile-alt {
+    margin-top: 14px;
+    max-width: 680px;
+    max-height: 120px;
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px dashed rgba(145, 175, 239, 0.30);
+    border-radius: 14px;
+    padding: 14px 22px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-smooth);
+    text-align: left;
+    color: var(--white);
+    display: flex; align-items: center; gap: 16px;
+    font-family: inherit;
+  }
+  .profile-alt:hover {
+    background: rgba(53, 96, 231, 0.14);
+    border-color: rgba(145, 175, 239, 0.55);
+    border-style: solid;
+  }
+  .profile-alt.active {
+    background: rgba(53, 96, 231, 0.20);
+    border-color: var(--blue);
+    border-style: solid;
+    box-shadow: 0 0 0 1px var(--blue);
+  }
+  .profile-alt.dim { opacity: 0.45; }
+  .profile-alt-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(145, 175, 239, 0.12);
+    border: 1px solid rgba(145, 175, 239, 0.2);
+    display: grid; place-items: center;
+    color: var(--blue-mid);
+    flex-shrink: 0;
+  }
+  .profile-alt.active .profile-alt-icon {
+    background: rgba(255,255,255,0.14);
+    color: var(--white);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .profile-alt-text {
+    font-size: 14px;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.85);
+    flex: 1;
+  }
+  .profile-alt-text strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+  .profile-alt-arrow {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    color: var(--blue-mid);
+    transition: transform 0.3s var(--ease-pop), color 0.2s ease;
+  }
+  .profile-alt:hover .profile-alt-arrow { transform: translateX(4px); color: var(--white); }
+  .profile-alt-arrow svg { width: 16px; height: 16px; }
+
+  .profile {
+    position: relative;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(145, 175, 239, 0.20);
+    border-radius: 14px;
+    padding: 20px 22px 22px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-smooth);
+    text-align: left;
+    color: var(--white);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex; flex-direction: column; gap: 14px;
+    min-height: 130px;
+    font-family: inherit;
+  }
+  .profile:hover {
+    background: rgba(53, 96, 231, 0.18);
+    border-color: rgba(145, 175, 239, 0.55);
+    transform: translateY(-3px);
+  }
+  .profile.active {
+    background: rgba(53, 96, 231, 0.25);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 1px var(--blue), 0 16px 40px -16px rgba(53, 96, 231, 0.7);
+    transform: translateY(-3px);
+  }
+  .profile.dim { opacity: 0.45; }
+  .profile.dim:hover { opacity: 0.85; transform: none; }
+
+  .profile-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(145, 175, 239, 0.15);
+    border: 1px solid rgba(145, 175, 239, 0.2);
+    display: grid; place-items: center;
+    color: var(--blue-mid);
+    transition: all 0.3s var(--ease-smooth);
+  }
+  .profile.active .profile-icon {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255,255,255,0.25);
+    color: var(--white);
+  }
+  .profile-text {
+    font-size: 14.5px;
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--white);
+  }
+  .profile-num {
+    position: absolute;
+    top: 14px; right: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: rgba(145, 175, 239, 0.5);
+  }
+  .profile.active .profile-num { color: var(--blue-mid); }
+
+  .profile {
+    transition:
+      padding 0.45s var(--ease-pop),
+      min-height 0.45s var(--ease-pop),
+      background 0.3s var(--ease-smooth),
+      border-color 0.3s var(--ease-smooth),
+      box-shadow 0.3s var(--ease-smooth),
+      transform 0.3s var(--ease-smooth),
+      opacity 0.3s ease;
+  }
+  .profile-text, .profile-icon, .profile-num {
+    transition: all 0.4s var(--ease-pop);
+  }
+
+  .hero { transition: padding 0.5s var(--ease-pop); }
+  .hero.is-selected .selector-label {
+    opacity: 0.55;
+    font-size: 12px;
+    margin: 28px 0 12px;
+    transition: all 0.4s var(--ease-smooth);
+  }
+  .hero.is-selected .selector-label::before {
+    background: rgba(255,255,255,0.2);
+  }
+
+  .hero.is-selected .profile.dim {
+    min-height: 56px;
+    padding: 10px 14px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.55;
+  }
+  .hero.is-selected .profile.dim .profile-num { opacity: 0; transform: scale(0.6); }
+  .hero.is-selected .profile.dim .profile-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    flex-shrink: 0;
+  }
+  .hero.is-selected .profile.dim .profile-icon svg {
+    width: 14px; height: 14px;
+  }
+  .hero.is-selected .profile.dim .profile-text {
+    font-size: 12.5px;
+    line-height: 1.3;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+  }
+  .hero.is-selected .profile.active {
+    padding: 22px 24px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    transform: translateY(-3px);
+    min-height: 130px;
+  }
+  .hero.is-selected .profile-alt:not(.active) {
+    opacity: 0.35;
+    padding: 10px 16px;
+  }
+  .hero.is-selected .profile-alt:not(.active) .profile-alt-icon {
+    width: 26px; height: 26px;
+  }
+  .hero.is-selected .profile-alt:not(.active) .profile-alt-text {
+    font-size: 12.5px;
+  }
+  .hero.is-selected .profile-alt.hide-alt {
+    max-height: 0;
+    margin-top: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: all 0.4s var(--ease-smooth);
+  }
+
+  .hero.is-selected .hero-subtitle {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.92);
+    transition: all 0.4s var(--ease-smooth);
+  }
+
+  .next-step {
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(145, 175, 239, 0.20);
+    border-radius: 50px;
+    padding: 8px 16px 8px 14px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-smooth);
+    opacity: 0;
+    transform: translateY(8px);
+    animation: nextStepIn 0.5s var(--ease-pop) 0.2s forwards;
+    font-family: inherit;
+  }
+  .next-step:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(145, 175, 239, 0.45);
+    transform: translateY(-1px);
+  }
+  .next-step svg {
+    width: 14px; height: 14px;
+    color: var(--blue-mid);
+    animation: nudgeDown 1.8s var(--ease-smooth) infinite;
+  }
+  @keyframes nextStepIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes nudgeDown {
+    0%, 70%, 100% { transform: translateY(0); }
+    35% { transform: translateY(3px); }
+  }
+
+  .selector-prompt {
+    margin-top: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 22px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px dashed rgba(145, 175, 239, 0.32);
+    border-radius: 50px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: opacity 0.4s ease, transform 0.4s var(--ease-pop);
+  }
+  .selector-prompt-arrow {
+    width: 18px; height: 18px;
+    color: var(--blue-mid);
+    animation: nudgeUp 1.6s var(--ease-smooth) infinite;
+  }
+  @keyframes nudgeUp {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+  }
+
+  .recommended-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 8px 12px;
+    background: rgba(217, 227, 250, 0.08);
+    border: 1px solid rgba(145, 175, 239, 0.30);
+    border-radius: 50px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.88);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-smooth);
+    opacity: 0;
+    transform: translateY(8px);
+    animation: chipIn 0.5s var(--ease-pop) 0.15s forwards;
+    text-decoration: none;
+    margin-top: 18px;
+  }
+  .recommended-chip:hover {
+    background: rgba(217, 227, 250, 0.14);
+    border-color: var(--blue);
+    transform: translateY(-1px);
+  }
+  .recommended-chip-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--blue-mid);
+  }
+  .recommended-chip-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .recommended-chip svg {
+    width: 12px; height: 12px;
+    color: var(--blue-mid);
+    transition: transform 0.2s ease;
+  }
+  .recommended-chip:hover svg { transform: translateX(3px); color: var(--white); }
+  @keyframes chipIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .sticky-prompt {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%) translateY(20px);
+    z-index: 998;
+    background: rgba(11, 28, 96, 0.92);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(145, 175, 239, 0.25);
+    border-radius: 16px;
+    padding: 10px 12px 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 16px 48px -12px rgba(11, 28, 96, 0.55), 0 4px 16px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s var(--ease-smooth), transform 0.45s var(--ease-pop);
+    max-width: calc(100vw - 32px);
+  }
+  .sticky-prompt.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .sticky-prompt-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    white-space: nowrap;
+  }
+  .sticky-prompt-chips {
+    display: flex;
+    gap: 6px;
+  }
+  .sticky-chip {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(145, 175, 239, 0.20);
+    border-radius: 50px;
+    padding: 7px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    transition: all 0.2s var(--ease-smooth);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .sticky-chip svg { width: 12px; height: 12px; color: var(--blue-mid); }
+  .sticky-chip:hover {
+    background: rgba(53, 96, 231, 0.25);
+    border-color: var(--blue);
+    color: var(--white);
+  }
+  .sticky-chip:hover svg { color: var(--white); }
+  .sticky-prompt-close {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: none;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    display: grid; place-items: center;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .sticky-prompt-close:hover { background: rgba(255, 255, 255, 0.12); color: var(--white); }
+  .sticky-prompt-close svg { width: 12px; height: 12px; }
+
+  .cta-block {
+    margin-top: 28px;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+  }
+
+  .wa-cta {
+    background: var(--whatsapp);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 15px 28px;
+    font-weight: 700;
+    font-size: 15px;
+    display: inline-flex; align-items: center; gap: 10px;
+    box-shadow: 0 8px 28px rgba(37, 211, 102, 0.40);
+    transition: all 0.3s var(--ease-smooth);
+    min-width: 280px;
+    justify-content: center;
+  }
+  .wa-cta:hover {
+    transform: translateY(-2px);
+    background: var(--whatsapp-dark);
+    box-shadow: 0 14px 36px rgba(37, 211, 102, 0.55);
+  }
+  .wa-cta-label {
+    transition: opacity 0.25s ease;
+  }
+  .wa-cta-label.fading { opacity: 0; }
+  .wa-cta svg { width: 18px; height: 18px; }
+
+  @keyframes ctaPing {
+    0% { transform: scale(0.95); opacity: 0.6; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+  .wa-cta-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .wa-cta-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    background: rgba(37, 211, 102, 0.45);
+    pointer-events: none;
+    opacity: 0;
+  }
+  .wa-cta-wrap.ping::before {
+    animation: ctaPing 0.7s var(--ease-pop) forwards;
+  }
+
+  .cta-caption {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+    margin-left: 4px;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    animation: pulse-soft 3s ease-in-out infinite;
+    transition: opacity 0.4s ease;
+  }
+  .hero.is-selected .scroll-hint { opacity: 0; pointer-events: none; }
+  .scroll-hint .bar {
+    width: 1px; height: 32px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.4), transparent);
+  }
+
+  /* ---------- WhatsApp Float ---------- */
+  .wa-float {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    z-index: 999;
+    background: var(--whatsapp);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 14px 20px 14px 16px;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-flex; align-items: center; gap: 10px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    animation: wa-glow 3.6s ease-in-out infinite;
+    transition: transform 0.3s ease, opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .wa-float.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .wa-float:hover {
+    transform: translateY(-3px);
+    background: var(--whatsapp-dark);
+  }
+  .wa-float svg { width: 22px; height: 22px; }
+  .wa-float .label { white-space: nowrap; }
+
+  /* ---------- Shared Section Primitives ---------- */
+  .section {
+    position: relative;
+    padding: 100px 32px;
+    width: 100%;
+  }
+  .section-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .section-divider {
+    width: 48px; height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--blue-mid));
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .section-divider.center { margin-left: auto; margin-right: auto; }
+
+  .eyebrow-dark {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--blue);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    font-size: clamp(38px, 5.6vw, 56px);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--navy);
+    margin: 0 0 24px;
+  }
+  .section-title .grad {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-lead {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--gray-600);
+    max-width: 620px;
+  }
+  .section-head.center {
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .section-head.center .section-lead { margin-left: auto; margin-right: auto; }
+
+  /* ---------- Section 1 — Tu primera sesion ---------- */
+  .first-session {
+    background: var(--white);
+    padding: 0;
+    position: relative;
+  }
+  .first-session::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 80px;
+    background: linear-gradient(180deg, rgba(11,28,96,0.05) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+  .first-session-grid {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    min-height: 640px;
+    align-items: stretch;
+  }
+  .first-session-photo {
+    position: relative;
+    background: var(--navy);
+    overflow: hidden;
+    min-height: 540px;
+  }
+  .fs-photo-content {
+    position: absolute; inset: 0;
+    transition: opacity 0.35s ease;
+  }
+  .fs-photo-content.swap-out { opacity: 0; }
+  /* Real photo image */
+  .fs-photo-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    image-orientation: from-image;
+  }
+  /* Gradient overlay on top of real photo */
+  .first-session-photo::before {
+    content: '';
+    position: absolute; inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .first-session-photo.has-photo::before {
+    background: linear-gradient(to right, transparent 40%, rgba(11,28,96,0.03) 100%),
+                linear-gradient(to top, rgba(11,28,96,0.55) 0%, transparent 50%);
+  }
+  .first-session-photo:not(.has-photo)::before {
+    background-image:
+      linear-gradient(135deg, rgba(11,28,96,0.85) 0%, rgba(53,96,231,0.65) 100%),
+      radial-gradient(circle at 30% 30%, rgba(217,227,250,0.15) 0%, transparent 50%);
+  }
+  .first-session-photo::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(217,227,250,0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    z-index: 2;
+  }
+  .first-session-photo.has-photo::after { display: none; }
+  .photo-tag {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px;
+    color: var(--blue-mid);
+  }
+  .photo-tag .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: rgba(217,227,250,0.55);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .photo-tag .label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: rgba(217,227,250,0.45);
+  }
+  .photo-tag .desc {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1.0;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    max-width: 380px;
+  }
+  .photo-tag .meta {
+    margin-top: 18px;
+    font-size: 13px;
+    color: rgba(217,227,250,0.65);
+    font-weight: 500;
+    max-width: 380px;
+    line-height: 1.5;
+  }
+  .photo-decor {
+    position: absolute;
+    z-index: 3;
+    border-radius: 50%;
+    border: 1px solid rgba(217,227,250,0.18);
+  }
+  .photo-decor.d1 {
+    width: 260px; height: 260px;
+    top: -60px; right: -80px;
+  }
+  .photo-decor.d2 {
+    width: 140px; height: 140px;
+    bottom: 28%; right: 12%;
+    border-color: rgba(217,227,250,0.12);
+  }
+  .photo-number {
+    position: absolute;
+    top: 48px; left: 48px;
+    z-index: 3;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 96px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: rgba(217,227,250,0.10);
+  }
+
+  .first-session-text {
+    padding: 100px 32px 100px 64px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .fs-text-content {
+    transition: opacity 0.35s ease;
+  }
+  .fs-text-content.swap-out { opacity: 0; }
+  .first-session-text .body {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--gray-600);
+    max-width: 520px;
+  }
+  .first-session-text .body p { margin: 0 0 18px; }
+  .first-session-text .body p:last-child { margin-bottom: 0; }
+  .first-session-text .body strong { color: var(--gray-800); font-weight: 600; }
+
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-32px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .reveal-left { opacity: 0; }
+  .reveal-left.in { animation: slideInLeft 0.8s var(--ease-pop) forwards; }
+
+  /* ---------- Section 2 — Planes ---------- */
+  .plans {
+    background: var(--gray-50);
+    position: relative;
+  }
+  .plans::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(53,96,231,0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  .plans .section-inner { position: relative; z-index: 1; }
+
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 64px;
+    align-items: stretch;
+    transition: opacity 0.3s ease;
+  }
+  .plans-grid.swap-out { opacity: 0; }
+  .plans-grid-wrap { width: 100%; }
+
+  .plan-card {
+    position: relative;
+    background: var(--white);
+    border: 1px solid rgba(11, 28, 96, 0.08);
+    border-radius: 20px;
+    padding: 32px 28px;
+    display: flex; flex-direction: column;
+    transition: all 0.4s var(--ease-smooth);
+    box-shadow: 0 4px 20px rgba(11, 28, 96, 0.03);
+  }
+  .plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(11, 28, 96, 0.10);
+  }
+  .plan-card.featured {
+    transform: scale(1.03);
+    border: 1.5px solid transparent;
+    background:
+      linear-gradient(var(--white), var(--white)) padding-box,
+      linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%) border-box;
+    box-shadow: 0 24px 56px -16px rgba(53, 96, 231, 0.35), 0 4px 20px rgba(11, 28, 96, 0.08);
+    z-index: 2;
+  }
+  .plan-card.featured:hover {
+    transform: scale(1.03) translateY(-4px);
+  }
+  .plan-price .amount.amount-sm {
+    font-size: 26px;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+  }
+
+  .p3-callout {
+    margin-top: 32px;
+    background: linear-gradient(135deg, rgba(11, 28, 96, 0.04), rgba(53, 96, 231, 0.06));
+    border: 1px solid rgba(53, 96, 231, 0.18);
+    border-radius: 14px;
+    padding: 18px 24px;
+    max-width: 720px;
+    margin-left: auto; margin-right: auto;
+    animation: fadeUp 0.5s var(--ease-pop);
+  }
+  .p3-callout-row {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .p3-callout-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+  .p3-callout-text {
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.55;
+    flex: 1;
+    min-width: 200px;
+  }
+  .plan-pill {
+    position: absolute;
+    top: -14px; left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 50px;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(53, 96, 231, 0.35);
+  }
+  .plan-badge {
+    display: inline-block;
+    background: var(--blue-light);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 6px 12px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+    align-self: flex-start;
+  }
+  .plan-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--navy);
+    margin: 0 0 4px;
+  }
+  .plan-price {
+    display: flex; align-items: baseline; gap: 4px;
+    margin-bottom: 24px;
+  }
+  .plan-price .amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--navy);
+  }
+  .plan-card.featured .plan-price .amount {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .plan-price .period {
+    font-size: 14px;
+    color: var(--gray-400);
+    font-weight: 500;
+  }
+  .plan-features {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    border-top: 1px solid rgba(11,28,96,0.08);
+    padding-top: 20px;
+    flex: 1;
+  }
+  .plan-features li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--gray-600);
+    padding: 7px 0;
+  }
+  .plan-features li svg {
+    flex: 0 0 16px;
+    width: 16px; height: 16px;
+    color: var(--blue);
+    margin-top: 3px;
+  }
+  .plan-footnote {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin: -10px 0 18px;
+    font-style: italic;
+  }
+  .plan-cta {
+    display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1.5px solid var(--blue-mid);
+    background: transparent;
+    color: var(--navy);
+  }
+  .plan-cta:hover {
+    border-color: var(--blue);
+    background: var(--blue-light);
+  }
+  .plan-cta svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .plan-cta.primary {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: var(--white);
+    border-color: transparent;
+    box-shadow: 0 8px 24px rgba(53, 96, 231, 0.25);
+  }
+  .plan-cta.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(53, 96, 231, 0.40);
+  }
+
+  .featured-reason {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--blue);
+    font-weight: 600;
+    font-style: italic;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .featured-reason.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .plans-included {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 13px;
+    color: var(--gray-400);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .plans-included .dot {
+    display: inline-block;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--gray-400);
+    margin: 0 12px;
+    transform: translateY(-3px);
+  }
+  .plans-bcv-note {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--gray-400);
+    letter-spacing: 0.01em;
+  }
+  .plans-bcv-note strong {
+    color: var(--blue);
+    font-weight: 700;
+  }
+
+  .p4-callout {
+    margin-top: 40px;
+    background: var(--blue-light);
+    border-radius: 16px;
+    padding: 28px 32px;
+    color: var(--navy);
+    font-size: 15px;
+    line-height: 1.55;
+    text-align: center;
+    max-width: 720px;
+    margin-left: auto; margin-right: auto;
+    border: 1px solid rgba(53, 96, 231, 0.15);
+    animation: fadeUp 0.6s var(--ease-pop);
+  }
+  .p4-callout strong { color: var(--blue); font-weight: 700; }
+
+  /* ---------- Section 3 — Servicios ---------- */
+  .services-compact {
+    background: var(--white);
+    padding: 48px 32px 80px;
+  }
+  .services-compact-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .services-compact-label {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--gray-400);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 16px;
+    justify-content: center;
+  }
+  .services-compact-label::before,
+  .services-compact-label::after {
+    content: '';
+    width: 60px; height: 1px;
+    background: rgba(11, 28, 96, 0.12);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .service-card {
+    background: var(--white);
+    border: 1px solid rgba(11, 28, 96, 0.10);
+    border-radius: 16px;
+    padding: 28px 30px;
+    transition: all 0.3s var(--ease-smooth);
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .service-card:hover {
+    border-color: var(--blue-mid);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(11, 28, 96, 0.08);
+  }
+  .service-card .row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 16px;
+  }
+  .service-card .name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--navy);
+  }
+  .service-card .price {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .service-card .desc {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--gray-600);
+    margin: 0 0 18px;
+    flex: 1;
+  }
+  .service-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    background: none; border: none; padding: 0;
+    cursor: pointer;
+    transition: gap 0.2s ease, color 0.2s ease;
+    align-self: flex-start;
+  }
+  .service-link:hover { gap: 10px; color: var(--navy); }
+  .service-link svg { width: 14px; height: 14px; }
+
+  .services-elevated {
+    background: var(--gray-50);
+  }
+  .services-elevated .services-grid {
+    margin-top: 64px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .services-elevated .service-card {
+    padding: 40px 36px;
+    border-radius: 20px;
+    border: 1px solid rgba(11, 28, 96, 0.08);
+    box-shadow: 0 4px 20px rgba(11, 28, 96, 0.04);
+  }
+  .services-elevated .service-card .name { font-size: 38px; }
+  .services-elevated .service-card .desc { font-size: 15px; margin-bottom: 24px; }
+  .services-elevated .service-card .price { font-size: 14px; }
+
+  /* ---------- Section 4 — Equipo ---------- */
+  .team {
+    background: var(--navy);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .team::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(217,227,250,0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .team-decor {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(145,175,239,0.10);
+    pointer-events: none;
+  }
+  .team-decor.t1 {
+    width: 480px; height: 480px;
+    top: -120px; left: -160px;
+  }
+  .team-decor.t2 {
+    width: 280px; height: 280px;
+    bottom: -100px; right: 30%;
+    border-color: rgba(145,175,239,0.07);
+  }
+
+  .team .section-inner {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 45% 55%;
+    gap: 64px;
+    align-items: center;
+  }
+  .team-divider {
+    width: 48px; height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--white), rgba(255,255,255,0.3));
+    margin-bottom: 20px;
+  }
+  .team .eyebrow-dark {
+    color: var(--blue-mid);
+  }
+  .team-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    font-size: clamp(38px, 5.6vw, 56px);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    margin: 0 0 24px;
+  }
+  .team-title .grad-light {
+    background: linear-gradient(135deg, #fff 0%, var(--blue-mid) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .team-body {
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.72);
+    max-width: 460px;
+  }
+  .team-body p { margin: 0 0 16px; }
+  .team-body p:last-child { margin-bottom: 0; }
+
+  .credential-strip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(145,175,239,0.15);
+    border-radius: 10px;
+    padding: 16px 22px;
+    margin-top: 32px;
+    font-size: 12.5px;
+    line-height: 1.7;
+    letter-spacing: 1px;
+    font-weight: 500;
+    color: var(--blue-mid);
+    text-transform: uppercase;
+    display: flex; flex-wrap: wrap; gap: 6px 0;
+    align-items: center;
+  }
+  .credential-strip .sep {
+    display: inline-block;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: rgba(145,175,239,0.5);
+    margin: 0 14px;
+  }
+  .credential-meta {
+    margin-top: 20px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.42);
+    font-weight: 500;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    grid-template-rows: 210px 210px;
+    gap: 12px;
+  }
+  .team-tile {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(145,175,239,0.15);
+    display: flex; align-items: flex-end; justify-content: flex-start;
+    padding: 16px;
+    color: var(--blue-mid);
+  }
+  .team-tile-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .team-tile::before {
+    content: '';
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+  .team-tile:not(.has-photo)::before {
+    background:
+      linear-gradient(135deg, rgba(11,28,96,0.4) 0%, rgba(53,96,231,0.3) 100%),
+      radial-gradient(circle at 30% 30%, rgba(217,227,250,0.12), transparent 60%);
+  }
+  .team-tile.has-photo::before {
+    background: linear-gradient(to top, rgba(11,28,96,0.75) 0%, rgba(11,28,96,0.15) 50%, transparent 100%);
+    z-index: 1;
+  }
+  .team-tile .tile-label {
+    position: relative; z-index: 1;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(217,227,250,0.55);
+  }
+  .team-tile .tile-desc {
+    position: relative; z-index: 1;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    margin-top: 8px;
+    max-width: 220px;
+  }
+  .team-tile-content {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+  }
+  .team-tile-num {
+    position: absolute;
+    top: 14px; right: 16px;
+    z-index: 1;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: rgba(217,227,250,0.16);
+  }
+  .team-tile.big {
+    grid-column: 2; grid-row: 1 / -1;
+  }
+  .team-tile.big .tile-desc { font-size: 26px; max-width: 320px; }
+
+  /* ---------- Section 5 — Ubicacion ---------- */
+  .location {
+    background: var(--white);
+    padding: 0;
+  }
+  .location-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 540px;
+    align-items: stretch;
+  }
+  .location-info {
+    padding: 100px 64px 100px 32px;
+    display: flex; flex-direction: column; justify-content: center;
+    max-width: 720px;
+    margin-left: auto;
+    width: 100%;
+  }
+  .location-address {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-top: 32px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .location-address svg { width: 18px; height: 18px; color: var(--blue); flex-shrink: 0; }
+  .location-hours {
+    font-size: 15px;
+    color: var(--gray-600);
+    line-height: 1.8;
+    margin-top: 8px;
+  }
+  .location-hours .day {
+    font-weight: 600;
+    color: var(--gray-800);
+  }
+  .location-link {
+    margin-top: 20px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue);
+    align-self: flex-start;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: border-color 0.2s ease;
+  }
+  .location-link:hover { border-bottom-color: var(--blue); }
+
+  .location-wa-btn {
+    margin-top: 32px;
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent;
+    color: var(--navy);
+    border: 1.5px solid var(--blue-mid);
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .location-wa-btn:hover {
+    border-color: var(--blue);
+    background: var(--blue-light);
+  }
+  .location-wa-btn svg { width: 16px; height: 16px; color: var(--whatsapp); }
+
+  .location-map {
+    position: relative;
+    min-height: 460px;
+    overflow: hidden;
+    background: var(--navy);
+  }
+  .location-map iframe {
+    width: 100%; height: 100%;
+    min-height: 540px;
+    border: 0;
+    display: block;
+    filter: saturate(0.7) contrast(1.05) hue-rotate(-10deg);
+  }
+
+  /* ---------- Section 6 — CTA Final ---------- */
+  .cta-final {
+    padding: 80px 32px 100px;
+    background: var(--white);
+  }
+  .cta-block-outer {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .cta-card {
+    position: relative;
+    background: linear-gradient(135deg, #0b1c60 0%, #1a2d7a 50%, #3560e7 100%);
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 90px 60px;
+    text-align: center;
+    color: var(--white);
+    box-shadow: 0 32px 80px -24px rgba(11, 28, 96, 0.45);
+  }
+  .cta-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(217,227,250,0.08) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.6;
+  }
+  .cta-decor {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(145,175,239,0.10);
+    pointer-events: none;
+  }
+  .cta-decor.cd1 {
+    width: 460px; height: 460px;
+    top: -180px; right: -120px;
+  }
+  .cta-decor.cd2 {
+    width: 260px; height: 260px;
+    bottom: -100px; left: -60px;
+    border-color: rgba(145,175,239,0.08);
+  }
+  .cta-decor.cd3 {
+    width: 180px; height: 180px;
+    bottom: 30%; right: 20%;
+    border-color: rgba(145,175,239,0.06);
+  }
+
+  .cta-inner {
+    position: relative; z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    font-size: clamp(38px, 6vw, 64px);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    margin: 0;
+    transition: opacity 0.35s ease;
+  }
+  .cta-title.fading { opacity: 0; }
+  .cta-subtitle {
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    margin: 24px 0 0;
+    transition: opacity 0.35s ease;
+  }
+  .cta-subtitle.fading { opacity: 0; }
+  .cta-button {
+    margin-top: 36px;
+    background: var(--whatsapp);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    font-weight: 700;
+    font-size: 15px;
+    display: inline-flex; align-items: center; gap: 12px;
+    box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
+    transition: all 0.3s ease;
+    width: 300px;
+    justify-content: center;
+  }
+  .cta-button:hover {
+    transform: translateY(-2px);
+    background: var(--whatsapp-dark);
+    box-shadow: 0 14px 36px rgba(37, 211, 102, 0.6);
+  }
+  .cta-button svg { width: 18px; height: 18px; }
+  .cta-caption-final {
+    margin-top: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    background: var(--white);
+    border-top: 1px solid var(--gray-100);
+    padding: 36px 32px;
+  }
+  .footer-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px;
+  }
+  .footer-brand {
+    display: flex; align-items: center;
+  }
+  .footer-logo-img {
+    display: block;
+    height: 60px;
+    width: auto;
+  }
+  .footer-links {
+    display: flex; gap: 24px;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--gray-400);
+    transition: color 0.2s ease;
+  }
+  .footer-links a:hover { color: var(--blue); }
+  .footer-copyright {
+    font-size: 13px;
+    color: var(--gray-400);
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 980px) {
+    .nav-links { display: none; }
+    .hero { padding: 110px 20px 60px; min-height: 100vh; }
+    .hero h1 { font-size: clamp(48px, 12vw, 64px); }
+    .hero-subtitle { font-size: 16px; }
+    .profile-grid { grid-template-columns: 1fr; max-width: 100%; gap: 12px; }
+    .profile { min-height: auto; padding: 16px 18px; flex-direction: row; align-items: center; }
+    .profile-icon { width: 32px; height: 32px; flex: 0 0 32px; }
+    .profile-text { font-size: 14px; }
+    .profile-num { display: none; }
+    .scroll-hint { display: none; }
+    .nav { padding: 10px 20px; }
+    .nav-logo-img { height: 48px; }
+    .nav.scrolled .nav-logo-img { height: 42px; }
+    .footer-logo-img { height: 52px; }
+    .wa-float .label { display: none; }
+    .wa-float {
+      width: 56px; height: 56px;
+      padding: 0;
+      justify-content: center;
+      bottom: 20px; right: 20px;
+    }
+    .wa-cta { width: 100%; min-width: 0; }
+    .wa-cta-wrap { width: 100%; }
+    .cta-block { width: 100%; }
+    .profile-alt { padding: 14px 16px; }
+    .profile-alt-text { font-size: 13px; }
+
+    .section { padding: 72px 20px; }
+    .first-session-grid {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    .first-session-photo {
+      min-height: 280px;
+    }
+    .photo-tag { padding: 28px; }
+    .photo-tag .desc { font-size: 22px; }
+    .photo-number { font-size: 64px; top: 24px; left: 28px; }
+    .first-session-text { padding: 48px 20px 72px; }
+
+    .plans-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .plan-card.featured {
+      transform: scale(1);
+      order: -1;
+    }
+    .plan-card.featured:hover { transform: translateY(-4px); }
+
+    .services-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .services-compact { padding: 32px 20px 60px; }
+
+    .team .section-inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .team-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 180px 140px;
+      gap: 10px;
+    }
+    .team-tile.big { grid-column: span 2; grid-row: 1; }
+    .team-tile.big .tile-desc { font-size: 22px; }
+    .credential-strip { font-size: 11.5px; padding: 14px 18px; }
+    .credential-strip .sep { margin: 0 8px; }
+
+    .location-grid {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    .location-info {
+      padding: 60px 20px;
+      max-width: 100%;
+      margin: 0;
+    }
+    .location-map { min-height: 320px; }
+    .location-map iframe { min-height: 320px; }
+
+    .cta-final { padding: 60px 20px 80px; }
+    .cta-card { padding: 56px 28px; border-radius: 18px; }
+    .cta-button { width: 100%; max-width: 320px; }
+
+    .footer {
+      padding: 32px 20px;
+    }
+    .footer-inner {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+    .sticky-prompt {
+      flex-wrap: wrap;
+      padding: 10px 12px;
+      gap: 10px;
+      max-width: calc(100vw - 24px);
+    }
+    .sticky-prompt-chips { flex-wrap: wrap; }
+    .sticky-prompt-label { font-size: 12px; }
+    .sticky-chip { font-size: 11px; padding: 6px 10px; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect, useRef } = React;
+
+const WA_NUMBER = '584220430323';
+
+const PROFILES = [
+  {
+    id: 1,
+    text: 'Entreno seguido pero acumulo molestias',
+    icon: 'activity',
+    subtitle: 'Tu cuerpo no es el problema. Es la falta de criterio en cómo entrenas.',
+    waMsg: 'Hola, entreno seguido pero acumulo molestias. Me interesa saber cómo puede ayudarme Nexa.'
+  },
+  {
+    id: 2,
+    text: 'Salí de una lesión y quiero retomar',
+    icon: 'heart',
+    subtitle: 'Volver a entrenar después de una lesión tiene que hacerse bien. Aquí sabemos cómo.',
+    waMsg: 'Hola, estoy saliendo de una lesión y quiero retomar el entrenamiento. Me interesa conocer Nexa.'
+  },
+  {
+    id: 3,
+    text: 'Quiero mejorar mi rendimiento deportivo',
+    icon: 'trending',
+    subtitle: 'Rendir más no es solo entrenar más duro. Es entrenar con criterio.',
+    waMsg: 'Hola, practico deporte y quiero mejorar mi rendimiento. Me interesa conocer Nexa.'
+  }
+];
+
+const INJURY_PROFILE = {
+  id: 4,
+  subtitle: 'Evaluamos tu condición y diseñamos el tratamiento desde el primer día.',
+  waMsg: 'Hola, tengo una lesión y me interesa una sesión de fisioterapia en Nexa.'
+};
+
+const DEFAULT_SUBTITLE = 'Entrena hoy para seguir entrenando mañana.';
+const DEFAULT_WA = 'Hola, me interesa conocer Nexa.';
+
+const RECOMMENDED_PLAN = {
+  1: { key: 'base',    name: 'Nexa Base' },
+  2: { key: 'control', name: 'Nexa Control' },
+  3: { key: 'elite',   name: 'Nexa Élite' },
+  4: { key: 'control', name: 'Nexa Control' }
+};
+
+function ProfileIcon({ name }) {
+  const props = {
+    width: 22, height: 22, viewBox: '0 0 24 24',
+    fill: 'none', stroke: 'currentColor', strokeWidth: 1.8,
+    strokeLinecap: 'round', strokeLinejoin: 'round'
+  };
+  if (name === 'activity') return (
+    <svg {...props}><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+  );
+  if (name === 'heart') return (
+    <svg {...props}>
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z" />
+      <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27" />
+    </svg>
+  );
+  if (name === 'trending') return (
+    <svg {...props}>
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+      <polyline points="16 7 22 7 22 13" />
+    </svg>
+  );
+  return null;
+}
+
+function ArrowRight() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
+
+function WhatsAppGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l.39.625-1 3.648 3.74-.981.849.749zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01a1.092 1.092 0 0 0-.793.372c-.272.297-1.04 1.016-1.04 2.479s1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.711.307 1.265.49 1.697.628.713.226 1.362.194 1.876.118.572-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z" />
+    </svg>
+  );
+}
+
+function useReveal(threshold = 0.15) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        el.classList.add('in');
+        io.disconnect();
+      }
+    }, { threshold });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [threshold]);
+  return ref;
+}
+
+function Navbar({ onCta }) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
+      <a href="#top" className="nav-logo" aria-label="Nexa — inicio">
+        <img className="nav-logo-img" src="assets/nexa-mark.png" alt="Nexa" />
+      </a>
+      <div className="nav-links">
+        <a href="#planes">Planes</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#ubicacion">Ubicación</a>
+      </div>
+      <button className="nav-cta" onClick={onCta}>Escríbenos</button>
+    </nav>
+  );
+}
+
+function Hero({ selected, setSelected, waUrl }) {
+  const [hovered, setHovered] = useState(null);
+  const [fadingSub, setFadingSub] = useState(false);
+  const [displaySub, setDisplaySub] = useState(DEFAULT_SUBTITLE);
+  const [fadingCta, setFadingCta] = useState(false);
+  const [displayCta, setDisplayCta] = useState('Escríbenos por WhatsApp');
+  const [pingKey, setPingKey] = useState(0);
+  const previousSelected = useRef(null);
+
+  const effective = hovered ?? selected;
+
+  useEffect(() => {
+    let next = DEFAULT_SUBTITLE;
+    if (effective) {
+      const found = [...PROFILES, INJURY_PROFILE].find(p => p.id === effective);
+      if (found) next = found.subtitle;
+    }
+    if (next === displaySub) {
+      setFadingSub(false);
+      return;
+    }
+    setFadingSub(true);
+    const t = setTimeout(() => {
+      setDisplaySub(next);
+      setFadingSub(false);
+    }, 200);
+    return () => {
+      clearTimeout(t);
+      setFadingSub(false);
+    };
+  }, [effective, displaySub]);
+
+  useEffect(() => {
+    let next = 'Escríbenos por WhatsApp';
+    if (selected) {
+      const labels = {
+        1: 'Hablemos de tus molestias',
+        2: 'Hablemos de tu vuelta',
+        3: 'Hablemos de tu rendimiento',
+        4: 'Hablemos de tu lesión'
+      };
+      next = labels[selected] || next;
+    }
+    if (next === displayCta) {
+      setFadingCta(false);
+      return;
+    }
+    setFadingCta(true);
+    const t = setTimeout(() => {
+      setDisplayCta(next);
+      setFadingCta(false);
+    }, 180);
+    return () => {
+      clearTimeout(t);
+      setFadingCta(false);
+    };
+  }, [selected, displayCta]);
+
+  useEffect(() => {
+    if (selected && selected !== previousSelected.current) {
+      setPingKey(k => k + 1);
+    }
+    previousSelected.current = selected;
+  }, [selected]);
+
+  const eyebrowRef = useReveal(0.1);
+  const titleRef = useReveal(0.1);
+  const subRef = useReveal(0.1);
+  const selLabelRef = useReveal(0.1);
+  const gridRef = useReveal(0.1);
+  const altRef = useReveal(0.1);
+  const ctaRef = useReveal(0.1);
+
+  return (
+    <section className={`hero ${selected ? 'is-selected' : ''}`} id="top">
+      <div className="hero-photo-stack">
+        <div className={`hero-photo-layer p-default ${!selected ? 'active' : ''}`} />
+        <div className={`hero-photo-layer p-1 ${selected === 1 ? 'active' : ''}`} />
+        <div className={`hero-photo-layer p-2 ${selected === 2 ? 'active' : ''}`} />
+        <div className={`hero-photo-layer p-3 ${selected === 3 ? 'active' : ''}`} />
+        <div className={`hero-photo-layer p-4 ${selected === 4 ? 'active' : ''}`} />
+      </div>
+      <div className="hero-overlay" />
+      <div className="hero-circles">
+        <div className="hero-circle c1" />
+        <div className="hero-circle c2" />
+        <div className="hero-circle c3" />
+      </div>
+      <div className="hero-grain" />
+
+      <div className="hero-inner">
+        <div className="hero-content">
+          <div ref={eyebrowRef} className="eyebrow reveal" style={{ animationDelay: '0.05s' }}>
+            <span className="eyebrow-dot" />
+            <span>Centro de Entrenamiento &amp; Rehabilitación · Maracay</span>
+          </div>
+
+          <h1 ref={titleRef} className="reveal" style={{ animationDelay: '0.15s' }}>
+            ENTRENA FUERTE.
+            <span className="line2">SIN ROMPERTE.</span>
+          </h1>
+
+          <p ref={subRef} className="hero-subtitle reveal" style={{ animationDelay: '0.30s' }}>
+            <span className={`hero-sub-text ${fadingSub ? 'fading' : ''}`}>{displaySub}</span>
+          </p>
+
+          <div ref={selLabelRef} className="selector-label reveal" style={{ animationDelay: '0.45s' }}>
+            {selected ? 'Tu perfil · toca otro para cambiar' : '¿Cuál de estos te describe?'}
+          </div>
+
+          <div ref={gridRef} className="profile-grid reveal" style={{ animationDelay: '0.55s' }}>
+            {PROFILES.map((p, i) => {
+              const isActive = selected === p.id;
+              const isDim = selected != null && selected !== p.id;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  className={`profile ${isActive ? 'active' : ''} ${isDim ? 'dim' : ''}`}
+                  onClick={() => setSelected(isActive ? null : p.id)}
+                  onMouseEnter={() => setHovered(p.id)}
+                  onMouseLeave={() => setHovered(null)}
+                  onFocus={() => setHovered(p.id)}
+                  onBlur={() => setHovered(null)}
+                  style={{ transitionDelay: `${i * 30}ms` }}
+                >
+                  <span className="profile-num">0{p.id}</span>
+                  <div className="profile-icon"><ProfileIcon name={p.icon} /></div>
+                  <div className="profile-text">{p.text}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            ref={altRef}
+            type="button"
+            className={`profile-alt reveal ${selected === 4 ? 'active' : ''} ${selected && selected !== 4 ? 'dim hide-alt' : ''}`}
+            style={{ animationDelay: '0.7s' }}
+            onClick={() => setSelected(selected === 4 ? null : 4)}
+            onMouseEnter={() => setHovered(4)}
+            onMouseLeave={() => setHovered(null)}
+            onFocus={() => setHovered(4)}
+            onBlur={() => setHovered(null)}
+          >
+            <div className="profile-alt-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 12h.01M15 12h.01M5 8a2 2 0 0 1 2-2h2l1.5-2h3L15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z" />
+                <path d="M12 14v2" />
+              </svg>
+            </div>
+            <div className="profile-alt-text">
+              <strong>Tengo una lesión o dolor activo.</strong>{' '}
+              <span style={{ color: 'rgba(255,255,255,0.6)' }}>Habla con un fisioterapeuta.</span>
+            </div>
+            <div className="profile-alt-arrow"><ArrowRight /></div>
+          </button>
+
+          <div ref={ctaRef} className="cta-block reveal" style={{ animationDelay: '0.85s' }}>
+            {!selected ? (
+              <div className="selector-prompt">
+                <svg className="selector-prompt-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 19V5" /><path d="m5 12 7-7 7 7" />
+                </svg>
+                <span>Elige una opción para continuar</span>
+              </div>
+            ) : (
+              <>
+                <div className={`wa-cta-wrap ${pingKey ? 'ping' : ''}`} key={pingKey}>
+                  <a className="wa-cta" href={waUrl} target="_blank" rel="noopener noreferrer">
+                    <WhatsAppGlyph />
+                    <span className={`wa-cta-label ${fadingCta ? 'fading' : ''}`}>{displayCta}</span>
+                    <ArrowRight />
+                  </a>
+                </div>
+                <div className="cta-caption">Sin compromiso. Te orientamos antes de que decidas.</div>
+                {RECOMMENDED_PLAN[selected] && (
+                  <a
+                    className="recommended-chip"
+                    href="#planes"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const target = document.querySelector('#planes');
+                      if (target) {
+                        const top = target.getBoundingClientRect().top + window.scrollY - 60;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    <span className="recommended-chip-label">Tu plan</span>
+                    <span className="recommended-chip-name">{RECOMMENDED_PLAN[selected].name}</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </a>
+                )}
+                <button
+                  type="button"
+                  className="next-step"
+                  onClick={() => {
+                    const target = document.querySelector('.first-session');
+                    if (target) {
+                      const top = target.getBoundingClientRect().top + window.scrollY - 60;
+                      window.scrollTo({ top, behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  <span>O mira cómo trabajamos contigo</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 5v14" /><path d="m19 12-7 7-7-7" />
+                  </svg>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="scroll-hint">
+        <span>Sigue bajando</span>
+        <div className="bar" />
+      </div>
+    </section>
+  );
+}
+
+const FIRST_SESSION = {
+  1: {
+    body: (<>
+      <p><strong>El primer día conversamos primero.</strong></p>
+      <p>Un fisioterapeuta revisa tu historial — cómo entrenas, qué molestias tienes, desde cuándo, qué has intentado. Con eso claro, arrancas con movimientos sencillos mientras el fisio observa cómo responde tu cuerpo en tiempo real.</p>
+      <p>De ahí sale un plan de entrenamiento con criterio real. No una rutina genérica — un proceso diseñado para que sigas entrenando fuerte sin que tu cuerpo te pase factura.</p>
+    </>),
+    photo: { num: '01', src: 'assets/sesion-1.jpg', pos: 'center 30%', label: 'Foto · Evaluación inicial', desc: 'Fisio hablando con cliente, anotando y evaluando postura.', meta: 'Conversación + observación en movimiento · ~45 min' }
+  },
+  2: {
+    body: (<>
+      <p><strong>Volver a entrenar después de una lesión no es simplemente retomar donde lo dejaste.</strong></p>
+      <p>El primer día el fisio revisa cómo quedó tu cuerpo — te hace preguntas, te observa moviéndote, evalúa cómo responde la zona afectada. Con eso define si estás listo para entrenar o si primero necesitas trabajo terapéutico.</p>
+      <p>Nadie te mete a entrenar antes de tiempo. Y cuando estás listo, el proceso está diseñado para que no vuelvas a donde estabas.</p>
+    </>),
+    photo: { num: '02', src: 'assets/sesion-2.jpg', pos: 'center 30%', label: 'Foto · Evaluación post-lesión', desc: 'Fisio evaluando movimiento o zona específica del cliente.', meta: 'Movilidad, dolor, control motor de la zona afectada' }
+  },
+  3: {
+    body: (<>
+      <p><strong>El primer día el fisio analiza cómo te mueves</strong> — no en abstracto, sino en función del deporte que practicas.</p>
+      <p>Revisamos patrones de movimiento, identificamos limitaciones que frenan tu rendimiento y evaluamos tu fuerza con criterio deportivo. Con eso se construye un plan enfocado en lo que necesitas para rendir más en tu deporte específico.</p>
+      <p>Entrenas para mejorar en lo que practicas. Con la estructura para no lesionarte en el proceso.</p>
+    </>),
+    photo: { num: '03', src: 'assets/sesion-3.jpg', pos: 'center 30%', label: 'Foto · Análisis deportivo', desc: 'Fisio observando movimiento del cliente en entrenamiento.', meta: 'Patrones, fuerza, criterio específico para tu deporte' }
+  },
+  4: {
+    body: (<>
+      <p><strong>La primera sesión siempre incluye evaluación completa.</strong></p>
+      <p>El fisioterapeuta revisa tu condición, entiende el origen del dolor o la lesión, y diseña el tratamiento desde ese mismo día. No hay suposiciones ni tratamientos genéricos — cada proceso se construye sobre lo que encontramos en esa primera evaluación.</p>
+      <p>Cuando estés listo para retomar el entrenamiento, en Nexa tienes continuidad. No empiezas de cero.</p>
+    </>),
+    photo: { num: '04', src: 'assets/sesion-4.jpg', pos: 'center 30%', label: 'Foto · Sesión de fisioterapia', desc: 'Fisio trabajando zona específica del cliente en tratamiento.', meta: 'Tratamiento dirigido + plan desde la primera sesión' }
+  }
+};
+
+const FEATURED_REASON = {
+  1: 'El más recomendado para quien arrastra molestias y quiere estructura profesional sin saltar al seguimiento intenso.',
+  2: 'El más recomendado para volver después de una lesión con criterio.',
+  3: 'El más recomendado para deportistas con objetivos de rendimiento.',
+  4: 'Cuando estés listo para entrenar, este es el plan para ti.'
+};
+const FEATURED_REASON_DEFAULT = 'El más elegido por nuestros clientes.';
+
+const PLANS = {
+  entrada: {
+    id: 'entrada',
+    name: 'NEXA ENTRADA',
+    badge: 'Acceso + autonomía',
+    price: '$30',
+    period: '/mes',
+    features: [
+      'Evaluación inicial (fuerza + medidas)',
+      'Plan de entrenamiento inicial',
+      'Primera semana de acompañamiento'
+    ],
+    footnote: 'Add-on opcional: acompañamiento semanal por $3.75/sem',
+    defaultMsg: 'Hola, me interesa el plan Entrada de Nexa.'
+  },
+  base: {
+    id: 'base',
+    name: 'NEXA BASE',
+    badge: 'Estructura profesional',
+    price: '$50',
+    period: '/mes',
+    features: [
+      'Evaluación de fuerza + medidas corporales',
+      'Programa diseñado por fisioterapeuta',
+      'Corrección técnica puntual',
+      'Ajuste mensual del programa'
+    ],
+    defaultMsg: 'Hola, me interesa el plan Base de Nexa.'
+  },
+  control: {
+    id: 'control',
+    name: 'NEXA CONTROL',
+    badge: 'Seguimiento continuo',
+    price: '$75',
+    period: '/mes',
+    features: [
+      'Programa personalizado a tus objetivos',
+      'Evaluación de fuerza + funcional (FMS)',
+      'Medidas corporales',
+      'Corrección técnica activa en cada sesión',
+      'Seguimiento mensual estructurado',
+      'Ejercicios fisioterapéuticos integrados',
+      'Recovery según necesidad'
+    ],
+    defaultMsg: 'Hola, me interesa el plan Control de Nexa.'
+  },
+  elite: {
+    id: 'elite',
+    name: 'NEXA ÉLITE',
+    badge: 'Deportistas · Academia o individual',
+    price: 'Por evaluación',
+    period: '',
+    features: [
+      'Preparación física enfocada en tu deporte',
+      'Corrección técnica en cada sesión',
+      'Evaluación de movimiento',
+      'Coordinación con tu entrenador (Academia) o programa propio (Individual)',
+      '1 descarga muscular al mes incluida'
+    ],
+    footnote: 'Modalidades · Academia (con tu entrenador) o Individual (grupo mixto)',
+    defaultMsg: 'Hola, practico deporte y quiero conocer Nexa Élite.'
+  }
+};
+
+const PLAN_SETS = {
+  1: ['entrada', 'base', 'control'],
+  2: ['entrada', 'base', 'control'],
+  3: ['base', 'control', 'elite'],
+  4: ['entrada', 'base', 'control'],
+  default: ['entrada', 'base', 'control']
+};
+
+const FEATURED_BY_PROFILE = {
+  1: 'base',
+  2: 'control',
+  3: 'elite',
+  4: 'control',
+  default: 'control'
+};
+
+const FEATURED_MSG = {
+  '1:base':    'Hola, entreno seguido pero tengo molestias. Me interesa el plan Base de Nexa.',
+  '2:control': 'Hola, estoy retomando después de una lesión. Me interesa el plan Control de Nexa.',
+  '3:elite':   'Hola, practico deporte y quiero mejorar mi rendimiento. Me interesa Nexa Élite.',
+  '4:control': 'Hola, cuando termine mi recuperación me interesa el plan Control de Nexa.',
+  'default:control': 'Hola, me interesa el plan Control de Nexa.'
+};
+
+function waLink(msg) {
+  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+function Check() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+function ArrowSm() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
+
+const CTA_FINAL = {
+  1: { title: 'DEJA DE ENTRENAR A CIEGAS', subtitle: 'Cuéntanos cómo entrenas y qué molestias tienes. Te decimos cómo podemos ayudarte.' },
+  2: { title: 'VUELVE A ENTRENAR. BIEN.', subtitle: 'Cuéntanos dónde estás en tu recuperación. Te orientamos sobre el siguiente paso.' },
+  3: { title: 'ENTRENA PARA RENDIR MÁS', subtitle: 'Cuéntanos qué deporte practicas y qué quieres mejorar. Definimos el proceso juntos.' },
+  4: { title: 'EMPIEZA POR RECUPERARTE', subtitle: 'Cuéntanos qué tienes. Evaluamos tu condición y arrancamos desde el primer día.' }
+};
+const CTA_FINAL_DEFAULT = {
+  title: 'ENTRENA FUERTE. SIN ROMPERTE.',
+  subtitle: 'Cuéntanos dónde estás y te orientamos. Sin compromiso.'
+};
+
+function FirstSession({ selected }) {
+  const profile = selected || 1;
+  const content = FIRST_SESSION[profile] || FIRST_SESSION[1];
+  const [displayed, setDisplayed] = useState(content);
+  const [swap, setSwap] = useState(false);
+
+  useEffect(() => {
+    if (displayed === content) {
+      setSwap(false);
+      return;
+    }
+    setSwap(true);
+    const t = setTimeout(() => {
+      setDisplayed(content);
+      setSwap(false);
+    }, 220);
+    return () => {
+      clearTimeout(t);
+      setSwap(false);
+    };
+  }, [content, displayed]);
+
+  const photoRef = useReveal(0.15);
+  const textRef = useReveal(0.15);
+
+  return (
+    <section className="first-session">
+      <div className="first-session-grid">
+        <div ref={photoRef} className={`first-session-photo reveal-left ${displayed.photo.src ? 'has-photo' : ''}`}>
+          <div className={`fs-photo-content ${swap ? 'swap-out' : ''}`}>
+            {displayed.photo.src ? (
+              <img
+                className="fs-photo-img"
+                src={displayed.photo.src}
+                alt={displayed.photo.desc}
+                style={{ objectPosition: displayed.photo.pos || 'center center' }}
+                loading="lazy"
+              />
+            ) : (
+              <>
+                <div className="photo-number">{displayed.photo.num}</div>
+                <div className="photo-decor d1" />
+                <div className="photo-decor d2" />
+              </>
+            )}
+            {!displayed.photo.src && (
+              <div className="photo-tag">
+                <div className="label"><span>Placeholder</span></div>
+                <div className="desc">{displayed.photo.desc}</div>
+                <div className="meta">{displayed.photo.meta}</div>
+              </div>
+            )}
+          </div>
+        </div>
+        <div ref={textRef} className="first-session-text reveal">
+          <div className={`fs-text-content ${swap ? 'swap-out' : ''}`}>
+            <div className="section-divider" />
+            <div className="eyebrow-dark">Así trabajamos</div>
+            <h2 className="section-title">
+              TU PRIMERA SESIÓN<br />
+              <span className="grad">EN NEXA</span>
+            </h2>
+            <div className="body">{displayed.body}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PlanCard({ plan, featured, pillLabel, ctaLabel, ctaMsg, primary, index }) {
+  return (
+    <div className={`plan-card ${featured ? 'featured' : ''}`} style={{ animationDelay: `${index * 0.08}s` }}>
+      {featured && <span className="plan-pill">{pillLabel}</span>}
+      <span className="plan-badge">{plan.badge}</span>
+      <h3 className="plan-name">{plan.name}</h3>
+      <div className="plan-price">
+        <span className={`amount ${plan.id === 'elite' ? 'amount-sm' : ''}`}>{plan.price}</span>
+        {plan.period && <span className="period">{plan.period}</span>}
+      </div>
+      <ul className="plan-features">
+        {plan.features.map((f, i) => (
+          <li key={i}><Check /> {f}</li>
+        ))}
+      </ul>
+      {plan.footnote && <div className="plan-footnote">{plan.footnote}</div>}
+      <a className={`plan-cta ${primary ? 'primary' : ''}`} href={waLink(ctaMsg)} target="_blank" rel="noopener noreferrer">
+        {ctaLabel}
+        {primary && <ArrowSm />}
+      </a>
+    </div>
+  );
+}
+
+function Plans({ selected }) {
+  const profileKey = selected || 'default';
+  const planIds = PLAN_SETS[profileKey] || PLAN_SETS.default;
+  const featuredId = FEATURED_BY_PROFILE[profileKey] || FEATURED_BY_PROFILE.default;
+  const reason = (selected && FEATURED_REASON[selected]) || FEATURED_REASON_DEFAULT;
+  const featuredMsg = FEATURED_MSG[`${profileKey}:${featuredId}`] || PLANS[featuredId].defaultMsg;
+
+  const [displayKey, setDisplayKey] = useState(profileKey);
+  const [swap, setSwap] = useState(false);
+
+  useEffect(() => {
+    if (displayKey === profileKey) {
+      setSwap(false);
+      return;
+    }
+    setSwap(true);
+    const t = setTimeout(() => {
+      setDisplayKey(profileKey);
+      setSwap(false);
+    }, 220);
+    return () => {
+      clearTimeout(t);
+      setSwap(false);
+    };
+  }, [profileKey, displayKey]);
+
+  const headRef = useReveal(0.15);
+  const grid = useReveal(0.15);
+
+  const renderPlanIds = PLAN_SETS[displayKey] || PLAN_SETS.default;
+  const renderFeaturedId = FEATURED_BY_PROFILE[displayKey] || FEATURED_BY_PROFILE.default;
+  const renderFeaturedMsg = FEATURED_MSG[`${displayKey}:${renderFeaturedId}`] || PLANS[renderFeaturedId].defaultMsg;
+
+  return (
+    <section className="section plans" id="planes">
+      <div className="section-inner">
+        <div ref={headRef} className="section-head center reveal">
+          <div className="section-divider center" />
+          <div className="eyebrow-dark">Elige tu plan</div>
+          <h2 className="section-title">
+            EL NIVEL DE ACOMPAÑAMIENTO<br />
+            <span className="grad">QUE NECESITAS</span>
+          </h2>
+          <p className="section-lead">
+            Los planes no se diferencian por acceso — todos incluyen el espacio de lunes a sábado.
+            Se diferencian por el nivel de seguimiento profesional.
+          </p>
+        </div>
+
+        <div ref={grid} className="plans-grid-wrap reveal">
+          <div className={`plans-grid ${swap ? 'swap-out' : ''}`}>
+            {renderPlanIds.map((id, i) => {
+              const plan = PLANS[id];
+              const isFeatured = id === renderFeaturedId;
+              return (
+                <PlanCard
+                  key={id}
+                  plan={plan}
+                  featured={isFeatured}
+                  pillLabel={selected ? 'Recomendado para ti' : 'El más elegido ★'}
+                  ctaLabel={isFeatured ? (id === 'elite' ? 'Conversemos sobre Élite' : 'Quiero este plan') : 'Preguntar por este plan'}
+                  ctaMsg={isFeatured ? renderFeaturedMsg : plan.defaultMsg}
+                  primary={isFeatured}
+                  index={i}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="featured-reason show" key={displayKey}>
+          {reason}
+        </div>
+
+        <div className="plans-included">
+          Acceso al espacio
+          <span className="dot" />Lunes a sábado
+          <span className="dot" />Maracay
+        </div>
+
+        <div className="plans-bcv-note">
+          Precios en USD · se pagan en bolívares al cambio <strong>BCV</strong> del día
+        </div>
+
+        {selected === 4 && (
+          <div className="p4-callout">
+            <strong>Cuando estés listo para retomar el entrenamiento, en Nexa tienes continuidad.</strong>{' '}
+            No empiezas de cero.
+          </div>
+        )}
+
+        {selected === 3 && (
+          <div className="p3-callout">
+            <div className="p3-callout-row">
+              <span className="p3-callout-label">¿Atleta de academia?</span>
+              <span className="p3-callout-text">Nexa Élite Academia coordina con tu entrenador. Nexa Élite Individual es para deportistas sin academia.</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ServicesCompact() {
+  const ref = useReveal(0.15);
+  return (
+    <section className="services-compact" id="servicios">
+      <div className="services-compact-inner">
+        <div className="services-compact-label">También disponibles</div>
+        <div ref={ref} className="services-grid reveal">
+          <ServiceCard
+            name="Fisioterapia"
+            price="Primera $30 · Siguientes $20"
+            desc="Para lesión, patología o dolor agudo/recurrente. Evaluación completa en la primera consulta."
+            cta="Agendar sesión"
+            msg="Hola, me interesa una sesión de fisioterapia en Nexa."
+          />
+          <ServiceCard
+            name="Nexa Recovery"
+            price="$20 / sesión"
+            desc="Descarga muscular y movilidad asistida. Mantenimiento preventivo para seguir entrenando bien."
+            cta="Preguntar por Recovery"
+            msg="Hola, me interesa una sesión de Recovery en Nexa."
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServicesElevated() {
+  const headRef = useReveal(0.15);
+  const grid = useReveal(0.15);
+  return (
+    <section className="section services-elevated" id="servicios">
+      <div className="section-inner">
+        <div ref={headRef} className="section-head reveal">
+          <div className="section-divider" />
+          <div className="eyebrow-dark">Fisioterapia &amp; Recovery</div>
+          <h2 className="section-title">
+            EMPEZAMOS<br />
+            <span className="grad">POR TU RECUPERACIÓN</span>
+          </h2>
+          <p className="section-lead">
+            Antes de entrenar, hay que estar bien. Aquí nos encargamos de esa parte también.
+          </p>
+        </div>
+        <div ref={grid} className="services-grid reveal">
+          <ServiceCard
+            name="Fisioterapia"
+            price="Primera $30 · Siguientes $20"
+            desc="Para lesión, patología o dolor agudo/recurrente. Evaluación completa en la primera consulta y plan de tratamiento desde el primer día."
+            cta="Agendar sesión de fisioterapia"
+            msg="Hola, tengo una lesión y me interesa una sesión de fisioterapia en Nexa."
+          />
+          <ServiceCard
+            name="Nexa Recovery"
+            price="$20 / sesión"
+            desc="Descarga muscular y movilidad asistida. Para cuando ya estés entrenando — mantenimiento del cuerpo para seguir progresando."
+            cta="Preguntar por Recovery"
+            msg="Hola, me interesa una sesión de Recovery en Nexa."
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServiceCard({ name, price, desc, cta, msg }) {
+  return (
+    <div className="service-card">
+      <div className="row">
+        <div className="name">{name}</div>
+        <div className="price">{price}</div>
+      </div>
+      <p className="desc">{desc}</p>
+      <a className="service-link" href={waLink(msg)} target="_blank" rel="noopener noreferrer">
+        {cta} <ArrowSm />
+      </a>
+    </div>
+  );
+}
+
+/* ── Datos de fotos del equipo ── */
+const TEAM_TILES = [
+  { num: '02', label: 'Espacio',     desc: 'Vista del área de entrenamiento', big: false, src: 'assets/equipo-espacio.jpeg', pos: 'center center' },
+  { num: '01', label: 'En sesión',   desc: 'Fisio trabajando con cliente',    big: true,  src: 'assets/equipo-sesion.jpg',   pos: 'center 30%' },
+  { num: '03', label: 'Evaluación',  desc: 'Fisio en proceso de evaluación',  big: false, src: 'assets/equipo-evaluacion.jpg', pos: 'center center' },
+];
+
+function Team() {
+  const leftRef = useReveal(0.15);
+  const gridRef = useReveal(0.15);
+  return (
+    <section className="section team">
+      <div className="team-decor t1" />
+      <div className="team-decor t2" />
+      <div className="section-inner">
+        <div ref={leftRef} className="reveal-left">
+          <div className="team-divider" />
+          <div className="eyebrow-dark">El equipo</div>
+          <h2 className="team-title">
+            FISIOTERAPEUTAS.<br />
+            <span className="grad-light">NO ENTRENADORES.</span>
+          </h2>
+          <div className="team-body">
+            <p>Todo lo que ocurre en Nexa pasa por manos de fisioterapeutas licenciados con formación especializada en deporte, rehabilitación y movimiento.</p>
+            <p>No hay improvisación. Hay criterio clínico detrás de cada programa.</p>
+          </div>
+          <div className="credential-strip">
+            <span>Terapia Manual</span><span className="sep" />
+            <span>Fisioterapia Deportiva</span><span className="sep" />
+            <span>Rehabilitación Post-Quirúrgica</span><span className="sep" />
+            <span>Punción Seca</span><span className="sep" />
+            <span>Traumatología</span><span className="sep" />
+            <span>Control Motor</span>
+          </div>
+          <div className="credential-meta">6 fisioterapeutas licenciados · Maracay, Venezuela</div>
+        </div>
+
+        <div ref={gridRef} className="team-grid reveal">
+          {TEAM_TILES.map((tile, i) => (
+            <div key={tile.num} className={`team-tile ${tile.big ? 'big' : ''} ${tile.src ? 'has-photo' : ''}`} style={{ animationDelay: `${i * 0.1}s` }}>
+              {tile.src && (
+                <img className="team-tile-img" src={tile.src} alt={tile.desc} style={{ objectPosition: tile.pos }} loading="lazy" />
+              )}
+              <div className="team-tile-num">{tile.num}</div>
+              <div className="team-tile-content">
+                <div className="tile-label">{tile.label}</div>
+                <div className="tile-desc">{tile.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 10c0 7-8 13-8 13s-8-6-8-13a8 8 0 0 1 16 0Z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  );
+}
+
+function Location({ waUrl }) {
+  const infoRef = useReveal(0.15);
+  const mapRef = useReveal(0.1);
+  return (
+    <section className="location" id="ubicacion">
+      <div className="location-grid">
+        <div ref={infoRef} className="location-info reveal">
+          <div className="section-divider" />
+          <div className="eyebrow-dark">Dónde estamos</div>
+          <h2 className="section-title">
+            MARACAY,<br />
+            <span className="grad">VENEZUELA</span>
+          </h2>
+          <div className="location-address">
+            <PinIcon />
+            <span>Av. Constitución, Maracay</span>
+          </div>
+          <div className="location-hours">
+            <div className="day">Lunes a sábado</div>
+            <div>6:00 AM – 12:00 PM · 2:00 PM – 9:00 PM</div>
+          </div>
+          <a className="location-link" href="https://maps.app.goo.gl/49D7b35VSyKaVt3f6" target="_blank" rel="noopener noreferrer">
+            → Cómo llegar
+          </a>
+          <a className="location-wa-btn" href={waUrl} target="_blank" rel="noopener noreferrer">
+            <WhatsAppGlyph />
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+        <div ref={mapRef} className="location-map reveal" style={{ animationDelay: '0.15s' }}>
+          <iframe
+            title="Ubicación Nexa"
+            src="https://www.google.com/maps?q=10.2508646,-67.6168864&z=17&output=embed"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CtaFinal({ selected, waUrl }) {
+  const content = (selected && CTA_FINAL[selected]) || CTA_FINAL_DEFAULT;
+  const [displayed, setDisplayed] = useState(content);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    if (displayed.title === content.title) {
+      setFading(false);
+      return;
+    }
+    setFading(true);
+    const t = setTimeout(() => {
+      setDisplayed(content);
+      setFading(false);
+    }, 220);
+    return () => {
+      clearTimeout(t);
+      setFading(false);
+    };
+  }, [content, displayed.title]);
+
+  const ref = useReveal(0.15);
+  return (
+    <section className="cta-final">
+      <div className="cta-block-outer">
+        <div ref={ref} className="cta-card reveal">
+          <div className="cta-decor cd1" />
+          <div className="cta-decor cd2" />
+          <div className="cta-decor cd3" />
+          <div className="cta-inner">
+            <h2 className={`cta-title ${fading ? 'fading' : ''}`}>{displayed.title}</h2>
+            <p className={`cta-subtitle ${fading ? 'fading' : ''}`}>{displayed.subtitle}</p>
+            <a className="cta-button" href={waUrl} target="_blank" rel="noopener noreferrer">
+              <WhatsAppGlyph />
+              <span>Escríbenos por WhatsApp</span>
+              <ArrowRight />
+            </a>
+            <div className="cta-caption-final">Sin compromiso. Te orientamos antes de que decidas.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer-inner">
+        <a href="#top" className="footer-brand" aria-label="Nexa — inicio">
+          <img className="footer-logo-img" src="assets/nexa-mark.png" alt="Nexa" />
+        </a>
+        <div className="footer-links">
+          <a href="#planes">Planes</a>
+          <a href="#servicios">Servicios</a>
+          <a href="#ubicacion">Ubicación</a>
+        </div>
+        <div className="footer-copyright">© 2026 Nexa — Maracay, Venezuela</div>
+      </div>
+    </footer>
+  );
+}
+
+function StickyPrompt({ selected, setSelected }) {
+  const [eligible, setEligible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (selected) return;
+    const onScroll = () => {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+      const heroBottom = hero.getBoundingClientRect().bottom;
+      setEligible(heroBottom < 120);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [selected]);
+
+  useEffect(() => {
+    if (selected) setDismissed(false);
+  }, [selected]);
+
+  const show = eligible && !selected && !dismissed;
+
+  const pickAndScroll = (id) => {
+    setSelected(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <div className={`sticky-prompt ${show ? 'show' : ''}`} role="region" aria-label="Elige tu perfil">
+      <span className="sticky-prompt-label">¿Cuál te describe?</span>
+      <div className="sticky-prompt-chips">
+        <button type="button" className="sticky-chip" onClick={() => pickAndScroll(1)}>
+          <ProfileIcon name="activity" /> Molestias
+        </button>
+        <button type="button" className="sticky-chip" onClick={() => pickAndScroll(2)}>
+          <ProfileIcon name="heart" /> Post-lesión
+        </button>
+        <button type="button" className="sticky-chip" onClick={() => pickAndScroll(3)}>
+          <ProfileIcon name="trending" /> Rendimiento
+        </button>
+        <button type="button" className="sticky-chip" onClick={() => pickAndScroll(4)}>
+          Lesión activa
+        </button>
+      </div>
+      <button type="button" className="sticky-prompt-close" onClick={() => setDismissed(true)} aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+function WhatsAppFloat({ waUrl, visible }) {
+  return (
+    <a
+      className={`wa-float ${visible ? 'show' : ''}`}
+      href={waUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Escríbenos por WhatsApp"
+    >
+      <WhatsAppGlyph />
+      <span className="label">Escríbenos</span>
+    </a>
+  );
+}
+
+function App() {
+  const [selected, setSelected] = useState(null);
+
+  const msg = (() => {
+    if (!selected) return DEFAULT_WA;
+    const found = [...PROFILES, INJURY_PROFILE].find(p => p.id === selected);
+    return found ? found.waMsg : DEFAULT_WA;
+  })();
+
+  const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  const openWA = () => window.open(waUrl, '_blank', 'noopener,noreferrer');
+  const floatVisible = !!selected;
+
+  return (
+    <>
+      <Navbar onCta={openWA} />
+      <Hero selected={selected} setSelected={setSelected} waUrl={waUrl} />
+      {selected === 4 ? (
+        <>
+          <FirstSession selected={selected} />
+          <ServicesElevated />
+          <Plans selected={selected} />
+        </>
+      ) : (
+        <>
+          <FirstSession selected={selected} />
+          <Plans selected={selected} />
+          <ServicesCompact />
+        </>
+      )}
+      <Team />
+      <Location waUrl={waUrl} />
+      <CtaFinal selected={selected} waUrl={waUrl} />
+      <Footer />
+      <WhatsAppFloat waUrl={waUrl} visible={floatVisible} />
+      <StickyPrompt selected={selected} setSelected={setSelected} />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
 </html>
