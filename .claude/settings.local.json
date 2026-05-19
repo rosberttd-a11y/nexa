@@ -21,7 +21,8 @@
       "Bash(gh pr *)",
       "Bash(git pull *)",
       "Bash(git reset *)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(cd \"C:\\\\Users\\\\rober\\\\Downloads\\\\Proyectos\\\\Nexa\\\\Claude\\\\Nueva Landing\" && mkdir -p public/assets && cp assets/* public/assets/)"
     ]
   }
 }
