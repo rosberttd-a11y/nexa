@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "PowerShell(if \\(-not \\(Test-Path \"C:\\\\Users\\\\rober\\\\Downloads\\\\Proyectos\\\\Nexa\\\\Claude\\\\Nueva Landing\\\\.claude\"\\)\\) { New-Item -ItemType Directory -Path \"C:\\\\Users\\\\rober\\\\Downloads\\\\Proyectos\\\\Nexa\\\\Claude\\\\Nueva Landing\\\\.claude\" -Force | Out-Null })",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "WebFetch(domain:maps.app.goo.gl)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git config *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git fetch *)",
+      "Bash(git push *)",
+      "Bash(gh pr create --base main --head nueva-landing --title 'Nueva landing page Nexa - rediseño completo' --body ' *)",
+      "Bash(gh api *)",
+      "Bash(git ls-tree *)",
+      "Bash(gh pr *)",
+      "Bash(git pull *)",
+      "Bash(git reset *)",
+      "Bash(git rm *)"
+    ]
+  }
+}
