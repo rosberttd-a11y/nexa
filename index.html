@@ -345,6 +345,7 @@
     color: var(--white);
     display: flex; align-items: center; gap: 16px;
     font-family: inherit;
+    animation: fadeUp 0.8s var(--ease-pop) 0.7s both;
   }
   .profile-alt:hover {
     background: rgba(53, 96, 231, 0.14);
@@ -524,10 +525,10 @@
   .profile-alt.hide-alt {
     height: 0;
     margin: 0;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
     border-width: 0;
-    opacity: 0 !important;
+    opacity: 0;
     overflow: hidden;
     pointer-events: none;
   }
@@ -2117,7 +2118,7 @@ function Hero({ selected, setSelected, waUrl }) {
   const subRef = useReveal(0.1);
   const selLabelRef = useReveal(0.1);
   const gridRef = useReveal(0.1);
-  const altRef = useReveal(0.1);
+  // altRef removed — profile-alt visibility managed by selection state, not scroll reveal
   const ctaRef = useReveal(0.1);
 
   return (
@@ -2182,10 +2183,8 @@ function Hero({ selected, setSelected, waUrl }) {
           </div>
 
           <button
-            ref={altRef}
             type="button"
-            className={`profile-alt reveal ${selected === 4 ? 'active' : ''} ${selected && selected !== 4 ? 'dim hide-alt' : ''}`}
-            style={{ animationDelay: '0.7s' }}
+            className={`profile-alt ${selected === 4 ? 'active' : ''} ${selected && selected !== 4 ? 'hide-alt' : ''}`}
             onClick={() => setSelected(selected === 4 ? null : 4)}
             onMouseEnter={() => setHovered(4)}
             onMouseLeave={() => setHovered(null)}
