@@ -513,6 +513,15 @@
     transform: translateY(-3px);
     min-height: 130px;
   }
+  .hero.is-selected .profile-alt.active {
+    opacity: 1;
+    max-height: 120px;
+    margin-top: 14px;
+    padding: 14px 22px;
+    border-width: 1.5px;
+    overflow: visible;
+    pointer-events: auto;
+  }
   .hero.is-selected .profile-alt:not(.active) {
     opacity: 0.35;
     padding: 10px 16px;
@@ -523,13 +532,13 @@
   .hero.is-selected .profile-alt:not(.active) .profile-alt-text {
     font-size: 12.5px;
   }
-  .profile-alt.dim.hide-alt {
-    max-height: 0 !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    border-width: 0 !important;
-    opacity: 0 !important;
+  .profile-alt.hide-alt {
+    max-height: 0;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    opacity: 0;
     overflow: hidden;
     pointer-events: none;
   }
