@@ -334,14 +334,13 @@
   .profile-alt {
     margin-top: 14px;
     max-width: 680px;
-    max-height: 120px;
     width: 100%;
     background: rgba(255,255,255,0.04);
     border: 1.5px dashed rgba(145, 175, 239, 0.30);
     border-radius: 14px;
     padding: 14px 22px;
     cursor: pointer;
-    transition: all 0.3s var(--ease-smooth);
+    transition: opacity 0.3s var(--ease-smooth), background 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
     text-align: left;
     color: var(--white);
     display: flex; align-items: center; gap: 16px;
@@ -511,32 +510,19 @@
   }
   .hero.is-selected .profile-alt.active {
     opacity: 1;
-    max-height: 120px;
-    margin-top: 14px;
-    padding: 14px 22px;
-    border-width: 1.5px;
-    overflow: visible;
-    pointer-events: auto;
   }
-  .hero.is-selected .profile-alt:not(.active) {
+  .hero.is-selected .profile-alt:not(.active):not(.hide-alt) {
     opacity: 0.35;
     padding: 10px 16px;
   }
-  .hero.is-selected .profile-alt:not(.active) .profile-alt-icon {
+  .hero.is-selected .profile-alt:not(.active):not(.hide-alt) .profile-alt-icon {
     width: 26px; height: 26px;
   }
-  .hero.is-selected .profile-alt:not(.active) .profile-alt-text {
+  .hero.is-selected .profile-alt:not(.active):not(.hide-alt) .profile-alt-text {
     font-size: 12.5px;
   }
   .profile-alt.hide-alt {
-    max-height: 0;
-    margin-top: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
+    display: none;
   }
 
   .hero.is-selected .hero-subtitle {
