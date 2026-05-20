@@ -2751,14 +2751,17 @@ function Team() {
         <div ref={gridRef} className="team-grid reveal">
           {TEAM_TILES.map((tile, i) => (
             <div key={tile.num} className={`team-tile ${tile.big ? 'big' : ''} ${tile.src ? 'has-photo' : ''}`} style={{ animationDelay: `${i * 0.1}s` }}>
-              {tile.src && (
+              {tile.src ? (
                 <img className="team-tile-img" src={tile.src} alt={tile.desc} style={{ objectPosition: tile.pos }} loading="lazy" />
+              ) : (
+                <>
+                  <div className="team-tile-num">{tile.num}</div>
+                  <div className="team-tile-content">
+                    <div className="tile-label">{tile.label}</div>
+                    <div className="tile-desc">{tile.desc}</div>
+                  </div>
+                </>
               )}
-              <div className="team-tile-num">{tile.num}</div>
-              <div className="team-tile-content">
-                <div className="tile-label">{tile.label}</div>
-                <div className="tile-desc">{tile.desc}</div>
-              </div>
             </div>
           ))}
         </div>
