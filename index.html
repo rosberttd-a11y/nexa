@@ -5,6 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nexa — Entrena fuerte. Sin romperte.</title>
 <meta name="description" content="Centro de Entrenamiento & Rehabilitación guiado por fisioterapeutas en Maracay, Venezuela. Entrena con criterio. Sin romperte." />
+<meta name="theme-color" content="#0b1c60" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://nexarehab.com/" />
+
+<!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Nexa" />
+<meta property="og:locale" content="es_VE" />
+<meta property="og:url" content="https://nexarehab.com/" />
+<meta property="og:title" content="Nexa — Entrena fuerte. Sin romperte." />
+<meta property="og:description" content="Centro de Entrenamiento & Rehabilitación guiado por fisioterapeutas en Maracay, Venezuela. Entrena con criterio. Sin romperte." />
+<meta property="og:image" content="https://nexarehab.com/assets/hero-standar.png" />
+<meta property="og:image:alt" content="Nexa — Centro de Entrenamiento & Rehabilitación" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Nexa — Entrena fuerte. Sin romperte." />
+<meta name="twitter:description" content="Centro de Entrenamiento & Rehabilitación guiado por fisioterapeutas en Maracay, Venezuela. Entrena con criterio. Sin romperte." />
+<meta name="twitter:image" content="https://nexarehab.com/assets/hero-standar.png" />
+
 <link rel="icon" type="image/png" href="assets/nexa-mark.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -120,6 +140,9 @@
     background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
     color: var(--white);
     border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
     padding: 10px 22px;
     border-radius: 8px;
     font-weight: 600;
@@ -754,6 +777,15 @@
   .wa-cta-label.fading { opacity: 0; }
   .wa-cta svg { width: 18px; height: 18px; }
 
+  .evaluation-cta {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    box-shadow: 0 8px 28px rgba(53, 96, 231, 0.40);
+  }
+  .evaluation-cta:hover {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+    box-shadow: 0 14px 36px rgba(53, 96, 231, 0.55);
+  }
+
   @keyframes ctaPing {
     0% { transform: scale(0.95); opacity: 0.6; }
     100% { transform: scale(1.5); opacity: 0; }
@@ -774,6 +806,7 @@
   .wa-cta-wrap.ping::before {
     animation: ctaPing 0.7s var(--ease-pop) forwards;
   }
+  .evaluation-cta-wrap::before { background: rgba(53, 96, 231, 0.45); }
 
   .cta-caption {
     font-size: 12px;
@@ -1759,6 +1792,8 @@
     box-shadow: 0 14px 36px rgba(37, 211, 102, 0.6);
   }
   .cta-button svg { width: 18px; height: 18px; }
+  .cta-button.evaluation-cta { background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%); }
+  .cta-button.evaluation-cta:hover { background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%); }
   .cta-caption-final {
     margin-top: 16px;
     font-size: 12px;
@@ -1928,6 +1963,8 @@
 const { useState, useEffect, useRef } = React;
 
 const WA_NUMBER = '584220430323';
+const EVALUATION_MESSAGE = 'Hola, me interesa agendar una evaluación gratuita en Nexa.';
+const EVALUATION_URL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(EVALUATION_MESSAGE)}`;
 
 const PROFILES = [
   {
@@ -1955,7 +1992,7 @@ const PROFILES = [
 
 const INJURY_PROFILE = {
   id: 4,
-  subtitle: 'Evaluamos tu condición y diseñamos el tratamiento desde el primer día.',
+  subtitle: 'Primero entendemos tu condición para indicarte el siguiente paso con criterio.',
   waMsg: 'Hola, tengo una lesión y me interesa una sesión de fisioterapia en Nexa.'
 };
 
@@ -1965,8 +2002,7 @@ const DEFAULT_WA = 'Hola, me interesa conocer Nexa.';
 const RECOMMENDED_PLAN = {
   1: { key: 'base',    name: 'Nexa Base' },
   2: { key: 'control', name: 'Nexa Control' },
-  3: { key: 'elite',   name: 'Nexa Élite' },
-  4: { key: 'control', name: 'Nexa Control' }
+  3: { key: 'elite',   name: 'Nexa Élite' }
 };
 
 function ProfileIcon({ name }) {
@@ -2009,6 +2045,15 @@ function WhatsAppGlyph() {
   );
 }
 
+function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M16 3v4M8 3v4M3 10h18" />
+    </svg>
+  );
+}
+
 function useReveal(threshold = 0.15) {
   const ref = useRef(null);
   useEffect(() => {
@@ -2026,7 +2071,7 @@ function useReveal(threshold = 0.15) {
   return ref;
 }
 
-function Navbar({ onCta }) {
+function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -2044,19 +2089,15 @@ function Navbar({ onCta }) {
         <a href="#servicios">Servicios</a>
         <a href="#ubicacion">Ubicación</a>
       </div>
-      <button className="nav-cta" onClick={onCta}>Escríbenos</button>
+      <a className="nav-cta" href={EVALUATION_URL} target="_blank" rel="noopener noreferrer">Agenda tu evaluación</a>
     </nav>
   );
 }
 
-function Hero({ selected, setSelected, waUrl }) {
+function Hero({ selected, setSelected }) {
   const [hovered, setHovered] = useState(null);
   const [fadingSub, setFadingSub] = useState(false);
   const [displaySub, setDisplaySub] = useState(DEFAULT_SUBTITLE);
-  const [fadingCta, setFadingCta] = useState(false);
-  const [displayCta, setDisplayCta] = useState('Escríbenos por WhatsApp');
-  const [pingKey, setPingKey] = useState(0);
-  const previousSelected = useRef(null);
 
   const effective = hovered ?? selected;
 
@@ -2080,39 +2121,6 @@ function Hero({ selected, setSelected, waUrl }) {
       setFadingSub(false);
     };
   }, [effective, displaySub]);
-
-  useEffect(() => {
-    let next = 'Escríbenos por WhatsApp';
-    if (selected) {
-      const labels = {
-        1: 'Hablemos de tus molestias',
-        2: 'Hablemos de tu vuelta',
-        3: 'Hablemos de tu rendimiento',
-        4: 'Hablemos de tu lesión'
-      };
-      next = labels[selected] || next;
-    }
-    if (next === displayCta) {
-      setFadingCta(false);
-      return;
-    }
-    setFadingCta(true);
-    const t = setTimeout(() => {
-      setDisplayCta(next);
-      setFadingCta(false);
-    }, 180);
-    return () => {
-      clearTimeout(t);
-      setFadingCta(false);
-    };
-  }, [selected, displayCta]);
-
-  useEffect(() => {
-    if (selected && selected !== previousSelected.current) {
-      setPingKey(k => k + 1);
-    }
-    previousSelected.current = selected;
-  }, [selected]);
 
   const eyebrowRef = useReveal(0.1);
   const titleRef = useReveal(0.1);
@@ -2206,24 +2214,15 @@ function Hero({ selected, setSelected, waUrl }) {
           </button>
 
           <div ref={ctaRef} className="cta-block reveal" style={{ animationDelay: '0.85s' }}>
-            {!selected ? (
-              <div className="selector-prompt">
-                <svg className="selector-prompt-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 19V5" /><path d="m5 12 7-7 7 7" />
-                </svg>
-                <span>Elige una opción para continuar</span>
-              </div>
-            ) : (
-              <>
-                <div className={`wa-cta-wrap ${pingKey ? 'ping' : ''}`} key={pingKey}>
-                  <a className="wa-cta" href={waUrl} target="_blank" rel="noopener noreferrer">
-                    <WhatsAppGlyph />
-                    <span className={`wa-cta-label ${fadingCta ? 'fading' : ''}`}>{displayCta}</span>
-                    <ArrowRight />
-                  </a>
-                </div>
-                <div className="cta-caption">Sin compromiso. Te orientamos antes de que decidas.</div>
-                {RECOMMENDED_PLAN[selected] && (
+            <div className="wa-cta-wrap evaluation-cta-wrap">
+              <a className="wa-cta evaluation-cta" href={EVALUATION_URL} target="_blank" rel="noopener noreferrer">
+                <CalendarIcon />
+                <span>Agenda tu evaluación gratuita</span>
+                <ArrowRight />
+              </a>
+            </div>
+            <div className="cta-caption">Presencial · 20 minutos · sin costo</div>
+            {selected && RECOMMENDED_PLAN[selected] && (
                   <a
                     className="recommended-chip"
                     href="#planes"
@@ -2236,14 +2235,15 @@ function Hero({ selected, setSelected, waUrl }) {
                       }
                     }}
                   >
-                    <span className="recommended-chip-label">Tu plan</span>
+                    <span className="recommended-chip-label">Podría interesarte</span>
                     <span className="recommended-chip-name">{RECOMMENDED_PLAN[selected].name}</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                     </svg>
                   </a>
                 )}
-                <button
+            {selected && (
+              <button
                   type="button"
                   className="next-step"
                   onClick={() => {
@@ -2258,8 +2258,7 @@ function Hero({ selected, setSelected, waUrl }) {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 5v14" /><path d="m19 12-7 7-7-7" />
                   </svg>
-                </button>
-              </>
+              </button>
             )}
           </div>
         </div>
@@ -2276,43 +2275,42 @@ function Hero({ selected, setSelected, waUrl }) {
 const FIRST_SESSION = {
   1: {
     body: (<>
-      <p><strong>El primer día conversamos primero.</strong></p>
-      <p>Un fisioterapeuta revisa tu historial: cómo entrenas, qué molestias tienes, desde cuándo, qué has intentado. Con eso claro, arrancas con movimientos sencillos mientras el fisio observa cómo responde tu cuerpo en tiempo real.</p>
-      <p>De ahí sale un plan de entrenamiento con criterio real. No una rutina genérica, un proceso diseñado para que sigas entrenando fuerte sin que tu cuerpo te pase factura.</p>
+      <p><strong>Empezamos con una evaluación gratuita de 20 minutos.</strong></p>
+      <p>Un fisioterapeuta revisa cómo entrenas, qué molestias tienes, desde cuándo y qué has intentado. También observa cómo te mueves para entender tu punto de partida.</p>
+      <p>Con eso te recomienda el plan que tiene más sentido para ti. No una rutina genérica: un proceso diseñado con criterio real.</p>
     </>),
-    photo: { num: '01', src: 'assets/sesion-1.jpg', pos: 'center 30%', label: 'Foto · Evaluación inicial', desc: 'Fisio hablando con cliente, anotando y evaluando postura.', meta: 'Conversación + observación en movimiento · ~45 min' }
+    photo: { num: '01', src: 'assets/sesion-1.jpg', pos: 'center 30%', label: 'Foto · Evaluación inicial', desc: 'Fisio hablando con cliente, anotando y evaluando postura.', meta: 'Conversación + observación en movimiento · 20 min' }
   },
   2: {
     body: (<>
       <p><strong>Volver a entrenar después de una lesión no es simplemente retomar donde lo dejaste.</strong></p>
-      <p>El primer día el fisio revisa cómo quedó tu cuerpo. Te hace preguntas, te observa moviéndote, evalúa cómo responde la zona afectada. Con eso define si estás listo para entrenar o si primero necesitas trabajo terapéutico.</p>
+      <p>En la evaluación gratuita el fisio revisa cómo quedó tu cuerpo. Te hace preguntas, te observa moviéndote y evalúa cómo responde la zona afectada. Con eso define si estás listo para entrenar o si primero necesitas fisioterapia.</p>
       <p>Nadie te mete a entrenar antes de tiempo. Y cuando estás listo, el proceso está diseñado para que no vuelvas a donde estabas.</p>
     </>),
     photo: { num: '02', src: 'assets/sesion-2.jpg', pos: 'center 30%', label: 'Foto · Evaluación post-lesión', desc: 'Fisio evaluando movimiento o zona específica del cliente.', meta: 'Movilidad, dolor, control motor de la zona afectada' }
   },
   3: {
     body: (<>
-      <p><strong>El primer día el fisio analiza cómo te mueves</strong>. No en abstracto, sino en función del deporte que practicas.</p>
-      <p>Revisamos patrones de movimiento, identificamos limitaciones que frenan tu rendimiento y evaluamos tu fuerza con criterio deportivo. Con eso se construye un plan enfocado en lo que necesitas para rendir más en tu deporte específico.</p>
+      <p><strong>En la evaluación gratuita el fisio analiza cómo te mueves</strong>. No en abstracto, sino en función del deporte que practicas.</p>
+      <p>Revisamos patrones de movimiento e identificamos limitaciones que pueden frenar tu rendimiento. Con eso te orientamos hacia el proceso que necesitas para rendir más en tu deporte específico.</p>
       <p>Entrenas para mejorar en lo que practicas. Con la estructura para no lesionarte en el proceso.</p>
     </>),
     photo: { num: '03', src: 'assets/sesion-3.jpg', pos: 'center 30%', label: 'Foto · Análisis deportivo', desc: 'Fisio observando movimiento del cliente en entrenamiento.', meta: 'Patrones, fuerza, criterio específico para tu deporte' }
   },
   4: {
     body: (<>
-      <p><strong>La primera sesión siempre incluye evaluación completa.</strong></p>
-      <p>El fisioterapeuta revisa tu condición, entiende el origen del dolor o la lesión, y diseña el tratamiento desde ese mismo día. No hay suposiciones ni tratamientos genéricos. Cada proceso se construye sobre lo que encontramos en esa primera evaluación.</p>
+      <p><strong>La evaluación gratuita es el primer paso.</strong></p>
+      <p>El fisioterapeuta revisa tu condición, entiende cómo te afecta el dolor o la lesión y te indica el siguiente paso. Puede ser fisioterapia antes de entrenar o un plan de entrenamiento cuando estés listo.</p>
       <p>Cuando estés listo para retomar el entrenamiento, en Nexa tienes continuidad. No empiezas de cero.</p>
     </>),
-    photo: { num: '04', src: 'assets/sesion-4.jpg', pos: 'center 30%', label: 'Foto · Sesión de fisioterapia', desc: 'Fisio trabajando zona específica del cliente en tratamiento.', meta: 'Tratamiento dirigido + plan desde la primera sesión' }
+    photo: { num: '04', src: 'assets/sesion-4.jpg', pos: 'center 30%', label: 'Foto · Consulta con fisioterapeuta', desc: 'Fisio revisando la condición de un cliente.', meta: 'Revisión de condición + siguiente paso recomendado' }
   }
 };
 
 const FEATURED_REASON = {
   1: 'El más recomendado para quien arrastra molestias y quiere estructura profesional sin saltar al seguimiento intenso.',
   2: 'El más recomendado para volver después de una lesión con criterio.',
-  3: 'El más recomendado para deportistas con objetivos de rendimiento.',
-  4: 'Cuando estés listo para entrenar, este es el plan para ti.'
+  3: 'El más recomendado para deportistas con objetivos de rendimiento.'
 };
 const FEATURED_REASON_DEFAULT = 'El más elegido por nuestros clientes.';
 
@@ -2320,16 +2318,17 @@ const PLANS = {
   entrada: {
     id: 'entrada',
     name: 'NEXA ENTRADA',
-    badge: 'Acceso + autonomía',
-    price: '$30',
+    badge: 'Puerta de entrada guiada',
+    price: '$40',
     period: '/mes',
     features: [
-      'Evaluación inicial (fuerza + medidas)',
-      'Plan de entrenamiento inicial',
-      'Primera semana de acompañamiento'
+      'Evaluación inicial de fuerza + medidas',
+      'Programa seleccionado por fisioterapeuta',
+      'Acompañamiento y corrección en cada sesión',
+      'Primer mes en el horario que te funcione'
     ],
-    footnote: 'Add-on opcional: acompañamiento semanal por $3.75/sem',
-    defaultMsg: 'Hola, me interesa el plan Entrada de Nexa.'
+    footnote: 'Al renovar, continúas en las franjas Entrada sujetas a cupo.',
+    waMsg: 'Hola, me interesa el plan Nexa Entrada.'
   },
   base: {
     id: 'base',
@@ -2340,10 +2339,11 @@ const PLANS = {
     features: [
       'Evaluación de fuerza + medidas corporales',
       'Programa diseñado por fisioterapeuta',
-      'Corrección técnica puntual',
+      'Fisioterapeuta asignado en cada sesión',
+      'Corrección técnica durante las sesiones',
       'Ajuste mensual del programa'
     ],
-    defaultMsg: 'Hola, me interesa el plan Base de Nexa.'
+    waMsg: 'Hola, me interesa el plan Nexa Base.'
   },
   control: {
     id: 'control',
@@ -2360,7 +2360,7 @@ const PLANS = {
       'Ejercicios fisioterapéuticos integrados',
       'Recovery según necesidad'
     ],
-    defaultMsg: 'Hola, me interesa el plan Control de Nexa.'
+    waMsg: 'Hola, me interesa el plan Nexa Control.'
   },
   elite: {
     id: 'elite',
@@ -2376,7 +2376,7 @@ const PLANS = {
       '1 descarga muscular al mes incluida'
     ],
     footnote: 'Modalidades · Academia (con tu entrenador) o Individual (grupo mixto)',
-    defaultMsg: 'Hola, practico deporte y quiero conocer Nexa Élite.'
+    waMsg: 'Hola, practico deporte y me interesa conocer Nexa Élite.'
   }
 };
 
@@ -2384,7 +2384,6 @@ const PLAN_SETS = {
   1: ['entrada', 'base', 'control'],
   2: ['entrada', 'base', 'control'],
   3: ['base', 'control', 'elite'],
-  4: ['entrada', 'base', 'control'],
   default: ['entrada', 'base', 'control']
 };
 
@@ -2392,16 +2391,7 @@ const FEATURED_BY_PROFILE = {
   1: 'base',
   2: 'control',
   3: 'elite',
-  4: 'control',
   default: 'control'
-};
-
-const FEATURED_MSG = {
-  '1:base':    'Hola, entreno seguido pero tengo molestias. Me interesa el plan Base de Nexa.',
-  '2:control': 'Hola, estoy retomando después de una lesión. Me interesa el plan Control de Nexa.',
-  '3:elite':   'Hola, practico deporte y quiero mejorar mi rendimiento. Me interesa Nexa Élite.',
-  '4:control': 'Hola, cuando termine mi recuperación me interesa el plan Control de Nexa.',
-  'default:control': 'Hola, me interesa el plan Control de Nexa.'
 };
 
 function waLink(msg) {
@@ -2493,7 +2483,7 @@ function FirstSession({ selected }) {
             <div className="section-divider" />
             <div className="eyebrow-dark">Así trabajamos</div>
             <h2 className="section-title">
-              TU PRIMERA SESIÓN<br />
+              TU EVALUACIÓN<br />
               <span className="grad">EN NEXA</span>
             </h2>
             <div className="body">{displayed.body}</div>
@@ -2504,7 +2494,7 @@ function FirstSession({ selected }) {
   );
 }
 
-function PlanCard({ plan, featured, pillLabel, ctaLabel, ctaMsg, primary, index }) {
+function PlanCard({ plan, featured, pillLabel, ctaLabel, primary, index }) {
   return (
     <div className={`plan-card ${featured ? 'featured' : ''}`} style={{ animationDelay: `${index * 0.08}s` }}>
       {featured && <span className="plan-pill">{pillLabel}</span>}
@@ -2520,7 +2510,7 @@ function PlanCard({ plan, featured, pillLabel, ctaLabel, ctaMsg, primary, index 
         ))}
       </ul>
       {plan.footnote && <div className="plan-footnote">{plan.footnote}</div>}
-      <a className={`plan-cta ${primary ? 'primary' : ''}`} href={waLink(ctaMsg)} target="_blank" rel="noopener noreferrer">
+      <a className={`plan-cta ${primary ? 'primary' : ''}`} href={waLink(plan.waMsg)} target="_blank" rel="noopener noreferrer">
         {ctaLabel}
         {primary && <ArrowSm />}
       </a>
@@ -2533,7 +2523,6 @@ function Plans({ selected }) {
   const planIds = PLAN_SETS[profileKey] || PLAN_SETS.default;
   const featuredId = FEATURED_BY_PROFILE[profileKey] || FEATURED_BY_PROFILE.default;
   const reason = (selected && FEATURED_REASON[selected]) || FEATURED_REASON_DEFAULT;
-  const featuredMsg = FEATURED_MSG[`${profileKey}:${featuredId}`] || PLANS[featuredId].defaultMsg;
 
   const [displayKey, setDisplayKey] = useState(profileKey);
   const [swap, setSwap] = useState(false);
@@ -2559,7 +2548,6 @@ function Plans({ selected }) {
 
   const renderPlanIds = PLAN_SETS[displayKey] || PLAN_SETS.default;
   const renderFeaturedId = FEATURED_BY_PROFILE[displayKey] || FEATURED_BY_PROFILE.default;
-  const renderFeaturedMsg = FEATURED_MSG[`${displayKey}:${renderFeaturedId}`] || PLANS[renderFeaturedId].defaultMsg;
 
   return (
     <section className="section plans" id="planes">
@@ -2572,8 +2560,8 @@ function Plans({ selected }) {
             <span className="grad">QUE NECESITAS</span>
           </h2>
           <p className="section-lead">
-            Los planes no se diferencian por acceso. Todos incluyen el espacio de lunes a sábado.
-            Se diferencian por el nivel de seguimiento profesional.
+            Los planes se diferencian por el nivel de acompañamiento y la flexibilidad horaria.
+            En Nexa siempre entrenas con guía profesional.
           </p>
         </div>
 
@@ -2588,8 +2576,7 @@ function Plans({ selected }) {
                   plan={plan}
                   featured={isFeatured}
                   pillLabel={selected ? 'Recomendado para ti' : 'El más elegido ★'}
-                  ctaLabel={isFeatured ? (id === 'elite' ? 'Conversemos sobre Élite' : 'Quiero este plan') : 'Preguntar por este plan'}
-                  ctaMsg={isFeatured ? renderFeaturedMsg : plan.defaultMsg}
+                  ctaLabel="Me interesa este plan"
                   primary={isFeatured}
                   index={i}
                 />
@@ -2603,21 +2590,14 @@ function Plans({ selected }) {
         </div>
 
         <div className="plans-included">
-          Acceso al espacio
-          <span className="dot" />Lunes a sábado
+          Entrenamiento acompañado
+          <span className="dot" />Lunes a viernes
           <span className="dot" />Maracay
         </div>
 
         <div className="plans-bcv-note">
           Precios en USD · se pagan en bolívares al cambio <strong>BCV</strong> del día
         </div>
-
-        {selected === 4 && (
-          <div className="p4-callout">
-            <strong>Cuando estés listo para retomar el entrenamiento, en Nexa tienes continuidad.</strong>{' '}
-            No empiezas de cero.
-          </div>
-        )}
 
         {selected === 3 && (
           <div className="p3-callout">
@@ -2641,9 +2621,9 @@ function ServicesCompact() {
         <div ref={ref} className="services-grid reveal">
           <ServiceCard
             name="Fisioterapia"
-            price="Primera $30 · Siguientes $20"
-            desc="Para lesión, patología o dolor agudo/recurrente. Evaluación completa en la primera consulta."
-            cta="Agendar sesión"
+            price="$20 / sesión"
+            desc="Atención clínica para lesión, patología o dolor agudo/recurrente. Un fisioterapeuta te indicará el proceso adecuado."
+            cta="Consultar fisioterapia"
             msg="Hola, me interesa una sesión de fisioterapia en Nexa."
           />
           <ServiceCard
@@ -2679,9 +2659,9 @@ function ServicesElevated() {
         <div ref={grid} className="services-grid reveal">
           <ServiceCard
             name="Fisioterapia"
-            price="Primera $30 · Siguientes $20"
-            desc="Para lesión, patología o dolor agudo/recurrente. Evaluación completa en la primera consulta y plan de tratamiento desde el primer día."
-            cta="Agendar sesión de fisioterapia"
+            price="$20 / sesión"
+            desc="Atención clínica para lesión, patología o dolor agudo/recurrente. Si la necesitas, el fisioterapeuta te indicará el proceso adecuado."
+            cta="Consultar fisioterapia"
             msg="Hola, tengo una lesión y me interesa una sesión de fisioterapia en Nexa."
           />
           <ServiceCard
@@ -2798,10 +2778,10 @@ function Location({ waUrl }) {
             <span>Av. Constitución, Maracay</span>
           </div>
           <div className="location-hours">
-            <div className="day">Lunes a sábado</div>
-            <div>6:00 AM – 12:00 PM · 2:00 PM – 9:00 PM</div>
+            <div className="day">Lunes a viernes</div>
+            <div>7:00 AM – 12:00 PM · 2:00 PM – 9:00 PM</div>
           </div>
-          <a className="location-link" href="https://maps.app.goo.gl/49D7b35VSyKaVt3f6" target="_blank" rel="noopener noreferrer">
+          <a className="location-link" href="https://maps.app.goo.gl/Sv1kWtonHkFWcBnr7?g_st=iw" target="_blank" rel="noopener noreferrer">
             → Cómo llegar
           </a>
           <a className="location-wa-btn" href={waUrl} target="_blank" rel="noopener noreferrer">
@@ -2823,7 +2803,7 @@ function Location({ waUrl }) {
   );
 }
 
-function CtaFinal({ selected, waUrl }) {
+function CtaFinal({ selected }) {
   const content = (selected && CTA_FINAL[selected]) || CTA_FINAL_DEFAULT;
   const [displayed, setDisplayed] = useState(content);
   const [fading, setFading] = useState(false);
@@ -2855,12 +2835,12 @@ function CtaFinal({ selected, waUrl }) {
           <div className="cta-inner">
             <h2 className={`cta-title ${fading ? 'fading' : ''}`}>{displayed.title}</h2>
             <p className={`cta-subtitle ${fading ? 'fading' : ''}`}>{displayed.subtitle}</p>
-            <a className="cta-button" href={waUrl} target="_blank" rel="noopener noreferrer">
-              <WhatsAppGlyph />
-              <span>Escríbenos por WhatsApp</span>
+            <a className="cta-button evaluation-cta" href={EVALUATION_URL} target="_blank" rel="noopener noreferrer">
+              <CalendarIcon />
+              <span>Agenda tu evaluación gratuita</span>
               <ArrowRight />
             </a>
-            <div className="cta-caption-final">Sin compromiso. Te orientamos antes de que decidas.</div>
+            <div className="cta-caption-final">Presencial · 20 minutos · sin costo</div>
           </div>
         </div>
       </div>
@@ -2965,18 +2945,16 @@ function App() {
   })();
 
   const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-  const openWA = () => window.open(waUrl, '_blank', 'noopener,noreferrer');
   const floatVisible = !!selected;
 
   return (
     <>
-      <Navbar onCta={openWA} />
-      <Hero selected={selected} setSelected={setSelected} waUrl={waUrl} />
+      <Navbar />
+      <Hero selected={selected} setSelected={setSelected} />
       {selected === 4 ? (
         <>
           <FirstSession selected={selected} />
           <ServicesElevated />
-          <Plans selected={selected} />
         </>
       ) : (
         <>
@@ -2987,7 +2965,7 @@ function App() {
       )}
       <Team />
       <Location waUrl={waUrl} />
-      <CtaFinal selected={selected} waUrl={waUrl} />
+      <CtaFinal selected={selected} />
       <Footer />
       <WhatsAppFloat waUrl={waUrl} visible={floatVisible} />
       <StickyPrompt selected={selected} setSelected={setSelected} />
