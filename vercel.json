@@ -2,6 +2,8 @@
   "buildCommand": "",
   "outputDirectory": ".",
   "rewrites": [
+    { "source": "/agenda", "destination": "/agenda/index.html" },
+    { "source": "/agenda/", "destination": "/agenda/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Agenda tu Experiencia Nexa</title>
+<meta name="description" content="Tu primer día en Nexa es gratis: un fisioterapeuta te evalúa, te mide y entrena contigo. Elige el día y la hora." />
+<meta name="theme-color" content="#0b1c60" />
+<link rel="canonical" href="https://nexarehab.com/agenda" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Nexa" />
+<meta property="og:locale" content="es_VE" />
+<meta property="og:url" content="https://nexarehab.com/agenda" />
+<meta property="og:title" content="Agenda tu Experiencia Nexa" />
+<meta property="og:description" content="Primer día gratis: evaluación, medidas y tu primera sesión con un fisioterapeuta." />
+<meta property="og:image" content="https://nexarehab.com/assets/hero-standar.png" />
+<link rel="icon" type="image/png" href="/assets/nexa-mark.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<!--
+  Agenda pública de la Experiencia Nexa. Habla con la función de Supabase
+  `agenda-publica` (repo de la plataforma, rosberttd-a11y/pixel-perfect-replication).
+  Aquí no va ninguna clave secreta: este repo es público. Las de abajo son
+  públicas por diseño (el ID del píxel y la clave de proyecto de PostHog).
+-->
+<style>
+  :root {
+    --navy: #0b1c60; --blue: #3560e7; --mid: #91afef; --light: #d9e3fa; --off: #f4f7fd;
+    --ink2: #33437a; --ink3: #4a5a8c; --wa: #25d366; --amber: #ffb020;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--off); }
+  body { font-family: "Plus Jakarta Sans", system-ui, sans-serif; color: var(--navy); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 480px; margin: 0 auto; min-height: 100dvh; display: flex; flex-direction: column; background: var(--off); }
+  @media (min-width: 560px) { body { background: linear-gradient(135deg, #0b1c60, #3560e7); } .wrap { box-shadow: 0 30px 80px rgba(0,0,0,.25); } }
+  h1, h2 { font-family: "Bebas Neue", sans-serif; font-weight: 400; margin: 0; letter-spacing: .01em; }
+  p { margin: 0; }
+  a { color: var(--blue); }
+  button { font-family: inherit; }
+  .hero { background: linear-gradient(135deg, #0b1c60, #3560e7); color: #fff; padding: 24px 20px 30px; display: flex; flex-direction: column; gap: 12px; }
+  .hero img { height: 36px; width: auto; align-self: flex-start; }
+  .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  .hero .eyebrow { color: var(--light); margin-top: 16px; }
+  .hero h1 { font-size: 50px; line-height: .95; }
+  .hero p { font-size: 15px; line-height: 1.5; color: var(--light); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.14); font-size: 13px; font-weight: 600; }
+  .sec { padding: 20px 16px 0; }
+  .sec .eyebrow { color: var(--blue); }
+  .sec h2 { font-size: 34px; line-height: 1; margin-top: 4px; }
+  .muted { font-size: 13px; color: var(--ink3); }
+  .days { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px 4px; scrollbar-width: none; }
+  .days::-webkit-scrollbar { display: none; }
+  .day { flex: none; width: 64px; height: 78px; border-radius: 14px; border: 1px solid rgba(11,28,96,.12); background: #fff; color: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; }
+  .day .n { font-family: "Bebas Neue"; font-size: 28px; line-height: 1; }
+  .day small { font-size: 11px; font-weight: 600; }
+  .day[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .day:disabled { opacity: .45; cursor: not-allowed; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .slot { height: 56px; border-radius: 14px; border: 1px solid rgba(11,28,96,.12); background: #fff; color: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; cursor: pointer; }
+  .slot b { font-size: 15px; }
+  .slot small { font-size: 11px; font-weight: 600; }
+  .slot[aria-pressed="true"] { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .slot:disabled { background: #e9eef9; color: #6b78a3; border-color: transparent; cursor: not-allowed; }
+  .turno { font-size: 13px; font-weight: 700; color: var(--ink3); margin: 14px 0 8px; }
+  .card { background: #fff; border: 1px solid rgba(11,28,96,.08); border-radius: 14px; padding: 16px; }
+  .info { margin: 22px 16px 0; display: flex; gap: 12px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: var(--ink2); }
+  .foot { position: sticky; bottom: 0; margin-top: auto; padding: 14px 16px calc(18px + env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(244,247,253,0), var(--off) 30%); display: flex; flex-direction: column; gap: 10px; }
+  .btn { display: flex; align-items: center; justify-content: center; gap: 8px; height: 54px; border-radius: 999px; border: 0; background: linear-gradient(135deg, #0b1c60, #3560e7); color: #fff; font-size: 16px; font-weight: 700; text-decoration: none; box-shadow: 0 12px 32px rgba(53,96,231,.28); cursor: pointer; width: 100%; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+  .btn.wa { background: var(--wa); color: #04200f; box-shadow: 0 12px 32px rgba(37,211,102,.35); }
+  .btn.out { background: #fff; color: var(--navy); border: 1px solid var(--mid); box-shadow: none; }
+  .link { text-align: center; font-size: 13px; font-weight: 600; text-decoration: none; }
+  .top { padding: 18px 16px 0; display: flex; align-items: center; gap: 12px; }
+  .back { width: 44px; height: 44px; border-radius: 999px; background: #fff; border: 1px solid rgba(11,28,96,.1); display: flex; align-items: center; justify-content: center; color: var(--navy); cursor: pointer; }
+  .resumen { margin: 14px 16px 0; padding: 14px 16px; border-radius: 14px; background: var(--light); display: flex; align-items: center; gap: 12px; }
+  .resumen b { font-size: 15px; }
+  .form { padding: 20px 16px 0; display: flex; flex-direction: column; gap: 14px; }
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink2); }
+  input[type="text"], input[type="tel"] { height: 50px; border-radius: 14px; border: 1px solid rgba(11,28,96,.14); background: #fff; padding: 0 14px; font: inherit; font-size: 16px; color: var(--navy); width: 100%; }
+  input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--mid); outline-offset: 2px; }
+  .err { font-size: 12px; font-weight: 600; color: #a1260d; }
+  fieldset { margin: 0; padding: 16px; border-radius: 14px; border: 1px solid rgba(11,28,96,.1); background: #fff; display: flex; flex-direction: column; gap: 12px; }
+  legend { float: left; width: 100%; padding: 0; font-size: 14px; font-weight: 800; line-height: 1.35; color: var(--navy); }
+  .yn { height: 48px; border-radius: 999px; border: 1px solid var(--mid); background: #fff; color: var(--navy); font-size: 15px; font-weight: 700; cursor: pointer; }
+  .yn[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .trampa { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .aviso { margin: 14px 16px 0; padding: 12px 14px; border-radius: 12px; background: #fff4de; color: #6b4100; font-size: 13px; font-weight: 600; }
+  .ok { width: 56px; height: 56px; border-radius: 999px; background: rgba(255,255,255,.16); display: flex; align-items: center; justify-content: center; }
+  .cita { margin: -18px 16px 0; padding: 18px; border-radius: 20px; background: #fff; box-shadow: 0 8px 24px rgba(11,28,96,.1); display: flex; flex-direction: column; gap: 14px; position: relative; }
+  .cal { width: 60px; height: 64px; border-radius: 14px; background: var(--navy); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .cal span:first-child { font-size: 11px; font-weight: 700; }
+  .cal span:last-child { font-family: "Bebas Neue"; font-size: 30px; line-height: 1; }
+  .lista { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .lista div { display: flex; gap: 12px; align-items: center; padding: 14px; border-radius: 14px; background: #fff; border: 1px solid rgba(11,28,96,.08); font-size: 14px; }
+  .icon { flex: none; }
+  .center { padding: 60px 16px; text-align: center; color: var(--ink3); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+
+  <!-- Paso 1: día y hora -->
+  <section id="paso1">
+    <header class="hero">
+      <img src="/assets/nexa-logo-blanco.png" alt="Nexa, Centro de Rehabilitación y Entrenamiento" />
+      <p class="eyebrow">Primer día gratis</p>
+      <h1>Agenda tu Experiencia Nexa</h1>
+      <p>Un fisioterapeuta te evalúa, te mide y entrena contigo. Al final te recomienda un plan, sin compromiso.</p>
+      <div class="chips"><span class="chip">60 a 90 min</span><span class="chip">Sin costo</span><span class="chip">Av. Constitución, Maracay</span></div>
+    </header>
+    <div class="sec"><p class="eyebrow">Paso 1 de 2</p><h2>Elige el día</h2></div>
+    <div class="days" id="dias" role="group" aria-label="Días"></div>
+    <div class="sec"><h2>Elige la hora</h2><p class="muted" id="diaLabel" style="margin-top:6px"></p></div>
+    <div class="sec" style="padding-top:0" id="horas"></div>
+    <p class="center" id="cargando">Cargando horarios…</p>
+    <div class="info card" role="note">
+      <svg class="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3560e7" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      <p>¿Tienes dolor, una lesión o una condición médica? Lo tuyo es la <b>evaluación de fisioterapia</b>. Te lo preguntamos en el siguiente paso.</p>
+    </div>
+    <div class="foot">
+      <button class="btn" id="continuar" disabled>Elige una hora</button>
+      <a class="link" id="waPrefiero" target="_blank" rel="noopener">Prefiero escribir por WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- Paso 2: datos -->
+  <section id="paso2" hidden>
+    <div class="top">
+      <button class="back" data-ir="paso1" aria-label="Volver a elegir día y hora"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <p class="eyebrow" style="color:var(--blue)">Paso 2 de 2</p>
+    </div>
+    <div class="sec" style="padding-top:18px"><h1 style="font-size:44px;line-height:.95">Tus datos</h1></div>
+    <div class="resumen">
+      <svg class="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0b1c60" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <div style="flex:1"><b id="resumenTexto"></b><p class="muted" style="color:var(--ink2)">Experiencia Nexa · 60 a 90 min</p></div>
+      <button class="link" data-ir="paso1" style="background:none;border:0;color:var(--blue);font-weight:700;cursor:pointer">Cambiar</button>
+    </div>
+    <form class="form" id="form" novalidate>
+      <div class="two">
+        <label>Nombre<input type="text" id="nombre" autocomplete="given-name" maxlength="60" required /></label>
+        <label>Apellido<input type="text" id="apellido" autocomplete="family-name" maxlength="60" /></label>
+      </div>
+      <label>Tu WhatsApp
+        <input type="tel" id="telefono" inputmode="tel" autocomplete="tel" placeholder="0412 1234567" maxlength="20" required />
+        <span class="muted" style="font-weight:500">Por aquí te confirmamos y te recordamos la cita.</span>
+        <span class="err" id="errTel" hidden></span>
+      </label>
+      <div class="trampa" aria-hidden="true"><label>Empresa<input type="text" id="empresa" tabindex="-1" autocomplete="off" /></label></div>
+      <fieldset>
+        <legend>¿Tienes dolor, una lesión o una condición médica ahora?</legend>
+        <p class="muted">Si es así, te va mejor empezar con la evaluación de fisioterapia.</p>
+        <div class="two">
+          <button type="button" class="yn" id="lesionSi" aria-pressed="false">Sí</button>
+          <button type="button" class="yn" id="lesionNo" aria-pressed="false">No</button>
+        </div>
+      </fieldset>
+      <p class="err" id="errForm" hidden></p>
+    </form>
+    <div class="foot">
+      <button class="btn" id="confirmar" disabled>Confirmar mi cita</button>
+      <p class="muted" style="text-align:center">Si ya viniste a Nexa o eres cliente, <a id="waYaVine" target="_blank" rel="noopener">escríbenos por WhatsApp</a>.</p>
+    </div>
+  </section>
+
+  <!-- Si tiene dolor o lesión -->
+  <section id="lesion" hidden style="padding:18px 16px 0;display:flex;flex-direction:column;flex:1">
+    <button class="back" data-ir="paso2" aria-label="Volver"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+    <div style="margin-top:36px;width:64px;height:64px;border-radius:20px;background:var(--light);display:flex;align-items:center;justify-content:center">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3560e7" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    </div>
+    <h1 style="margin-top:22px;font-size:46px;line-height:.95">Para ti, primero la evaluación de fisioterapia</h1>
+    <p style="margin-top:14px;font-size:15px;line-height:1.55;color:var(--ink2)">La Experiencia Nexa es para entrenar desde el primer día. Si tienes dolor o una lesión, un fisioterapeuta tiene que evaluarte antes, para que entrenes sin riesgo.</p>
+    <div class="card" style="margin-top:22px;border-radius:20px;box-shadow:0 8px 24px rgba(11,28,96,.06)">
+      <div style="display:flex;align-items:baseline;justify-content:space-between"><b style="font-size:16px">Evaluación inicial de fisioterapia</b><span style="font-family:'Bebas Neue';font-size:34px;line-height:1">$10</span></div>
+      <p class="muted" style="margin-top:8px;line-height:1.5">Te dice qué tienes, qué puedes hacer y cómo empezar. Se paga en bolívares a tasa BCV.</p>
+    </div>
+    <div class="foot" style="padding-left:0;padding-right:0">
+      <a class="btn wa" id="waLesion" target="_blank" rel="noopener">Agendar por WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- Ya vino o es cliente -->
+  <section id="yaVino" hidden style="padding:18px 16px 0;display:flex;flex-direction:column;flex:1">
+    <h1 style="margin-top:40px;font-size:46px;line-height:.95">Ya tienes historia con Nexa</h1>
+    <p style="margin-top:14px;font-size:15px;line-height:1.55;color:var(--ink2)">Con ese número ya viniste o eres cliente, así que la Experiencia no aplica. Escríbenos y te ayudamos a volver a entrenar.</p>
+    <div class="foot" style="padding-left:0;padding-right:0">
+      <a class="btn wa" id="waVolver" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      <button class="link" data-ir="paso2" style="background:none;border:0;color:var(--blue);cursor:pointer">Corregir el número</button>
+    </div>
+  </section>
+
+  <!-- Confirmada -->
+  <section id="listo" hidden style="display:flex;flex-direction:column;flex:1">
+    <header class="hero" style="padding-bottom:34px">
+      <div class="ok"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h1 id="listoTitulo" style="margin-top:6px">Listo. Te esperamos</h1>
+      <p id="listoTexto">Tu Experiencia Nexa quedó agendada. Un día antes te escribimos por WhatsApp para confirmar.</p>
+    </header>
+    <div class="cita">
+      <div style="display:flex;gap:14px;align-items:center">
+        <div class="cal"><span id="calDia"></span><span id="calNum"></span></div>
+        <div><p style="font-size:17px;font-weight:800" id="citaHora"></p><p class="muted" id="citaFecha"></p></div>
+      </div>
+      <div style="height:1px;background:rgba(11,28,96,.08)"></div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3560e7" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top:2px"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div><p style="font-size:14px;font-weight:700">Nexa · Av. Constitución, Maracay</p><a href="https://maps.app.goo.gl/Sv1kWtonHkFWcBnr7" target="_blank" rel="noopener" style="font-size:13px;font-weight:700;text-decoration:none">Cómo llegar</a></div>
+      </div>
+    </div>
+    <div class="sec" style="padding-top:24px">
+      <h2 style="font-size:32px">Para ese día</h2>
+      <div class="lista">
+        <div>Ropa cómoda y zapatos deportivos.</div>
+        <div>Agua y una toalla pequeña.</div>
+        <div>Llega 10 minutos antes.</div>
+        <div>Tu teléfono con batería: ese día te damos acceso a Nexa Track.</div>
+      </div>
+    </div>
+    <div class="foot" style="position:static;padding-top:22px">
+      <a class="btn out" id="waCambiar" target="_blank" rel="noopener">¿Necesitas cambiarla? Escríbenos</a>
+      <a class="link" href="/">Conoce más de Nexa</a>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ── Configuración pública ────────────────────────────────────────────────
+  var API = "https://rgeymcmrkojuvmudcwxt.supabase.co/functions/v1/agenda-publica";
+  var WHATSAPP = "584220430323";
+  var META_PIXEL_ID = "";          // se completa cuando Hame tenga el píxel
+  var POSTHOG_KEY = "phc_ohnvhhmNi26YJM6VGbVATbPVndrgg8uaeWawmAo7rMsT"; // clave de proyecto (pública)
+  var POSTHOG_HOST = "https://us.i.posthog.com";
+
+  var DIAS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+  var DIAS_LARGO = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+  var MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  var MESES_LARGO = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var estado = { horas: [], dia: null, hora: null, lesion: null, enviando: false };
+
+  // ── De dónde viene (UTM y clic de Meta) ─────────────────────────────────
+  var params = new URLSearchParams(location.search);
+  var utm = {};
+  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach(function (k) {
+    if (params.get(k)) utm[k] = params.get(k);
+  });
+  try {
+    if (Object.keys(utm).length) sessionStorage.setItem("nexa_utm", JSON.stringify(utm));
+    else utm = JSON.parse(sessionStorage.getItem("nexa_utm") || "{}");
+  } catch (e) { /* sin sessionStorage: se usa lo del enlace */ }
+
+  function cookie(nombre) {
+    var m = document.cookie.match(new RegExp("(?:^|; )" + nombre + "=([^;]*)"));
+    return m ? decodeURIComponent(m[1]) : "";
+  }
+  function ponerCookie(nombre, valor) {
+    document.cookie = nombre + "=" + encodeURIComponent(valor) + "; max-age=" + 60 * 60 * 24 * 90 + "; path=/; SameSite=Lax";
+  }
+  // Formato que pide Meta: fb.1.<milisegundos>.<fbclid>
+  if (params.get("fbclid")) ponerCookie("_fbc", "fb.1." + Date.now() + "." + params.get("fbclid"));
+  if (!cookie("_fbp")) ponerCookie("_fbp", "fb.1." + Date.now() + "." + Math.floor(Math.random() * 1e10));
+
+  // ── Medición (solo si ya están configuradas) ────────────────────────────
+  if (META_PIXEL_ID) {
+    /* Píxel de Meta, fragmento oficial */
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq("init", META_PIXEL_ID);
+    fbq("track", "PageView");
+  }
+  if (POSTHOG_KEY) {
+    /* PostHog, fragmento oficial */
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset identify alias people.set people.set_once set_config get_distinct_id".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init(POSTHOG_KEY, { api_host: POSTHOG_HOST, person_profiles: "identified_only" });
+  }
+  function medir(evento, props) {
+    try { if (window.posthog && POSTHOG_KEY) posthog.capture(evento, props || {}); } catch (e) { /* nunca rompe la agenda */ }
+  }
+
+  // ── Utilidades ───────────────────────────────────────────────────────────
+  function fechaDe(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function hora12(h) { return (h % 12 === 0 ? 12 : h % 12) + ":00 " + (h < 12 ? "AM" : "PM"); }
+  function largo(s) { var d = fechaDe(s); return DIAS_LARGO[d.getDay()] + " " + d.getDate() + " de " + MESES_LARGO[d.getMonth()]; }
+  function wa(texto) { return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(texto); }
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0; return (c === "x" ? r : (r & 3 | 8)).toString(16); });
+  }
+  function ir(id) {
+    ["paso1", "paso2", "lesion", "yaVino", "listo"].forEach(function (s) { $(s).hidden = s !== id; });
+    window.scrollTo(0, 0);
+  }
+
+  $("waPrefiero").href = wa("Hola, quiero agendar la Experiencia Nexa.");
+  $("waYaVine").href = wa("Hola, ya he ido a Nexa y quiero volver a entrenar.");
+  $("waVolver").href = wa("Hola, ya he ido a Nexa y quiero volver a entrenar.");
+  $("waLesion").href = wa("Hola, tengo una molestia y quiero la evaluación de fisioterapia.");
+  $("waLesion").addEventListener("click", function () { medir("agenda_derivada_fisio"); });
+  document.querySelectorAll("[data-ir]").forEach(function (b) {
+    b.addEventListener("click", function () { ir(b.getAttribute("data-ir")); });
+  });
+
+  // ── Paso 1 ───────────────────────────────────────────────────────────────
+  function cargar() {
+    $("cargando").hidden = false;
+    $("cargando").textContent = "Cargando horarios…";
+    return fetch(API).then(function (r) { return r.json(); }).then(function (d) {
+      estado.horas = d.horas || [];
+      $("cargando").hidden = true;
+      var dias = diasConHoras();
+      if (!estado.dia || !dias.some(function (x) { return x.fecha === estado.dia && x.libres; })) {
+        var primero = dias.find(function (x) { return x.libres; });
+        estado.dia = primero ? primero.fecha : null;
+        estado.hora = null;
+      }
+      pintar();
+    }).catch(function () {
+      $("cargando").textContent = "No pudimos cargar los horarios. Revisa tu conexión o escríbenos por WhatsApp.";
+    });
+  }
+
+  function diasConHoras() {
+    var orden = [], mapa = {};
+    estado.horas.forEach(function (h) {
+      if (!mapa[h.fecha]) { mapa[h.fecha] = { fecha: h.fecha, libres: 0 }; orden.push(mapa[h.fecha]); }
+      if (h.estado === "disponible") mapa[h.fecha].libres++;
+    });
+    return orden;
+  }
+
+  function pintar() {
+    var cont = $("dias");
+    cont.innerHTML = "";
+    diasConHoras().forEach(function (x) {
+      var d = fechaDe(x.fecha);
+      var b = document.createElement("button");
+      b.className = "day";
+      b.type = "button";
+      b.disabled = !x.libres;
+      b.setAttribute("aria-pressed", String(x.fecha === estado.dia));
+      b.setAttribute("aria-label", largo(x.fecha) + (x.libres ? "" : ", sin horas disponibles"));
+      b.innerHTML = "<small>" + DIAS[d.getDay()] + "</small><span class='n'>" + d.getDate() + "</span><small>" + MESES[d.getMonth()] + "</small>";
+      b.addEventListener("click", function () { estado.dia = x.fecha; estado.hora = null; medir("agenda_dia", { fecha: x.fecha }); pintar(); });
+      cont.appendChild(b);
+    });
+
+    var horas = $("horas");
+    horas.innerHTML = "";
+    $("diaLabel").textContent = estado.dia ? largo(estado.dia) : "No quedan horas disponibles en estas dos semanas.";
+    var delDia = estado.horas.filter(function (h) { return h.fecha === estado.dia; });
+    [["Mañana", function (h) { return h.hora < 12; }], ["Tarde", function (h) { return h.hora >= 12; }]].forEach(function (t) {
+      var lista = delDia.filter(t[1]);
+      if (!lista.length) return;
+      var titulo = document.createElement("p");
+      titulo.className = "turno";
+      titulo.textContent = t[0];
+      horas.appendChild(titulo);
+      var grid = document.createElement("div");
+      grid.className = "grid";
+      lista.forEach(function (h) {
+        var libre = h.estado === "disponible";
+        var sel = estado.hora === h.hora;
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "slot";
+        b.disabled = !libre;
+        b.setAttribute("aria-pressed", String(sel));
+        b.innerHTML = "<b>" + hora12(h.hora) + "</b><small>" + (libre ? (sel ? "Elegida" : "Disponible") : (h.estado === "lleno" ? "Lleno" : "Muy pronto")) + "</small>";
+        b.addEventListener("click", function () { estado.hora = h.hora; medir("agenda_hora", { fecha: h.fecha, hora: h.hora }); pintar(); });
+        grid.appendChild(b);
+      });
+      horas.appendChild(grid);
+    });
+
+    var c = $("continuar");
+    c.disabled = estado.hora === null;
+    if (estado.hora === null) c.textContent = "Elige una hora";
+    else { var d = fechaDe(estado.dia); c.textContent = "Continuar · " + DIAS[d.getDay()] + " " + d.getDate() + ", " + hora12(estado.hora); }
+  }
+
+  $("continuar").addEventListener("click", function () {
+    $("resumenTexto").textContent = largo(estado.dia) + " · " + hora12(estado.hora);
+    medir("agenda_datos");
+    ir("paso2");
+    validar();
+  });
+
+  // ── Paso 2 ───────────────────────────────────────────────────────────────
+  function digitos(t) { return (t || "").replace(/\D/g, ""); }
+  function validar() {
+    var ok = $("nombre").value.trim() && digitos($("telefono").value).length >= 10 && estado.lesion === false;
+    $("confirmar").disabled = !ok || estado.enviando;
+  }
+  ["nombre", "apellido", "telefono"].forEach(function (id) { $(id).addEventListener("input", function () { $("errTel").hidden = true; validar(); }); });
+  $("lesionSi").addEventListener("click", function () {
+    estado.lesion = true;
+    $("lesionSi").setAttribute("aria-pressed", "true"); $("lesionNo").setAttribute("aria-pressed", "false");
+    medir("agenda_lesion");
+    ir("lesion");
+  });
+  $("lesionNo").addEventListener("click", function () {
+    estado.lesion = false;
+    $("lesionNo").setAttribute("aria-pressed", "true"); $("lesionSi").setAttribute("aria-pressed", "false");
+    validar();
+  });
+
+  var MENSAJES = {
+    lleno: "Esa hora se acaba de llenar. Elige otra, por favor.",
+    pronto: "Esa hora ya está muy cerca. Elige otra, por favor.",
+    hora_invalida: "Esa hora ya no está disponible. Elige otra, por favor.",
+    datos: "Revisa tu nombre y apellido.",
+    muchos_intentos: "Hubo muchos intentos seguidos. Prueba en un rato o escríbenos por WhatsApp.",
+    servidor: "No pudimos guardar la cita. Prueba de nuevo o escríbenos por WhatsApp."
+  };
+
+  $("confirmar").addEventListener("click", function () {
+    if (estado.enviando) return;
+    estado.enviando = true;
+    $("errForm").hidden = true;
+    $("confirmar").textContent = "Guardando…";
+    validar();
+    var eventId = uuid();
+    var nombre = $("nombre").value.trim();
+    fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre: nombre, apellido: $("apellido").value.trim(), telefono: $("telefono").value.trim(),
+        fecha: estado.dia, hora: estado.hora, utm: utm, fbc: cookie("_fbc"), fbp: cookie("_fbp"),
+        event_id: eventId, url: location.href, empresa: $("empresa").value
+      })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d && d.ok) {
+        if (META_PIXEL_ID && !d.existente) fbq("track", "Schedule", {}, { eventID: eventId });
+        medir("agenda_reservada", { existente: !!d.existente, fecha: d.fecha, hora: d.hora });
+        mostrarListo(nombre, d.fecha, Number(d.hora), d.existente);
+        return;
+      }
+      var error = (d && d.error) || "servidor";
+      medir("agenda_error", { error: error });
+      if (error === "ya_registrado") { ir("yaVino"); return; }
+      if (error === "telefono") { $("errTel").textContent = "Revisa el número: debe tener 11 dígitos, como 0412 1234567."; $("errTel").hidden = false; return; }
+      $("errForm").textContent = MENSAJES[error] || MENSAJES.servidor;
+      $("errForm").hidden = false;
+      if (error === "lleno" || error === "pronto" || error === "hora_invalida") {
+        estado.hora = null;
+        cargar().then(function () { ir("paso1"); });
+      }
+    }).catch(function () {
+      $("errForm").textContent = MENSAJES.servidor;
+      $("errForm").hidden = false;
+    }).then(function () {
+      estado.enviando = false;
+      $("confirmar").textContent = "Confirmar mi cita";
+      validar();
+    });
+  });
+
+  // ── Confirmada ───────────────────────────────────────────────────────────
+  function mostrarListo(nombre, fecha, hora, existente) {
+    var d = fechaDe(fecha);
+    $("listoTitulo").textContent = "Listo, " + nombre + ". Te esperamos";
+    $("listoTexto").textContent = existente
+      ? "Ya tenías esta cita agendada con ese número. Si quieres cambiarla, escríbenos."
+      : "Tu Experiencia Nexa quedó agendada. Un día antes te escribimos por WhatsApp para confirmar.";
+    $("calDia").textContent = DIAS[d.getDay()].toUpperCase();
+    $("calNum").textContent = d.getDate();
+    $("citaHora").textContent = hora12(hora);
+    $("citaFecha").textContent = largo(fecha) + " · 60 a 90 min";
+    $("waCambiar").href = wa("Hola, soy " + nombre + ". Necesito cambiar mi Experiencia Nexa del " + largo(fecha) + " a las " + hora12(hora) + ".");
+    ir("listo");
+  }
+
+  medir("agenda_vista", utm);
+  cargar();
+})();
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
